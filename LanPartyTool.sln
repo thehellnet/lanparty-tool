@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2016
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LanPartyTool", "LanPartyTool\LanPartyTool.csproj", "{F36FC763-9AE3-4DC9-9CFE-76A3E44BF665}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F36FC763-9AE3-4DC9-9CFE-76A3E44BF665}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F36FC763-9AE3-4DC9-9CFE-76A3E44BF665}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F36FC763-9AE3-4DC9-9CFE-76A3E44BF665}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F36FC763-9AE3-4DC9-9CFE-76A3E44BF665}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5280A60E-75BB-4DE4-BAE5-D7FE255BB4F2}
+	EndGlobalSection
+EndGlobal
