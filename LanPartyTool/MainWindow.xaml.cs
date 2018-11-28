@@ -11,17 +11,18 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using LanPartyTool.log;
 
 namespace LanPartyTool
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        private Logger logger = Logger.GetLogger(typeof(MainWindow));
+
         public MainWindow()
         {
             InitializeComponent();
         }
+
     }
 }
