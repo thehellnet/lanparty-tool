@@ -13,17 +13,17 @@ namespace LanPartyTool
     /// </summary>
     public partial class App : Application
     {
-        private Logger logger = Logger.GetLogger(typeof(App));
+        private readonly Logger _logger = Logger.GetLogger(typeof(App));
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            logger.info(" ---------- ############ START ############ ---------- ");
+            _logger.info(" ---------- ############ START ############ ---------- ");
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
-            logger.info(" ---------- ############  END  ############ ---------- ");
+            _logger.info(" ---------- ############  END  ############ ---------- ");
             base.OnExit(e);
         }
     }

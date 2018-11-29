@@ -17,12 +17,19 @@ namespace LanPartyTool
 {
     public partial class MainWindow : Window
     {
-        private Logger logger = Logger.GetLogger(typeof(MainWindow));
+        private Logger _logger = Logger.GetLogger(typeof(MainWindow));
 
         public MainWindow()
         {
             InitializeComponent();
+
+            var logEvent = Logger.GetLogEvent();
+            logEvent += LogEventHandler;
         }
 
+        private void LogEventHandler(string text)
+        {
+            LogText.AppendText(text);
+        }
     }
 }
