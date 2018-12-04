@@ -7,7 +7,18 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="360" Width="640">
     <Grid>
-        <TextBox x:Name="LogText" Margin="10" TextWrapping="Wrap" Text="TextBox"/>
-
+        <GroupBox x:Name="PathGroupBox" Header="Path" Height="96" Margin="10,10,10,0" VerticalAlignment="Top">
+            <Grid>
+                <Label x:Name="GameExeLabel" Content="Game EXE" HorizontalAlignment="Left" Margin="10,10,0,0"
+                       VerticalAlignment="Top" />
+                <Label x:Name="CfgFileLabel" Content="CFG file" HorizontalAlignment="Left" Margin="10,41,0,0"
+                       VerticalAlignment="Top" />
+                <TextBox x:Name="GameExeText" Height="23" Margin="78,14,10,0" TextWrapping="Wrap" IsReadOnly="True"
+                         VerticalAlignment="Top" />
+                <TextBox x:Name="CfgFileText" Height="23" Margin="78,45,10,0" TextWrapping="Wrap" IsReadOnly="True"
+                         VerticalAlignment="Top" />
+            </Grid>
+        </GroupBox>
+        <RichTextBox x:Name="LogText" Margin="10,111,10,10" IsReadOnly="True" />
     </Grid>
 </Window>
