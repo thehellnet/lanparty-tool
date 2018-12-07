@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LanPartyTool"
+        xmlns:config="clr-namespace:LanPartyTool.config"
         mc:Ignorable="d"
         Title="MainWindow" Height="360" Width="640">
     <Grid>
@@ -11,14 +12,14 @@
             <Grid>
                 <Label x:Name="GameExeLabel" Content="Game EXE" HorizontalAlignment="Left" Margin="10,10,0,0"
                        VerticalAlignment="Top" />
+                <TextBox x:Name="GameExeText" Height="23" Margin="78,14,10,0" TextWrapping="Wrap" IsReadOnly="True"
+                         VerticalAlignment="Top"/>
                 <Label x:Name="CfgFileLabel" Content="CFG file" HorizontalAlignment="Left" Margin="10,41,0,0"
                        VerticalAlignment="Top" />
-                <TextBox x:Name="GameExeText" Height="23" Margin="78,14,10,0" TextWrapping="Wrap" IsReadOnly="True"
-                         VerticalAlignment="Top" />
                 <TextBox x:Name="CfgFileText" Height="23" Margin="78,45,10,0" TextWrapping="Wrap" IsReadOnly="True"
                          VerticalAlignment="Top" />
             </Grid>
         </GroupBox>
-        <RichTextBox x:Name="LogText" Margin="10,111,10,10" IsReadOnly="True" />
+        <TextBox x:Name="LogText" Margin="10,111,10,10" IsReadOnly="True" Text="{Binding LogContent}" />
     </Grid>
 </Window>

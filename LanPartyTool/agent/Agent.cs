@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
+using LanPartyTool.config;
 using Newtonsoft.Json;
 
 namespace LanPartyTool.agent
@@ -16,7 +17,11 @@ namespace LanPartyTool.agent
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(Agent));
 
+        private readonly Config _config = Config.GetInstance();
+
         private readonly ServerSocket _serverSocket = new ServerSocket();
+
+        private Timer _timer;
 
         public void Start()
         {
@@ -24,6 +29,13 @@ namespace LanPartyTool.agent
 
             _serverSocket.Start();
             _serverSocket.OnConnectionAccepted += NewConnectionHandler;
+
+            _timer = new Timer((obj) =>
+            {
+                Logger.Info("Setting values");
+                _config.GameExe = "Game EXE";
+                _config.CfgFile = "CFG Path";
+            }, null, 3000, Timeout.Infinite);
         }
 
         public void Stop()
