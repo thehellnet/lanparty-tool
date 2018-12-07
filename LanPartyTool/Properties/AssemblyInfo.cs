@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("LanPartyTool")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("The HellNet.org")]
 [assembly: AssemblyProduct("LanPartyTool")]
-[assembly: AssemblyCopyright("Copyright ©  2018")]
+[assembly: AssemblyCopyright("Copyright ©  2018 - Luca Cireddu")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
