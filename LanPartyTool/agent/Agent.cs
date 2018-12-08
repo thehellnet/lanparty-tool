@@ -31,6 +31,8 @@ namespace LanPartyTool.agent
                 return;
             }
 
+            CheckEntryPoint();
+
             _serverSocket.Start();
             _serverSocket.OnConnectionAccepted += NewConnectionHandler;
         }
@@ -59,7 +61,7 @@ namespace LanPartyTool.agent
                 }
             }
 
-            Logger.Info("Game exe path correct");
+            Logger.Debug("Game exe path correct");
 
             if (_config.ToolCfg == "")
             {
@@ -73,7 +75,7 @@ namespace LanPartyTool.agent
                 }
             }
 
-            Logger.Info("Tool cfg path correct");
+            Logger.Debug("Tool cfg path correct");
 
             if (_config.ProfileCfg == "")
             {
@@ -87,9 +89,14 @@ namespace LanPartyTool.agent
                 }
             }
 
-            Logger.Info("Profile cfg path correct");
+            Logger.Debug("Profile cfg path correct");
 
             return true;
+        }
+
+        private void CheckEntryPoint()
+        {
+            Logger.Info("Checking entry point presence");
         }
 
         private void NewConnectionHandler(Socket socket)
