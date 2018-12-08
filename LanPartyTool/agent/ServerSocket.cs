@@ -55,7 +55,13 @@ namespace LanPartyTool.agent
 
             if (_socket != null && _socket.IsBound)
             {
-                _socket.Close();
+                try
+                {
+                    _socket.Close();
+                }
+                catch (SocketException)
+                {
+                }
             }
 
             if (_thread != null)

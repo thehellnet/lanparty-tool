@@ -22,7 +22,14 @@ namespace LanPartyTool
         public static void Main()
         {
             var lanPartyTool = new LanPartyTool();
-            lanPartyTool.Run();
+            try
+            {
+                lanPartyTool.Run();
+            }
+            catch (Exception e)
+            {
+                Console.Write(e.Message);
+            }
         }
 
         protected override void OnStartup(StartupEventArgs e)
