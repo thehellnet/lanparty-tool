@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Windows.Documents;
 using Microsoft.Win32;
 
 namespace LanPartyTool.utility
@@ -41,7 +45,7 @@ namespace LanPartyTool.utility
             }
 
             var cfgFileFolder = Path.Combine(virtualStoreInstallFolder, "main");
-            var toolCfg = Path.Combine(cfgFileFolder, "lanpartytool.cfg");
+            var toolCfg = Path.Combine(cfgFileFolder, Constants.ToolCfgFilename);
             return toolCfg;
         }
 
@@ -105,6 +109,39 @@ namespace LanPartyTool.utility
             }
 
             return "";
+        }
+
+        public static List<string> ReadCfg(string cfgPath)
+        {
+            var rows = new List<string>();
+            if (!File.Exists(cfgPath))
+            {
+                return rows;
+            }
+
+            var rawConent = File.ReadAllText(cfgPath);
+            var lines = rawConent.Split(
+                new[] {"\r\n", "\r", "\n"},
+                StringSplitOptions.None
+            );
+
+            rows.AddRange(lines.Select(line => line.Trim()));
+
+            return rows;
+        }
+
+        public static void WriteCfg(string cfgPath, List<string> rows)
+        {
+            var rawContent = string.Join("\n", rows);
+            File.WriteAllText(cfgPath, rawContent);
+        }
+
+        public static string[] splitCfgLine(string line)
+        {
+            return Regex.Matches(line, @"[\""].+?[\""]|[^ ]+")
+                .Cast<Match>()
+                .Select(m => m.Value)
+                .ToArray();
         }
     }
 }

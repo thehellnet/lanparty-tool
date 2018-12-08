@@ -142,7 +142,53 @@ namespace LanPartyTool.agent
         {
             Logger.Info("Checking entry point presence");
 
-            var profileCfg = _config.ProfileCfg;
+            var entrypointLines = new List<int>();
+
+            var profileCfgPath = _config.ProfileCfg;
+            var profileCfgRows = GameUtility.ReadCfg(profileCfgPath);
+
+            for (var i = 0; i < profileCfgRows.Count; i++)
+            {
+                var row = profileCfgRows.ElementAt(i);
+                //var items = GameUtility.splitCfgLine(row);
+                if (row.StartsWith(@"bind ."))
+                {
+                    entrypointLines.Add(i);
+                }
+            }
+
+            var entrypointRemove = false;
+            var entrypointAdd = false;
+
+            switch (entrypointLines.Count)
+            {
+                case 1:
+                    Logger.Debug($"Entrypoint bind command found at line {entrypointLines[0] + 1}");
+                    break;
+                case 0:
+                    Logger.Warn("Entrypoint bind command not found. Adding...");
+                    entrypointAdd = true;
+                    break;
+                default:
+                    Logger.Warn("Multiple entrypoint bind command found. Removing unuseful...");
+                    entrypointRemove = true;
+                    entrypointAdd = true;
+                    break;
+            }
+
+            if (entrypointRemove)
+            {
+                profileCfgRows.RemoveAll(row => row.StartsWith(@"bind ."));
+                GameUtility.WriteCfg(profileCfgPath, profileCfgRows);
+                Logger.Debug("Entrypoint bind commands removed from list");
+            }
+
+            if (entrypointAdd)
+            {
+                profileCfgRows.Add($"bind . \"exec {Constants.ToolCfgName}\"");
+                GameUtility.WriteCfg(profileCfgPath, profileCfgRows);
+                Logger.Debug("Entrypoint bind command added in profile cfg");
+            }
         }
 
         private void NewConnectionHandler(Socket socket)
