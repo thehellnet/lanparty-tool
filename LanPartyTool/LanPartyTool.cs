@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Forms;
 using log4net;
-using log4net.Repository.Hierarchy;
 using LanPartyTool.agent;
 using LanPartyTool.config;
-using Application = System.Windows.Application;
-using Control = System.Windows.Controls.Control;
+using LanPartyTool.windows;
 
 namespace LanPartyTool
 {
@@ -32,23 +28,14 @@ namespace LanPartyTool
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            Logger.Info("--------########  START  ########--------");
-
-            _agent.Start();
-
             _mainWindow.Show();
-
-            _config.GameExe = "Prova";
-            _config.CfgFile = "Prova";
+            _agent.Start();
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
-            _mainWindow.Close();
-
             _agent.Stop();
-
-            Logger.Info("--------########   END   ########--------");
+            _mainWindow.Close();
             base.OnExit(e);
         }
     }

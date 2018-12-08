@@ -19,6 +19,7 @@ namespace LanPartyTool.agent
         private const int SocketBacklog = 128;
 
         public delegate void NewConnectionHandler(Socket socket);
+
         public event NewConnectionHandler OnConnectionAccepted;
 
         private Socket _socket;
@@ -52,7 +53,7 @@ namespace LanPartyTool.agent
         {
             Logger.Info("ServerSocket stop");
 
-            if (_socket.IsBound)
+            if (_socket != null && _socket.IsBound)
             {
                 _socket.Close();
             }

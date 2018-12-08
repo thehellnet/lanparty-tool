@@ -1,4 +1,4 @@
-﻿<Window x:Class="LanPartyTool.MainWindow"
+﻿<Window x:Class="LanPartyTool.windows.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -20,6 +20,6 @@
                          VerticalAlignment="Top" />
             </Grid>
         </GroupBox>
-        <TextBox x:Name="LogText" Margin="10,111,10,10" IsReadOnly="True" Text="{Binding LogContent}" />
+        <TextBox x:Name="LogText" Margin="10,111,10,10" IsReadOnly="True" FontFamily="DejaVu Sans Mono" />
     </Grid>
 </Window>

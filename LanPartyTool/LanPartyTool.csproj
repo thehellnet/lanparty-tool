@@ -100,7 +100,8 @@
     <Compile Include="agent\JsonResponse.cs" />
     <Compile Include="agent\ServerSocket.cs" />
     <Compile Include="config\Config.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="LogEvent.cs" />
+    <Compile Include="windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -134,7 +135,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="MainWindow.xaml">
+    <Page Include="windows\MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
