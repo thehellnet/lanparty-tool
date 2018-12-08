@@ -24,6 +24,6 @@
                     VerticalAlignment="Top" />
             </Grid>
         </GroupBox>
-        <WebBrowser x:Name="LogWebBrowser" Margin="10,139,10,10" />
+        <RichTextBox x:Name="LogText" Margin="10,139,10,10" />
     </Grid>
 </Window>

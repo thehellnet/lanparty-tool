@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Forms;
+using System.Windows.Media;
 using System.Windows.Threading;
 using log4net;
 using log4net.Core;
@@ -19,7 +21,7 @@ namespace LanPartyTool.windows
 
         private readonly Config _config = Config.GetInstance();
 
-        private List<string> _logList = new List<string>();
+        private List<Paragraph> _logList = new List<Paragraph>();
 
         public MainWindow()
         {
@@ -51,42 +53,50 @@ namespace LanPartyTool.windows
 
         private void NewLogEvent(Level level, string message)
         {
-            var color = "grey";
-            var weight = "normal";
-            var style = "italic";
+            var color = Brushes.Gray;
+            var weight = FontWeights.Normal;
+            var style = FontStyles.Italic;
 
             if (level == Level.Error)
             {
-                color = "red";
-                weight = "bold";
-                style = "normal";
+                color = Brushes.Red;
+                weight = FontWeights.Bold;
+                style = FontStyles.Normal;
             }
             else if (level == Level.Warn)
             {
-                color = "orange";
-                weight = "normal";
-                style = "normal";
+                color = Brushes.Orange;
+                weight = FontWeights.Normal;
+                style = FontStyles.Normal;
             }
             else if (level == Level.Info)
             {
-                color = "black";
-                weight = "normal";
-                style = "normal";
+                color = Brushes.Black;
+                weight = FontWeights.Normal;
+                style = FontStyles.Normal;
             }
 
-            _logList.Add(
-                $"<div style='color: {color}; font-weight: {weight}; font-style: {style};'>{message.Trim()}</div>");
+            var paragraph = new Paragraph();
+            paragraph.Inlines.Add(message.Trim());
+            paragraph.FontFamily = new FontFamily("Courier New");
+            paragraph.Margin = new Thickness(0);
+            paragraph.Foreground = color;
+            paragraph.FontWeight = weight;
+            paragraph.FontStyle = style;
+            _logList.Add(paragraph);
 
             while (_logList.Count > MaxLogLines)
             {
                 _logList.RemoveAt(0);
             }
 
-            var webContent = @"<div style='font-family: monospace; font-size: 12px; font-style: normal; font-weight: normal;'>";
-            webContent += string.Join("", _logList);
-            webContent += @"</div>";
-
-            Dispatcher.Invoke((MethodInvoker) delegate { LogWebBrowser.NavigateToString(webContent); });
+            Dispatcher.Invoke((MethodInvoker) delegate
+            {
+                var flowDoc = LogText.Document;
+                flowDoc.Blocks.Clear();
+                flowDoc.Blocks.AddRange(_logList);
+                LogText.Document = flowDoc;
+            });
         }
     }
 }
