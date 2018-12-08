@@ -19,30 +19,39 @@ namespace LanPartyTool.agent
         private static readonly ILog Logger = LogManager.GetLogger(typeof(Agent));
 
         private readonly Config _config = Config.GetInstance();
-
         private readonly ServerSocket _serverSocket = new ServerSocket();
 
         public void Start()
         {
-            Logger.Info("Agent start");
-
-            if (!CheckConfig())
+            new Thread(() =>
             {
-                return;
-            }
+                Logger.Info("Agent start");
 
-            CheckEntryPoint();
+                if (!CheckConfig())
+                {
+                    return;
+                }
 
-            _serverSocket.Start();
-            _serverSocket.OnConnectionAccepted += NewConnectionHandler;
+                CheckEntryPoint();
+
+                _serverSocket.Start();
+                _serverSocket.OnConnectionAccepted += NewConnectionHandler;
+
+                Logger.Debug("Agent start sequence completed");
+            }).Start();
         }
 
         public void Stop()
         {
-            Logger.Info("Agent stop");
+            new Thread(() =>
+            {
+                Logger.Info("Agent stop");
 
-            _serverSocket.OnConnectionAccepted -= NewConnectionHandler;
-            _serverSocket.Stop();
+                _serverSocket.OnConnectionAccepted -= NewConnectionHandler;
+                _serverSocket.Stop();
+
+                Logger.Debug("Agent stop sequence completed");
+            }).Start();
         }
 
         private bool CheckConfig()
