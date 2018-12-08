@@ -1,8 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Dynamic;
+using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Forms;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Threading;
 using log4net;
@@ -21,7 +28,8 @@ namespace LanPartyTool.windows
 
         private readonly Config _config = Config.GetInstance();
 
-        private List<Paragraph> _logList = new List<Paragraph>();
+        private readonly object _logListLock = new object();
+        private readonly List<dynamic> _logList = new List<dynamic>();
 
         public MainWindow()
         {
@@ -76,27 +84,36 @@ namespace LanPartyTool.windows
                 style = FontStyles.Normal;
             }
 
-            var paragraph = new Paragraph();
-            paragraph.Inlines.Add(message.Trim());
-            paragraph.FontFamily = new FontFamily("Courier New");
-            paragraph.Margin = new Thickness(0);
-            paragraph.Foreground = color;
-            paragraph.FontWeight = weight;
-            paragraph.FontStyle = style;
-            _logList.Add(paragraph);
+            dynamic logItem = new ExpandoObject();
+            logItem.color = color;
+            logItem.weight = weight;
+            logItem.style = style;
+            logItem.message = message.Trim();
 
+            _logList.Add(logItem);
             while (_logList.Count > MaxLogLines)
             {
                 _logList.RemoveAt(0);
             }
 
-            Dispatcher.Invoke((MethodInvoker) delegate
+            LogText.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
             {
-                var flowDoc = LogText.Document;
-                flowDoc.Blocks.Clear();
-                flowDoc.Blocks.AddRange(_logList);
-                LogText.Document = flowDoc;
-            });
+                var paragraph = new Paragraph();
+                foreach (var log in _logList)
+                {
+                    paragraph.Inlines.Add(new TextBlock
+                    {
+                        FontFamily = new FontFamily("Courier New"),
+                        Margin = new Thickness(0),
+                        Foreground = log.color,
+                        FontWeight = log.weight,
+                        FontStyle = log.style,
+                        Text = log.message
+                    });
+                }
+
+                LogText.Document = new FlowDocument(paragraph);
+            }));
         }
     }
 }
