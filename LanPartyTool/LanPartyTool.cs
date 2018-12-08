@@ -22,6 +22,7 @@ namespace LanPartyTool
         public static void Main()
         {
             var lanPartyTool = new LanPartyTool();
+
             try
             {
                 lanPartyTool.Run();

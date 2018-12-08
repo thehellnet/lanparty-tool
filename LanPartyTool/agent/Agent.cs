@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -35,6 +36,8 @@ namespace LanPartyTool.agent
         {
             Logger.Info("Agent start");
 
+            InitConfig();
+
             if (!CheckConfig())
             {
                 return;
@@ -58,48 +61,76 @@ namespace LanPartyTool.agent
             Logger.Debug("Agent stop sequence completed");
         }
 
-        private bool CheckConfig()
+        private void InitConfig()
         {
-            Logger.Info("Checking configuration");
+            Logger.Info("Initializing configuration");
 
             if (_config.GameExe == "")
             {
                 Logger.Debug("Getting default game exe path");
                 _config.GameExe = GameUtility.DefaultGameExe();
+            }
 
-                if (_config.GameExe == "")
-                {
-                    Logger.Error("Invalid game exe path");
-                    return false;
-                }
+            if (_config.ToolCfg == "")
+            {
+                Logger.Debug("Getting default tool cfg path");
+                _config.ToolCfg = GameUtility.DefaultToolCfg();
+            }
+
+            if (_config.ProfileCfg == "")
+            {
+                Logger.Debug("Getting default profile cfg path");
+                _config.ProfileCfg = GameUtility.DefaultProfileCfg();
+            }
+        }
+
+        private bool CheckConfig()
+        {
+            Logger.Info("Checking configuration");
+
+            if (_config.GameExe == "" || !File.Exists(_config.GameExe))
+            {
+                Logger.Error("Invalid game exe path");
+                return false;
             }
 
             Logger.Debug("Game exe path correct");
 
             if (_config.ToolCfg == "")
             {
-                Logger.Debug("Getting default tool cfg path");
-                _config.ToolCfg = GameUtility.DefaultToolCfg();
+                Logger.Error("Invalid tool cfg path");
+                return false;
+            }
 
-                if (_config.ToolCfg == "")
-                {
-                    Logger.Error("Invalid tool cfg path");
-                    return false;
-                }
+            var toolCfgDirPath = Path.GetDirectoryName(_config.ToolCfg);
+            if (toolCfgDirPath == null)
+            {
+                Logger.Error("Unable to compute tool cfg directory path");
+                return false;
+            }
+
+            if (!Directory.Exists(toolCfgDirPath))
+            {
+                Directory.CreateDirectory(toolCfgDirPath);
+            }
+
+            if (!File.Exists(_config.ToolCfg))
+            {
+                File.Create(_config.ToolCfg).Dispose();
+            }
+
+            if (!File.Exists(_config.ToolCfg))
+            {
+                Logger.Error("Tool cfg file not found");
+                return false;
             }
 
             Logger.Debug("Tool cfg path correct");
 
-            if (_config.ProfileCfg == "")
+            if (_config.ProfileCfg == "" || !File.Exists(_config.ProfileCfg))
             {
-                Logger.Debug("Getting default profile cfg path");
-                _config.ProfileCfg = GameUtility.DefaultProfileCfg();
-
-                if (_config.ProfileCfg == "")
-                {
-                    Logger.Error("Invalid profile cfg path");
-                    return false;
-                }
+                Logger.Error("Invalid profile cfg path");
+                return false;
             }
 
             Logger.Debug("Profile cfg path correct");
@@ -110,6 +141,8 @@ namespace LanPartyTool.agent
         private void CheckEntryPoint()
         {
             Logger.Info("Checking entry point presence");
+
+            var profileCfg = _config.ProfileCfg;
         }
 
         private void NewConnectionHandler(Socket socket)
@@ -165,7 +198,7 @@ namespace LanPartyTool.agent
             Logger.Debug("Closing client loop");
         }
 
-        dynamic ParsePayload(dynamic request)
+        private dynamic ParsePayload(dynamic request)
         {
             Logger.Debug("Parsing payload");
             Logger.Debug($"Action: {request.action}");
