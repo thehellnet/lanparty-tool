@@ -12,7 +12,7 @@ namespace LanPartyTool.config
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private string _gameExe;
+        private string _gameExe = "";
 
         public string GameExe
         {
@@ -20,23 +20,37 @@ namespace LanPartyTool.config
             set
             {
                 if (_gameExe == value) return;
-
+                if (value == null) _gameExe = "";
                 _gameExe = value;
                 OnPropertyChanged("GameExe");
             }
         }
 
-        private string _cfgFile;
+        private string _toolCfg = "";
 
-        public string CfgFile
+        public string ToolCfg
         {
-            get => _cfgFile;
+            get => _toolCfg;
             set
             {
-                if (_cfgFile == value) return;
+                if (_toolCfg == value) return;
+                if (value == null) _toolCfg = "";
+                _toolCfg = value;
+                OnPropertyChanged("ToolCfg");
+            }
+        }
 
-                _cfgFile = value;
-                OnPropertyChanged("CfgFile");
+        private string _profileCfg = "";
+
+        public string ProfileCfg
+        {
+            get => _profileCfg;
+            set
+            {
+                if (_profileCfg == value) return;
+                if (value == null) _profileCfg = "";
+                _profileCfg = value;
+                OnPropertyChanged("ProfileCfg");
             }
         }
 

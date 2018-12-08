@@ -6,20 +6,24 @@
         xmlns:local="clr-namespace:LanPartyTool"
         xmlns:config="clr-namespace:LanPartyTool.config"
         mc:Ignorable="d"
-        Title="MainWindow" Height="360" Width="640">
+        Title="MainWindow" Height="480" Width="800">
     <Grid>
-        <GroupBox x:Name="PathGroupBox" Header="Path" Height="96" Margin="10,10,10,0" VerticalAlignment="Top">
+        <GroupBox x:Name="PathGroupBox" Header="Path" Height="124" Margin="10,10,10,0" VerticalAlignment="Top">
             <Grid>
                 <Label x:Name="GameExeLabel" Content="Game EXE" HorizontalAlignment="Left" Margin="10,10,0,0"
                        VerticalAlignment="Top" />
-                <TextBox x:Name="GameExeText" Height="23" Margin="78,14,10,0" TextWrapping="Wrap" IsReadOnly="True"
+                <TextBox x:Name="GameExeText" Height="23" Margin="84,13,10,0" TextWrapping="NoWrap" IsReadOnly="True"
                          VerticalAlignment="Top"/>
-                <Label x:Name="CfgFileLabel" Content="CFG file" HorizontalAlignment="Left" Margin="10,41,0,0"
+                <Label x:Name="ToolCfgLabel" Content="Tool CFG" HorizontalAlignment="Left" Margin="10,41,0,0"
                        VerticalAlignment="Top" />
-                <TextBox x:Name="CfgFileText" Height="23" Margin="78,45,10,0" TextWrapping="Wrap" IsReadOnly="True"
+                <TextBox x:Name="ToolCfgText" Height="23" Margin="84,44,10,0" TextWrapping="NoWrap" IsReadOnly="True"
                          VerticalAlignment="Top" />
+                <Label x:Name="ProfileCfgLabel" Content="Profile CFG" HorizontalAlignment="Left" Margin="10,72,0,0"
+                    VerticalAlignment="Top" />
+                <TextBox x:Name="ProfileCfgText" Height="23" Margin="84,75,10,0" TextWrapping="NoWrap" IsReadOnly="True"
+                    VerticalAlignment="Top" />
             </Grid>
         </GroupBox>
-        <TextBox x:Name="LogText" Margin="10,111,10,10" IsReadOnly="True" FontFamily="DejaVu Sans Mono" />
+        <TextBox x:Name="LogText" Margin="10,139,10,10" IsReadOnly="True" FontFamily="DejaVu Sans Mono" />
     </Grid>
 </Window>

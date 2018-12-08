@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using LanPartyTool.config;
+using LanPartyTool.utility;
 using Newtonsoft.Json;
 
 namespace LanPartyTool.agent
@@ -25,7 +26,10 @@ namespace LanPartyTool.agent
         {
             Logger.Info("Agent start");
 
-            CheckConfig();
+            if (!CheckConfig())
+            {
+                return;
+            }
 
             _serverSocket.Start();
             _serverSocket.OnConnectionAccepted += NewConnectionHandler;
@@ -39,12 +43,53 @@ namespace LanPartyTool.agent
             _serverSocket.Stop();
         }
 
-        private void CheckConfig()
+        private bool CheckConfig()
         {
             Logger.Info("Checking configuration");
 
-            _config.GameExe = "Game EXE";
-            _config.CfgFile = "CFG Path";
+            if (_config.GameExe == "")
+            {
+                Logger.Debug("Getting default game exe path");
+                _config.GameExe = GameUtility.DefaultGameExe();
+
+                if (_config.GameExe == "")
+                {
+                    Logger.Error("Invalid game exe path");
+                    return false;
+                }
+            }
+
+            Logger.Info("Game exe path correct");
+
+            if (_config.ToolCfg == "")
+            {
+                Logger.Debug("Getting default tool cfg path");
+                _config.ToolCfg = GameUtility.DefaultToolCfg();
+
+                if (_config.ToolCfg == "")
+                {
+                    Logger.Error("Invalid tool cfg path");
+                    return false;
+                }
+            }
+
+            Logger.Info("Tool cfg path correct");
+
+            if (_config.ProfileCfg == "")
+            {
+                Logger.Debug("Getting default profile cfg path");
+                _config.ProfileCfg = GameUtility.DefaultProfileCfg();
+
+                if (_config.ProfileCfg == "")
+                {
+                    Logger.Error("Invalid profile cfg path");
+                    return false;
+                }
+            }
+
+            Logger.Info("Profile cfg path correct");
+
+            return true;
         }
 
         private void NewConnectionHandler(Socket socket)
