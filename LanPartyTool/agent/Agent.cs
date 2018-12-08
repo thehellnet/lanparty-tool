@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 
 namespace LanPartyTool.agent
 {
-    class Agent
+    internal class Agent
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(Agent));
 
@@ -23,35 +23,39 @@ namespace LanPartyTool.agent
 
         public void Start()
         {
-            new Thread(() =>
-            {
-                Logger.Info("Agent start");
-
-                if (!CheckConfig())
-                {
-                    return;
-                }
-
-                CheckEntryPoint();
-
-                _serverSocket.Start();
-                _serverSocket.OnConnectionAccepted += NewConnectionHandler;
-
-                Logger.Debug("Agent start sequence completed");
-            }).Start();
+            new Thread(StartAgent).Start();
         }
 
         public void Stop()
         {
-            new Thread(() =>
+            new Thread(StopAgent).Start();
+        }
+
+        private void StartAgent()
+        {
+            Logger.Info("Agent start");
+
+            if (!CheckConfig())
             {
-                Logger.Info("Agent stop");
+                return;
+            }
 
-                _serverSocket.OnConnectionAccepted -= NewConnectionHandler;
-                _serverSocket.Stop();
+            CheckEntryPoint();
 
-                Logger.Debug("Agent stop sequence completed");
-            }).Start();
+            _serverSocket.Start();
+            _serverSocket.OnConnectionAccepted += NewConnectionHandler;
+
+            Logger.Debug("Agent start sequence completed");
+        }
+
+        private void StopAgent()
+        {
+            Logger.Info("Agent stop");
+
+            _serverSocket.OnConnectionAccepted -= NewConnectionHandler;
+            _serverSocket.Stop();
+
+            Logger.Debug("Agent stop sequence completed");
         }
 
         private bool CheckConfig()
