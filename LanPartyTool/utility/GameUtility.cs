@@ -35,12 +35,12 @@ namespace LanPartyTool.utility
             var InstallFolderPath = Path.GetDirectoryName(gameExePath).Substring(3);
             var localPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             var virtualStoreInstallFolder = Path.Combine(localPath, "VirtualStore", InstallFolderPath);
-            var cfgFileFolder = Path.Combine(virtualStoreInstallFolder, "main");
-            if (!Directory.Exists(cfgFileFolder))
+            if (!Directory.Exists(virtualStoreInstallFolder))
             {
                 return "";
             }
 
+            var cfgFileFolder = Path.Combine(virtualStoreInstallFolder, "main");
             var toolCfg = Path.Combine(cfgFileFolder, "lanpartytool.cfg");
             return toolCfg;
         }
