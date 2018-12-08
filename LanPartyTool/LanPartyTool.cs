@@ -28,21 +28,22 @@ namespace LanPartyTool
             }
             catch (Exception e)
             {
-                Console.Write(e.Message);
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
             }
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            _mainWindow.Show();
             _agent.Start();
+            _mainWindow.Show();
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
-            _agent.Stop();
             _mainWindow.Close();
+            _agent.Stop();
             base.OnExit(e);
         }
     }
