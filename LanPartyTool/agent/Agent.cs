@@ -21,21 +21,14 @@ namespace LanPartyTool.agent
 
         private readonly ServerSocket _serverSocket = new ServerSocket();
 
-        private Timer _timer;
-
         public void Start()
         {
             Logger.Info("Agent start");
 
+            CheckConfig();
+
             _serverSocket.Start();
             _serverSocket.OnConnectionAccepted += NewConnectionHandler;
-
-            _timer = new Timer((obj) =>
-            {
-                Logger.Info("Setting values");
-                _config.GameExe = "Game EXE";
-                _config.CfgFile = "CFG Path";
-            }, null, 3000, Timeout.Infinite);
         }
 
         public void Stop()
@@ -44,6 +37,14 @@ namespace LanPartyTool.agent
 
             _serverSocket.OnConnectionAccepted -= NewConnectionHandler;
             _serverSocket.Stop();
+        }
+
+        private void CheckConfig()
+        {
+            Logger.Info("Checking configuration");
+
+            _config.GameExe = "Game EXE";
+            _config.CfgFile = "CFG Path";
         }
 
         private void NewConnectionHandler(Socket socket)

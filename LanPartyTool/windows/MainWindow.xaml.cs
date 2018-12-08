@@ -11,6 +11,8 @@ namespace LanPartyTool.windows
 {
     public partial class MainWindow : Window
     {
+        private const int LogTextMaxLines = 100;
+
         private static readonly ILog Logger = LogManager.GetLogger(typeof(MainWindow));
 
         private readonly Config _config = Config.GetInstance();
@@ -41,7 +43,7 @@ namespace LanPartyTool.windows
             Dispatcher.Invoke((MethodInvoker) delegate
             {
                 LogText.AppendText(message);
-                while (LogText.LineCount > 100)
+                while (LogText.LineCount > LogTextMaxLines)
                 {
                     LogText.Text = LogText.Text.Remove(0, LogText.GetLineLength(0));
                 }
