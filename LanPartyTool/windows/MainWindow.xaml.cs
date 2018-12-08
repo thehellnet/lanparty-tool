@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Threading;
@@ -12,11 +13,13 @@ namespace LanPartyTool.windows
 {
     public partial class MainWindow : Window
     {
-        private const int LogTextMaxLines = 100;
+        private const int MaxLogLines = 100;
 
         private static readonly ILog Logger = LogManager.GetLogger(typeof(MainWindow));
 
         private readonly Config _config = Config.GetInstance();
+
+        private List<string> _logList = new List<string>();
 
         public MainWindow()
         {
@@ -48,15 +51,42 @@ namespace LanPartyTool.windows
 
         private void NewLogEvent(Level level, string message)
         {
-            Dispatcher.Invoke((MethodInvoker) delegate
-            {
-                LogText.AppendText(message);
+            var color = "grey";
+            var weight = "normal";
+            var style = "italic";
 
-                while (LogText.LineCount > LogTextMaxLines)
-                {
-                    LogText.Text = LogText.Text.Remove(0, LogText.GetLineLength(0));
-                }
-            });
+            if (level == Level.Error)
+            {
+                color = "red";
+                weight = "bold";
+                style = "normal";
+            }
+            else if (level == Level.Warn)
+            {
+                color = "orange";
+                weight = "normal";
+                style = "normal";
+            }
+            else if (level == Level.Info)
+            {
+                color = "black";
+                weight = "normal";
+                style = "normal";
+            }
+
+            _logList.Add(
+                $"<div style='color: {color}; font-weight: {weight}; font-style: {style};'>{message.Trim()}</div>");
+
+            while (_logList.Count > MaxLogLines)
+            {
+                _logList.RemoveAt(0);
+            }
+
+            var webContent = @"<div style='font-family: monospace; font-size: 12px; font-style: normal; font-weight: normal;'>";
+            webContent += string.Join("", _logList);
+            webContent += @"</div>";
+
+            Dispatcher.Invoke((MethodInvoker) delegate { LogWebBrowser.NavigateToString(webContent); });
         }
     }
 }
