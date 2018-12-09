@@ -100,9 +100,11 @@
     <Compile Include="agent\JsonResponse.cs" />
     <Compile Include="agent\ServerSocket.cs" />
     <Compile Include="config\Config.cs" />
+    <Compile Include="config\Status.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="LogEvent.cs" />
     <Compile Include="utility\GameUtility.cs" />
+    <Compile Include="utility\WindowsUtility.cs" />
     <Compile Include="windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>

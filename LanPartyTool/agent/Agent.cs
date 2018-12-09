@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Windows;
 using log4net;
 using LanPartyTool.config;
 using LanPartyTool.utility;
@@ -15,8 +17,15 @@ namespace LanPartyTool.agent
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(Agent));
 
+        private readonly Status _status = Status.GetInstance();
         private readonly Config _config = Config.GetInstance();
+
         private readonly ServerSocket _serverSocket = new ServerSocket();
+
+        public Agent()
+        {
+            _serverSocket.OnNewStatus += NewSocketStatusHandler;
+        }
 
         public void Start()
         {
@@ -134,7 +143,7 @@ namespace LanPartyTool.agent
             return true;
         }
 
-        private void CheckEntryPoint()
+        private bool CheckEntryPoint()
         {
             Logger.Info("Checking entry point presence");
 
@@ -171,6 +180,23 @@ namespace LanPartyTool.agent
                     break;
             }
 
+            if (entrypointRemove || entrypointAdd)
+            {
+                var result = MessageBox.Show(
+                    "Some changes are required in profile CFG.\n" +
+                    "If you select NO, no changes will be applied.\n" +
+                    "Do you want to continue?",
+                    "LanPartyTool CFG editing",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question,
+                    MessageBoxResult.Yes);
+
+                if (result == MessageBoxResult.No)
+                {
+                    return false;
+                }
+            }
+
             if (entrypointRemove)
             {
                 profileCfgRows.RemoveAll(row => row.StartsWith(@"bind ."));
@@ -184,6 +210,13 @@ namespace LanPartyTool.agent
                 GameUtility.WriteCfg(profileCfgPath, profileCfgRows);
                 Logger.Debug("Entrypoint bind command added in profile cfg");
             }
+
+            return true;
+        }
+
+        private void NewSocketStatusHandler(ServerSocket.Status status)
+        {
+            _status.SocketStatus = status;
         }
 
         private void NewConnectionHandler(Socket socket)

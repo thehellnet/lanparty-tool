@@ -5,8 +5,17 @@ using log4net;
 
 namespace LanPartyTool.agent
 {
-    class ServerSocket
+    internal class ServerSocket
     {
+        public enum Status
+        {
+            Closed,
+            Preparing,
+            Listening,
+            Accepting,
+            Closing
+        }
+
         private static readonly ILog Logger = LogManager.GetLogger(typeof(ServerSocket));
 
         private const int SocketPort = 19642;
@@ -14,7 +23,10 @@ namespace LanPartyTool.agent
 
         public delegate void NewConnectionHandler(Socket socket);
 
+        public delegate void NewStatusHandler(Status status);
+
         public event NewConnectionHandler OnConnectionAccepted;
+        public event NewStatusHandler OnNewStatus;
 
         private Socket _socket;
         private Thread _thread;
@@ -24,6 +36,7 @@ namespace LanPartyTool.agent
             Logger.Info("ServerSocket start");
 
             Logger.Debug("Preparing socket");
+            OnNewStatus?.Invoke(Status.Preparing);
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             _socket.Bind(new IPEndPoint(IPAddress.Any, SocketPort));
 
@@ -38,6 +51,8 @@ namespace LanPartyTool.agent
                 return;
             }
 
+            OnNewStatus?.Invoke(Status.Listening);
+
             Logger.Debug("Preparing main loop thread");
             _thread = new Thread(Loop);
             _thread.Start();
@@ -46,6 +61,8 @@ namespace LanPartyTool.agent
         public void Stop()
         {
             Logger.Info("ServerSocket stop");
+
+            OnNewStatus?.Invoke(Status.Closing);
 
             if (_socket != null && _socket.IsBound)
             {
@@ -70,6 +87,8 @@ namespace LanPartyTool.agent
             }
 
             _socket = null;
+
+            OnNewStatus?.Invoke(Status.Closed);
         }
 
         private void Loop()
@@ -80,6 +99,8 @@ namespace LanPartyTool.agent
             {
                 Socket newSocket;
 
+                OnNewStatus?.Invoke(Status.Listening);
+
                 try
                 {
                     newSocket = _socket.Accept();
@@ -88,6 +109,8 @@ namespace LanPartyTool.agent
                 {
                     break;
                 }
+
+                OnNewStatus?.Invoke(Status.Accepting);
 
                 var remoteAddress = newSocket.RemoteEndPoint.ToString();
                 Logger.Info($"New socket connection from {remoteAddress} accepted");

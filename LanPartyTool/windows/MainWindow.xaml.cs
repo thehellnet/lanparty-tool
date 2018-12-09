@@ -9,7 +9,9 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using log4net;
 using log4net.Core;
+using LanPartyTool.agent;
 using LanPartyTool.config;
+using LanPartyTool.utility;
 
 namespace LanPartyTool.windows
 {
@@ -19,6 +21,7 @@ namespace LanPartyTool.windows
 
         private static readonly ILog Logger = LogManager.GetLogger(typeof(MainWindow));
 
+        private readonly Status _status = Status.GetInstance();
         private readonly Config _config = Config.GetInstance();
 
         private readonly List<dynamic> _logList = new List<dynamic>();
@@ -51,6 +54,7 @@ namespace LanPartyTool.windows
             });
 
             LogEvent.OnLogEvent += NewLogEvent;
+            _status.OnSocketStatusChanged += SocketStatusChangedHandler;
         }
 
         private void NewLogEvent(Level level, string message)
@@ -108,6 +112,49 @@ namespace LanPartyTool.windows
 
                 LogText.Document = new FlowDocument(paragraph);
             }));
+        }
+
+        private void SocketStatusChangedHandler()
+        {
+            SocketStatusValue.Dispatcher.Invoke(DispatcherPriority.Background,
+                new Action(() =>
+                {
+                    switch (_status.SocketStatus)
+                    {
+                        case ServerSocket.Status.Closed:
+                            SocketStatusValue.Content = "Closed";
+                            break;
+                        case ServerSocket.Status.Preparing:
+                            SocketStatusValue.Content = "Preparing";
+                            break;
+                        case ServerSocket.Status.Listening:
+                            SocketStatusValue.Content = "Listening";
+                            break;
+                        case ServerSocket.Status.Accepting:
+                            SocketStatusValue.Content = "Accepting";
+                            break;
+                        case ServerSocket.Status.Closing:
+                            SocketStatusValue.Content = "Closing";
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }));
+        }
+
+        private void GameExeButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowsUtility.OpenFileFolder(_config.GameExe);
+        }
+
+        private void ToolCfgButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowsUtility.OpenFileFolder(_config.ToolCfg);
+        }
+
+        private void ProfileCfgButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowsUtility.OpenFileFolder(_config.ProfileCfg);
         }
     }
 }
