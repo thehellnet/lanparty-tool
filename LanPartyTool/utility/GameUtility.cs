@@ -102,18 +102,29 @@ namespace LanPartyTool.utility
             return "";
         }
 
-        public static string ConfiguredCodKey()
+        public static string ReadCodKey()
         {
             foreach (var registryPath in Cod4RegistryPaths)
             {
                 var codkey = (string) Registry.GetValue(registryPath, "codkey", null);
                 if (codkey != null && codkey.Length == 20)
                 {
-                    return codkey;
+                    return codkey.ToUpper();
                 }
             }
 
             return "";
+        }
+
+        public static string FormatCodKey(string codKey)
+        {
+            var items = new List<string>();
+            for (var i = 0; i < codKey.Length; i += 4)
+            {
+                items.Add(codKey.Substring(i, 4));
+            }
+
+            return string.Join("-", items);
         }
 
         public static List<string> ReadCfg(string cfgPath)

@@ -159,8 +159,9 @@ namespace LanPartyTool.windows
 
         private void ShowCodKeyButton_Click(object sender, RoutedEventArgs e)
         {
-            var codkey = GameUtility.ConfiguredCodKey();
-            MessageBox.Show(codkey, "Configured key", MessageBoxButton.OK, MessageBoxImage.Information);
+            var codKey = GameUtility.ReadCodKey();
+            var message = $"Key configured in registry: {GameUtility.FormatCodKey(codKey)}";
+            MessageBox.Show(message, "Configured key", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }
