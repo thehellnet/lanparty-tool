@@ -156,5 +156,11 @@ namespace LanPartyTool.windows
         {
             WindowsUtility.OpenFileFolder(_config.ProfileCfg);
         }
+
+        private void ShowCodKeyButton_Click(object sender, RoutedEventArgs e)
+        {
+            var codkey = GameUtility.ConfiguredCodKey();
+            MessageBox.Show(codkey, "Configured key", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
     }
 }
