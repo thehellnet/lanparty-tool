@@ -150,7 +150,6 @@ namespace LanPartyTool.agent
             for (var i = 0; i < profileCfgRows.Count; i++)
             {
                 var row = profileCfgRows.ElementAt(i);
-                //var items = GameUtility.splitCfgLine(row);
                 if (row.StartsWith(@"bind ."))
                 {
                     entrypointLines.Add(i);
