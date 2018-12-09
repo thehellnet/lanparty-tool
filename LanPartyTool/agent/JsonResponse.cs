@@ -18,7 +18,7 @@
 
         public static JsonResponse GetSuccessInstance(object data)
         {
-            return new JsonResponse(true) {data = data};
+            return new JsonResponse() {data = data};
         }
 
         public static JsonResponse GetErrorInstance(string error)

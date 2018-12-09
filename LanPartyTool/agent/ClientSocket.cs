@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using log4net;
 using log4net.Repository.Hierarchy;
 using Newtonsoft.Json;
@@ -77,7 +78,7 @@ namespace LanPartyTool.agent
             Logger.Debug("Closing client loop");
         }
 
-        private dynamic ParsePayload(dynamic request)
+        private JsonResponse ParsePayload(dynamic request)
         {
             Logger.Debug("Parsing payload");
             Logger.Debug($"Action: {request.action}");
