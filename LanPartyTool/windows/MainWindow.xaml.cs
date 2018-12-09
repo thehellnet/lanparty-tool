@@ -1,22 +1,15 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Dynamic;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Forms;
-using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Threading;
 using log4net;
 using log4net.Core;
 using LanPartyTool.config;
-using Binding = System.Windows.Data.Binding;
-using TextBox = System.Windows.Controls.TextBox;
 
 namespace LanPartyTool.windows
 {
@@ -28,28 +21,29 @@ namespace LanPartyTool.windows
 
         private readonly Config _config = Config.GetInstance();
 
-        private readonly object _logListLock = new object();
         private readonly List<dynamic> _logList = new List<dynamic>();
 
         public MainWindow()
         {
             InitializeComponent();
 
-            GameExeText.SetBinding(TextBox.TextProperty, new Binding()
+            Title = $"{Application.ResourceAssembly.GetName().Name} {Application.ResourceAssembly.GetName().Version}";
+
+            GameExeText.SetBinding(TextBox.TextProperty, new Binding
             {
                 Path = new PropertyPath("GameExe"),
                 Source = _config,
                 Mode = BindingMode.OneWay
             });
 
-            ToolCfgText.SetBinding(TextBox.TextProperty, new Binding()
+            ToolCfgText.SetBinding(TextBox.TextProperty, new Binding
             {
                 Path = new PropertyPath("ToolCfg"),
                 Source = _config,
                 Mode = BindingMode.OneWay
             });
 
-            ProfileCfgText.SetBinding(TextBox.TextProperty, new Binding()
+            ProfileCfgText.SetBinding(TextBox.TextProperty, new Binding
             {
                 Path = new PropertyPath("ProfileCfg"),
                 Source = _config,

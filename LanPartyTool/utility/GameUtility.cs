@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows.Documents;
 using Microsoft.Win32;
 
 namespace LanPartyTool.utility
@@ -18,13 +17,13 @@ namespace LanPartyTool.utility
 
         public static string DefaultGameExe()
         {
-            var InstallPath = DefaultInstallationDir();
-            if (InstallPath == "")
+            var installPath = DefaultInstallationDir();
+            if (installPath == "")
             {
                 return "";
             }
 
-            var gameExePath = Path.Combine(InstallPath, "iw3mp.exe");
+            var gameExePath = Path.Combine(installPath, "iw3mp.exe");
             return File.Exists(gameExePath) ? gameExePath : "";
         }
 
@@ -36,9 +35,15 @@ namespace LanPartyTool.utility
                 return "";
             }
 
-            var InstallFolderPath = Path.GetDirectoryName(gameExePath).Substring(3);
+            var installFolderPath = Path.GetDirectoryName(gameExePath);
+            if (installFolderPath == null)
+            {
+                return "";
+            }
+
+            var installFolderRealPath = installFolderPath.Substring(3);
             var localPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            var virtualStoreInstallFolder = Path.Combine(localPath, "VirtualStore", InstallFolderPath);
+            var virtualStoreInstallFolder = Path.Combine(localPath, "VirtualStore", installFolderRealPath);
             if (!Directory.Exists(virtualStoreInstallFolder))
             {
                 return "";
@@ -57,15 +62,15 @@ namespace LanPartyTool.utility
                 return "";
             }
 
-            var gameExeDirectoryName = Path.GetDirectoryName(gameExePath);
-            if (gameExeDirectoryName == null)
+            var installFolderPath = Path.GetDirectoryName(gameExePath);
+            if (installFolderPath == null)
             {
                 return "";
             }
 
-            var InstallFolderPath = gameExeDirectoryName.Substring(3);
+            var installFolderRealPath = installFolderPath.Substring(3);
             var localPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            var virtualStoreInstallFolder = Path.Combine(localPath, "VirtualStore", InstallFolderPath);
+            var virtualStoreInstallFolder = Path.Combine(localPath, "VirtualStore", installFolderRealPath);
             var profilesFolder = Path.Combine(virtualStoreInstallFolder, "players", "profiles");
             if (!Directory.Exists(profilesFolder))
             {
@@ -136,7 +141,7 @@ namespace LanPartyTool.utility
             File.WriteAllText(cfgPath, rawContent);
         }
 
-        public static string[] splitCfgLine(string line)
+        public static string[] SplitCfgLine(string line)
         {
             return Regex.Matches(line, @"[\""].+?[\""]|[^ ]+")
                 .Cast<Match>()

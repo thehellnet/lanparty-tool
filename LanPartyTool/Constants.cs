@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace LanPartyTool
+﻿namespace LanPartyTool
 {
-    class Constants
+    internal static class Constants
     {
         public const string ToolCfgName = "lanpartytool";
 

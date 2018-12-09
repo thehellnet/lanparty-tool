@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using log4net;
 using LanPartyTool.config;
 using LanPartyTool.utility;
@@ -191,6 +187,11 @@ namespace LanPartyTool.agent
         }
 
         private void NewConnectionHandler(Socket socket)
+        {
+            new Thread(() => { NewClientLoop(socket); }).Start();
+        }
+
+        private void NewClientLoop(Socket socket)
         {
             Logger.Debug("Starting client loop");
 
