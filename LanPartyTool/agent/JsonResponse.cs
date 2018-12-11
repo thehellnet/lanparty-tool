@@ -4,13 +4,13 @@ namespace LanPartyTool.agent
 {
     public class JsonResponse
     {
-        [JsonProperty]
+        [JsonProperty(PropertyName = "success")]
         private bool Success { get; set; }
 
-        [JsonProperty]
+        [JsonProperty(PropertyName = "data")]
         private object Data { get; set; }
 
-        [JsonProperty]
+        [JsonProperty(PropertyName = "error")]
         private object Error { get; set; }
 
         private JsonResponse(bool success = true)
