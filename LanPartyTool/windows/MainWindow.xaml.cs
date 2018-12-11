@@ -111,6 +111,7 @@ namespace LanPartyTool.windows
                 }
 
                 LogText.Document = new FlowDocument(paragraph);
+                LogText.ScrollToEnd();
             }));
         }
 
