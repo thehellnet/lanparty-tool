@@ -96,8 +96,9 @@
   <ItemGroup>
     <Compile Include="agent\Agent.cs" />
     <Compile Include="agent\ClientSocket.cs" />
-    <Compile Include="agent\Command.cs" />
+    <Compile Include="agent\Executor.cs" />
     <Compile Include="agent\JsonResponse.cs" />
+    <Compile Include="agent\Protocol.cs" />
     <Compile Include="agent\ServerSocket.cs" />
     <Compile Include="config\Config.cs" />
     <Compile Include="config\Status.cs" />

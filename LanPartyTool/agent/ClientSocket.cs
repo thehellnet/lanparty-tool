@@ -64,34 +64,27 @@ namespace LanPartyTool.agent
 
                 var payload = Encoding.UTF8.GetString(rawData);
                 var request = JsonConvert.DeserializeObject<dynamic>(payload);
-                var response = ParsePayload(request);
+
+                var executor = new Executor(request);
+                var response = executor.Execute();
+
                 var ret = JsonConvert.SerializeObject(response);
 
                 Logger.Debug($"Response: {ret}");
 
                 var retBytes = Encoding.ASCII.GetBytes(ret);
-                _socket.Send(retBytes);
+
+                try
+                {
+                    _socket.Send(retBytes);
+                }
+                catch (SocketException e)
+                {
+                    Logger.Warn(e.Message);
+                }
             }
 
             Logger.Debug("Closing client loop");
-        }
-
-        private JsonResponse ParsePayload(dynamic request)
-        {
-            Logger.Debug("Parsing payload");
-            Logger.Debug($"Action: {request.action}");
-
-            if (request.action == "ping")
-            {
-                return JsonResponse.GetSuccessInstance("pong");
-            }
-
-            if (request.action == "writeCfg")
-            {
-                return JsonResponse.GetErrorInstance("Not implemented yet");
-            }
-
-            return JsonResponse.GetErrorInstance("Action not recognized");
         }
     }
 }
