@@ -33,7 +33,7 @@
                 <Label x:Name="SocketStatusValue" Content="Closed" Margin="95,103,0,0"
                        VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" />
                 <Button x:Name="ShowCodKeyButton" Content="Show CodKey" Margin="0,104,10,0" VerticalAlignment="Top"
-                    Height="23" HorizontalAlignment="Right" Width="100" Click="ShowCodKeyButton_Click" />
+                        Height="23" HorizontalAlignment="Right" Width="100" Click="ShowCodKeyButton_Click" />
             </Grid>
         </GroupBox>
         <RichTextBox x:Name="LogText" Margin="10,171,10,10" />

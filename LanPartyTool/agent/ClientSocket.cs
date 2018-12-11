@@ -2,9 +2,7 @@
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using log4net;
-using log4net.Repository.Hierarchy;
 using Newtonsoft.Json;
 
 namespace LanPartyTool.agent
@@ -13,7 +11,7 @@ namespace LanPartyTool.agent
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(ServerSocket));
 
-        private Socket _socket;
+        private readonly Socket _socket;
 
         public ClientSocket(Socket socket)
         {
@@ -88,7 +86,7 @@ namespace LanPartyTool.agent
                 return JsonResponse.GetSuccessInstance("pong");
             }
 
-            if (request.action == "cfg")
+            if (request.action == "writeCfg")
             {
                 return JsonResponse.GetErrorInstance("Not implemented yet");
             }

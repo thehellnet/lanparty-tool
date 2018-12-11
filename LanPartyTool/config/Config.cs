@@ -2,7 +2,7 @@
 
 namespace LanPartyTool.config
 {
-    internal class Config : INotifyPropertyChanged
+    internal sealed class Config : INotifyPropertyChanged
     {
         private static Config _instance;
 
@@ -59,7 +59,7 @@ namespace LanPartyTool.config
             return _instance ?? (_instance = new Config());
         }
 
-        protected virtual void OnPropertyChanged(string propertyName)
+        private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

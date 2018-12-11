@@ -1,14 +1,14 @@
 ﻿namespace LanPartyTool.agent
 {
-    class JsonResponse
+    internal class JsonResponse
     {
-        public bool success { get; set; } = true;
-        public object data { get; set; } = null;
-        public object error { get; set; } = null;
+        private bool Success { get; set; }
+        private object Data { get; set; }
+        private object Error { get; set; }
 
         private JsonResponse(bool success = true)
         {
-            this.success = success;
+            Success = success;
         }
 
         public static JsonResponse GetInstance(bool success = true)
@@ -18,12 +18,12 @@
 
         public static JsonResponse GetSuccessInstance(object data)
         {
-            return new JsonResponse() {data = data};
+            return new JsonResponse {Data = data};
         }
 
         public static JsonResponse GetErrorInstance(string error)
         {
-            return new JsonResponse(false) {error = error};
+            return new JsonResponse(false) {Error = error};
         }
     }
 }

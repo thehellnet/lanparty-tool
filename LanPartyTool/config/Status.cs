@@ -3,7 +3,7 @@ using LanPartyTool.agent;
 
 namespace LanPartyTool.config
 {
-    internal class Status : INotifyPropertyChanged
+    internal sealed class Status : INotifyPropertyChanged
     {
         private static Status _instance;
 
@@ -36,7 +36,7 @@ namespace LanPartyTool.config
             return _instance ?? (_instance = new Status());
         }
 
-        protected virtual void OnPropertyChanged(string propertyName)
+        private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

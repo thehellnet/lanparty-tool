@@ -7,7 +7,7 @@ using Microsoft.Win32;
 
 namespace LanPartyTool.utility
 {
-    class GameUtility
+    internal static class GameUtility
     {
         private static readonly string[] Cod4RegistryPaths =
         {
@@ -135,8 +135,8 @@ namespace LanPartyTool.utility
                 return rows;
             }
 
-            var rawConent = File.ReadAllText(cfgPath);
-            var lines = rawConent.Split(
+            var rawContent = File.ReadAllText(cfgPath);
+            var lines = rawContent.Split(
                 new[] {"\r\n", "\r", "\n"},
                 StringSplitOptions.None
             );
