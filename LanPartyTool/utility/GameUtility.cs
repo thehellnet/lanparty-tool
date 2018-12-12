@@ -23,7 +23,7 @@ namespace LanPartyTool.utility
                 return "";
             }
 
-            var gameExePath = Path.Combine(installPath, "iw3mp.exe");
+            var gameExePath = Path.Combine(installPath, Constants.GameExeFilename);
             return File.Exists(gameExePath) ? gameExePath : "";
         }
 

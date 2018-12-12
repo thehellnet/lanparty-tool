@@ -105,6 +105,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="LogEvent.cs" />
     <Compile Include="utility\GameUtility.cs" />
+    <Compile Include="utility\KeyboardUtility.cs" />
     <Compile Include="utility\WindowsUtility.cs" />
     <Compile Include="windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using log4net;
+using LanPartyTool.config;
+using LanPartyTool.utility;
 using Microsoft.CSharp.RuntimeBinder;
 
 namespace LanPartyTool.agent
@@ -8,6 +11,8 @@ namespace LanPartyTool.agent
     public class Executor
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(Executor));
+
+        private readonly Config _config = Config.GetInstance();
 
         private readonly dynamic _command;
 
@@ -43,14 +48,29 @@ namespace LanPartyTool.agent
 
             try
             {
-                cfgLines = _command.cfgLines;
+                cfgLines = _command.cfgLines.ToObject<List<string>>();
             }
-            catch (RuntimeBinderException)
+            catch (RuntimeBinderException e)
             {
+                Logger.Warn(e.Message);
+                return JsonResponse.GetErrorInstance(e.Message);
+            }
+
+            if (cfgLines == null || cfgLines.Count == 0)
+            {
+                Logger.Warn("No CFG lines in command");
                 return JsonResponse.GetErrorInstance("No CFG lines");
             }
 
-            Logger.Debug(cfgLines);
+            Logger.Debug($"New CFG with {cfgLines.Count} lines");
+
+            Logger.Debug("Updating tool CFG");
+            GameUtility.WriteCfg(_config.ToolCfg, cfgLines);
+
+            Thread.Sleep(1000);
+
+            Logger.Debug("Triggering keyboard keypress");
+            WindowsUtility.SendKeyDown(Constants.GameExeName);
 
             return JsonResponse.GetSuccessInstance();
         }
