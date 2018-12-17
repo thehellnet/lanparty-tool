@@ -36,6 +36,7 @@
                         Height="23" HorizontalAlignment="Right" Width="100" Click="ShowCodKeyButton_Click" />
             </Grid>
         </GroupBox>
-        <RichTextBox x:Name="LogText" Margin="10,171,10,10" />
+        <RichTextBox x:Name="LogText" Margin="10,171,10,10" HorizontalScrollBarVisibility="Auto"
+                     VerticalScrollBarVisibility="Auto"/>
     </Grid>
 </Window>

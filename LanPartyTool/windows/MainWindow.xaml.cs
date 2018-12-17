@@ -108,9 +108,12 @@ namespace LanPartyTool.windows
                         FontStyle = log.style,
                         Text = log.message
                     });
+                    paragraph.Inlines.Add(new LineBreak());
                 }
 
-                LogText.Document = new FlowDocument(paragraph);
+                var document = new FlowDocument(paragraph);
+
+                LogText.Document = document;
                 LogText.ScrollToEnd();
             }));
         }
