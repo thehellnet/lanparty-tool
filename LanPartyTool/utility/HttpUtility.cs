@@ -20,6 +20,8 @@ namespace LanPartyTool.utility
 
         public static JsonResponse doPost(string url, dynamic requestBody)
         {
+            Logger.Debug("Doing POST HTTP Request");
+
             var requestData = new Dictionary<string, dynamic>
             {
                 {"jsonrpc", "2.0"},
@@ -30,15 +32,27 @@ namespace LanPartyTool.utility
 
             var jsonString = JsonConvert.SerializeObject(requestData, Formatting.None);
             var stringContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
-            var response = HttpClient.PostAsync(url, stringContent);
+            HttpResponseMessage responseMessage;
+            try
+            {
+                responseMessage = HttpClient.PostAsync(url, stringContent).Result;
+            }
+            catch (AggregateException)
+            {
+                Logger.Debug("Unable to complete HTTP request");
+                return null;
+            }
+
+            if (!responseMessage.IsSuccessStatusCode) return null;
 
             string responseString;
             try
             {
-                responseString = response.Result.Content.ReadAsStringAsync().Result;
+                responseString = responseMessage.Content.ReadAsStringAsync().Result;
             }
             catch (AggregateException)
             {
+                Logger.Debug("Unable to read HTTP response");
                 return null;
             }
 

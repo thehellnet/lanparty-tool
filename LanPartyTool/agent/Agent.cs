@@ -143,6 +143,14 @@ namespace LanPartyTool.agent
 
             Logger.Debug("Profile cfg path correct");
 
+            if (_config.ServerAddress == "")
+            {
+                Logger.Error("Invalid Server Address");
+                return false;
+            }
+
+            Logger.Debug("Server Address correct correct");
+
             return true;
         }
 

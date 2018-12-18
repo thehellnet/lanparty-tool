@@ -29,7 +29,8 @@ namespace LanPartyTool.utility
                     continue;
                 }
 
-                Logger.Info(result);
+                Logger.Info($"Server URL: {serverUrl}");
+                return serverUrl;
             }
 
             return "";
@@ -67,13 +68,20 @@ namespace LanPartyTool.utility
                         ? $"[{ipAddress}]"
                         : ipAddress.ToString();
 
-                    var serverUrl = $"{ServerProtocol}://{serverAddress}:{ServerPort}{ServerEndPoint}";
+                    var serverUrl = PrepareServerUrl(serverAddress);
                     serverUrls.Add(serverUrl);
                     Logger.Debug($"New possible URL: {serverUrl}");
                 }
             }
 
+            serverUrls.Add(PrepareServerUrl("127.0.0.1"));
+
             return serverUrls.ToArray();
+        }
+
+        private static string PrepareServerUrl(string serverAddress)
+        {
+            return $"{ServerProtocol}://{serverAddress}:{ServerPort}{ServerEndPoint}";
         }
     }
 }
