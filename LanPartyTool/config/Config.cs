@@ -16,8 +16,7 @@ namespace LanPartyTool.config
             set
             {
                 if (_gameExe == value) return;
-                if (value == null) _gameExe = "";
-                _gameExe = value;
+                _gameExe = value ?? "";
                 OnPropertyChanged("GameExe");
             }
         }
@@ -30,8 +29,7 @@ namespace LanPartyTool.config
             set
             {
                 if (_toolCfg == value) return;
-                if (value == null) _toolCfg = "";
-                _toolCfg = value;
+                _toolCfg = value ?? "";
                 OnPropertyChanged("ToolCfg");
             }
         }
@@ -44,9 +42,21 @@ namespace LanPartyTool.config
             set
             {
                 if (_profileCfg == value) return;
-                if (value == null) _profileCfg = "";
-                _profileCfg = value;
+                _profileCfg = value ?? "";
                 OnPropertyChanged("ProfileCfg");
+            }
+        }
+
+        private string _serverAddress = "";
+
+        public string ServerAddress
+        {
+            get => _serverAddress;
+            set
+            {
+                if (_serverAddress == value) return;
+                _serverAddress = value ?? "";
+                OnPropertyChanged("ServerAddress");
             }
         }
 

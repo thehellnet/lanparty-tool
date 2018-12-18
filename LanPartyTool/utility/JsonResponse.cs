@@ -7,13 +7,11 @@ namespace LanPartyTool.agent
         [JsonProperty(PropertyName = "success")]
         private bool Success { get; set; }
 
-        [JsonProperty(PropertyName = "data")]
-        private object Data { get; set; }
+        [JsonProperty(PropertyName = "data")] private object Data { get; set; }
 
-        [JsonProperty(PropertyName = "error")]
-        private object Error { get; set; }
+        [JsonProperty(PropertyName = "error")] private object Error { get; set; }
 
-        private JsonResponse(bool success = true)
+        public JsonResponse(bool success = true)
         {
             Success = success;
         }

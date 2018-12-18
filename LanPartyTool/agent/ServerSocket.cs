@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using log4net;
@@ -105,7 +106,7 @@ namespace LanPartyTool.agent
                 {
                     newSocket = _socket.Accept();
                 }
-                catch (SocketException)
+                catch (Exception)
                 {
                     break;
                 }

@@ -84,6 +84,12 @@ namespace LanPartyTool.agent
                 Logger.Debug("Getting default profile cfg path");
                 _config.ProfileCfg = GameUtility.DefaultProfileCfg();
             }
+
+            if (_config.ServerAddress == "")
+            {
+                Logger.Debug("Getting default server address");
+                _config.ServerAddress = ServerUtility.DefaultServerAddress();
+            }
         }
 
         private bool CheckConfig()
