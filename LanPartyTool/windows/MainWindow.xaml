@@ -8,19 +8,18 @@
     <Grid>
         <GroupBox x:Name="PathGroupBox" Header="Path" Height="156" Margin="10,10,10,0" VerticalAlignment="Top">
             <Grid>
-                <Label x:Name="GameExeLabel" Content="Game EXE" HorizontalAlignment="Left" Margin="10,10,0,0"
-                       VerticalAlignment="Top" />
+                <Label x:Name="GameExeLabel" Content="Game EXE" HorizontalAlignment="Left" Margin="10,13,0,0"
+                       VerticalAlignment="Top" Height="23" />
                 <TextBox x:Name="GameExeText" Height="23" Margin="95,13,85,0" TextWrapping="NoWrap" IsReadOnly="True"
                          VerticalAlignment="Top" />
-                <Label x:Name="ToolCfgLabel" Content="Tool CFG" HorizontalAlignment="Left" Margin="10,41,0,0"
-                       VerticalAlignment="Top" />
+                <Label x:Name="ToolCfgLabel" Content="Tool CFG" HorizontalAlignment="Left" Margin="10,44,0,0"
+                       VerticalAlignment="Top" Height="23" />
                 <TextBox x:Name="ToolCfgText" Height="23" Margin="95,44,85,0" TextWrapping="NoWrap" IsReadOnly="True"
                          VerticalAlignment="Top" />
-                <Label x:Name="ProfileCfgLabel" Content="Profile CFG" HorizontalAlignment="Left" Margin="10,72,0,0"
-                       VerticalAlignment="Top" Width="80" />
+                <Label x:Name="ProfileCfgLabel" Content="Profile CFG" HorizontalAlignment="Left" Margin="10,75,0,0"
+                       VerticalAlignment="Top" Width="80" Height="23" />
                 <TextBox x:Name="ProfileCfgText" Height="23" Margin="95,75,85,0" TextWrapping="NoWrap"
-                         IsReadOnly="True"
-                         VerticalAlignment="Top" />
+                         IsReadOnly="True" VerticalAlignment="Top" />
                 <Button x:Name="GameExeButton" Content="Open dir" Margin="0,13,10,0" VerticalAlignment="Top"
                         Height="23" HorizontalAlignment="Right" Width="70" Click="GameExeButton_Click" />
                 <Button x:Name="ToolCfgButton" Content="Open dir" Margin="0,44,10,0" VerticalAlignment="Top"
@@ -28,15 +27,18 @@
                 <Button x:Name="ProfileCfgButton" Content="Open dir" Margin="0,75,10,0" VerticalAlignment="Top"
                         Height="23" HorizontalAlignment="Right" Width="70" Click="ProfileCfgButton_Click" />
                 <Label x:Name="SocketStatusLabel" Content="Socket status" HorizontalAlignment="Left"
-                       Margin="10,103,0,0"
-                       VerticalAlignment="Top" />
-                <Label x:Name="SocketStatusValue" Content="Closed" Margin="95,103,0,0"
-                       VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" />
-                <Button x:Name="ShowCodKeyButton" Content="Show CodKey" Margin="0,104,10,0" VerticalAlignment="Top"
+                       Margin="10,106,0,0" VerticalAlignment="Top" Height="23" />
+                <TextBox x:Name="SocketStatusText" Margin="95,106,0,0" TextWrapping="NoWrap" IsReadOnly="True"
+                         VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" Height="23" />
+                <Button x:Name="ShowCodKeyButton" Content="Show CodKey" Margin="0,106,10,0" VerticalAlignment="Top"
                         Height="23" HorizontalAlignment="Right" Width="100" Click="ShowCodKeyButton_Click" />
+                <Label x:Name="ServerAddressLabel" Content="Server address" HorizontalAlignment="Left"
+                       Margin="200,106,0,0" VerticalAlignment="Top" Height="23" />
+                <TextBox x:Name="ServerAddressText" Height="23" Margin="292,106,115,0" TextWrapping="NoWrap"
+                         IsReadOnly="True" VerticalAlignment="Top" />
             </Grid>
         </GroupBox>
         <RichTextBox x:Name="LogText" Margin="10,171,10,10" HorizontalScrollBarVisibility="Auto"
-                     VerticalScrollBarVisibility="Auto"/>
+                     VerticalScrollBarVisibility="Auto" />
     </Grid>
 </Window>

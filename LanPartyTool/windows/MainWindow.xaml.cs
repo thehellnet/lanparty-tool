@@ -53,6 +53,13 @@ namespace LanPartyTool.windows
                 Mode = BindingMode.OneWay
             });
 
+            ServerAddressText.SetBinding(TextBox.TextProperty, new Binding
+            {
+                Path = new PropertyPath("ServerAddress"),
+                Source = _config,
+                Mode = BindingMode.OneWay
+            });
+
             LogEvent.OnLogEvent += NewLogEvent;
             _status.OnSocketStatusChanged += SocketStatusChangedHandler;
         }
@@ -120,25 +127,25 @@ namespace LanPartyTool.windows
 
         private void SocketStatusChangedHandler()
         {
-            SocketStatusValue.Dispatcher.Invoke(DispatcherPriority.Background,
+            SocketStatusText.Dispatcher.Invoke(DispatcherPriority.Background,
                 new Action(() =>
                 {
                     switch (_status.SocketStatus)
                     {
                         case ServerSocket.Status.Closed:
-                            SocketStatusValue.Content = "Closed";
+                            SocketStatusText.Text = "Closed";
                             break;
                         case ServerSocket.Status.Preparing:
-                            SocketStatusValue.Content = "Preparing";
+                            SocketStatusText.Text = "Preparing";
                             break;
                         case ServerSocket.Status.Listening:
-                            SocketStatusValue.Content = "Listening";
+                            SocketStatusText.Text = "Listening";
                             break;
                         case ServerSocket.Status.Accepting:
-                            SocketStatusValue.Content = "Accepting";
+                            SocketStatusText.Text = "Accepting";
                             break;
                         case ServerSocket.Status.Closing:
-                            SocketStatusValue.Content = "Closing";
+                            SocketStatusText.Text = "Closing";
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
