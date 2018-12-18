@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Text;
 using log4net;
-using LanPartyTool.agent;
 
 namespace LanPartyTool.utility
 {
@@ -20,7 +16,7 @@ namespace LanPartyTool.utility
 
         public static string DefaultServerAddress()
         {
-            foreach (var serverUrl in possibleServerUrls())
+            foreach (var serverUrl in PossibleServerUrls())
             {
                 var result = HttpUtility.doPost($"{serverUrl}/welcome", new {test = "Test"});
                 if (result == null)
@@ -36,33 +32,28 @@ namespace LanPartyTool.utility
             return "";
         }
 
-        private static IEnumerable<string> possibleServerUrls()
+        private static IEnumerable<string> PossibleServerUrls()
         {
             var serverUrls = new List<string>();
 
             foreach (var networkInterface in NetworkInterface.GetAllNetworkInterfaces())
             {
-                if (networkInterface.NetworkInterfaceType != NetworkInterfaceType.Ethernet)
-                {
-                    continue;
-                }
+                if (networkInterface.NetworkInterfaceType != NetworkInterfaceType.Ethernet) continue;
 
                 Logger.Debug($"Parsing interface \"{networkInterface.Name}\"");
 
                 foreach (var addressInformation in networkInterface.GetIPProperties().UnicastAddresses)
                 {
                     var address = addressInformation.Address;
-                    var netmask = addressInformation.IPv4Mask;
-                    var ipNetwork = IPNetwork.Parse(address, netmask);
+                    var networkMask = addressInformation.IPv4Mask;
+                    var ipNetwork = IPNetwork.Parse(address, networkMask);
                     var ipAddress = ipNetwork.LastUsable;
 
                     if (ipAddress.IsIPv6LinkLocal
                         || ipAddress.IsIPv6Multicast
                         || ipAddress.IsIPv6SiteLocal
                         || ipAddress.IsIPv6Teredo)
-                    {
                         continue;
-                    }
 
                     var serverAddress = ipAddress.AddressFamily == AddressFamily.InterNetworkV6
                         ? $"[{ipAddress}]"
