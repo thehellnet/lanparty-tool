@@ -6,39 +6,47 @@
         mc:Ignorable="d"
         Title="LanPartyTool" Height="480" Width="800">
     <Grid>
-        <GroupBox x:Name="PathGroupBox" Header="Path" Height="156" Margin="10,10,10,0" VerticalAlignment="Top">
+        <GroupBox x:Name="PathGroupBox" Header="Path" Height="175" Margin="10,10,10,0" VerticalAlignment="Top">
             <Grid>
-                <Label x:Name="GameExeLabel" Content="Game EXE" HorizontalAlignment="Left" Margin="10,13,0,0"
+                <Label x:Name="GameExeLabel" Content="Game EXE" HorizontalAlignment="Left" Margin="10,12,0,0"
                        VerticalAlignment="Top" Height="23" />
                 <TextBox x:Name="GameExeText" Height="23" Margin="95,13,85,0" TextWrapping="NoWrap" IsReadOnly="True"
                          VerticalAlignment="Top" />
-                <Label x:Name="ToolCfgLabel" Content="Tool CFG" HorizontalAlignment="Left" Margin="10,44,0,0"
+                <Label x:Name="ToolCfgLabel" Content="Tool CFG" HorizontalAlignment="Left" Margin="10,40,0,0"
                        VerticalAlignment="Top" Height="23" />
-                <TextBox x:Name="ToolCfgText" Height="23" Margin="95,44,85,0" TextWrapping="NoWrap" IsReadOnly="True"
+                <TextBox x:Name="ToolCfgText" Height="23" Margin="95,41,85,0" TextWrapping="NoWrap" IsReadOnly="True"
                          VerticalAlignment="Top" />
-                <Label x:Name="ProfileCfgLabel" Content="Profile CFG" HorizontalAlignment="Left" Margin="10,75,0,0"
+                <Label x:Name="ProfileCfgLabel" Content="Profile CFG" HorizontalAlignment="Left" Margin="10,68,0,0"
                        VerticalAlignment="Top" Width="80" Height="23" />
-                <TextBox x:Name="ProfileCfgText" Height="23" Margin="95,75,85,0" TextWrapping="NoWrap"
+                <TextBox x:Name="ProfileCfgText" Height="23" Margin="95,69,85,0" TextWrapping="NoWrap"
                          IsReadOnly="True" VerticalAlignment="Top" />
                 <Button x:Name="GameExeButton" Content="Open dir" Margin="0,13,10,0" VerticalAlignment="Top"
                         Height="23" HorizontalAlignment="Right" Width="70" Click="GameExeButton_Click" />
-                <Button x:Name="ToolCfgButton" Content="Open dir" Margin="0,44,10,0" VerticalAlignment="Top"
+                <Button x:Name="ToolCfgButton" Content="Open dir" Margin="0,41,10,0" VerticalAlignment="Top"
                         Height="23" HorizontalAlignment="Right" Width="70" Click="ToolCfgButton_Click" />
-                <Button x:Name="ProfileCfgButton" Content="Open dir" Margin="0,75,10,0" VerticalAlignment="Top"
+                <Button x:Name="ProfileCfgButton" Content="Open dir" Margin="0,69,10,0" VerticalAlignment="Top"
                         Height="23" HorizontalAlignment="Right" Width="70" Click="ProfileCfgButton_Click" />
                 <Label x:Name="SocketStatusLabel" Content="Socket status" HorizontalAlignment="Left"
-                       Margin="10,106,0,0" VerticalAlignment="Top" Height="23" />
-                <TextBox x:Name="SocketStatusText" Margin="95,106,0,0" TextWrapping="NoWrap" IsReadOnly="True"
+                       Margin="10,96,0,0" VerticalAlignment="Top" Height="23" />
+                <TextBox x:Name="SocketStatusText" Margin="95,97,0,0" TextWrapping="NoWrap" IsReadOnly="True"
                          VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" Height="23" />
-                <Button x:Name="ShowCodKeyButton" Content="Show CodKey" Margin="0,106,10,0" VerticalAlignment="Top"
+                <Button x:Name="ShowCodKeyButton" Content="Show CodKey" Margin="0,125,115,0" VerticalAlignment="Top"
                         Height="23" HorizontalAlignment="Right" Width="100" Click="ShowCodKeyButton_Click" />
-                <Label x:Name="ServerAddressLabel" Content="Server address" HorizontalAlignment="Left"
-                       Margin="200,106,0,0" VerticalAlignment="Top" Height="23" />
-                <TextBox x:Name="ServerAddressText" Height="23" Margin="292,106,115,0" TextWrapping="NoWrap"
+                <Label x:Name="ServerUrlLabel" Content="Server URL" HorizontalAlignment="Left"
+                       Margin="228,96,0,0" VerticalAlignment="Top" Height="23" />
+                <TextBox x:Name="ServerUrlText" Height="23" Margin="300,97,10,0" TextWrapping="NoWrap"
                          IsReadOnly="True" VerticalAlignment="Top" />
+                <ComboBox x:Name="ComPortComboBox" HorizontalAlignment="Left" Margin="95,125,0,0"
+                          VerticalAlignment="Top" Width="200
+                          "
+                          Height="23" />
+                <Label x:Name="ComPortLabel" Content="COM Port" HorizontalAlignment="Left"
+                       Margin="10,124,0,0" VerticalAlignment="Top" Height="23" />
+                <Button x:Name="RunGameButton" Content="Run game" Margin="0,125,10,0" VerticalAlignment="Top"
+                        Height="23" HorizontalAlignment="Right" Width="100" Click="RunGameButton_Click" />
             </Grid>
         </GroupBox>
-        <RichTextBox x:Name="LogText" Margin="10,171,10,10" HorizontalScrollBarVisibility="Auto"
+        <RichTextBox x:Name="LogText" Margin="10,190,10,10" HorizontalScrollBarVisibility="Auto"
                      VerticalScrollBarVisibility="Auto" />
     </Grid>
 </Window>

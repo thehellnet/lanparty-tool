@@ -85,10 +85,10 @@ namespace LanPartyTool.agent
                 _config.ProfileCfg = GameUtility.DefaultProfileCfg();
             }
 
-            if (_config.ServerAddress == "")
+            if (_config.ServerUrl == "")
             {
-                Logger.Debug("Getting default server address");
-                _config.ServerAddress = ServerUtility.DefaultServerAddress();
+                Logger.Debug("Getting default server url");
+                _config.ServerUrl = ServerUtility.DefaultServerUrl();
             }
         }
 
@@ -143,7 +143,7 @@ namespace LanPartyTool.agent
 
             Logger.Debug("Profile cfg path correct");
 
-            if (_config.ServerAddress == "")
+            if (_config.ServerUrl == "")
             {
                 Logger.Error("Invalid Server Address");
                 return false;

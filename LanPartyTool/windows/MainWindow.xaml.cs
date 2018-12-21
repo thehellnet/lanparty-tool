@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Dynamic;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -53,9 +55,9 @@ namespace LanPartyTool.windows
                 Mode = BindingMode.OneWay
             });
 
-            ServerAddressText.SetBinding(TextBox.TextProperty, new Binding
+            ServerUrlText.SetBinding(TextBox.TextProperty, new Binding
             {
-                Path = new PropertyPath("ServerAddress"),
+                Path = new PropertyPath("ServerUrl"),
                 Source = _config,
                 Mode = BindingMode.OneWay
             });
@@ -173,6 +175,43 @@ namespace LanPartyTool.windows
             var codKey = GameUtility.ReadCodKey();
             var message = $"Key configured in registry: {GameUtility.FormatCodKey(codKey)}";
             MessageBox.Show(message, "Configured key", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void RunGameButton_Click(object sender, RoutedEventArgs e)
+        {
+            LaunchServer();
+        }
+
+        private void LaunchServer()
+        {
+            var addresses = System.Net.Dns.GetHostAddresses(_config.ServerUrl);
+            var serverAddress = addresses[0].ToString();
+
+            var arguments = " +connect " + serverAddress;
+
+            var directoryInfo = new FileInfo(_config.GameExe).Directory;
+            if (directoryInfo == null)
+            {
+                return;
+            }
+
+            var workingDirectory = directoryInfo.FullName;
+
+            var process = new ProcessStartInfo(_config.GameExe)
+            {
+                WorkingDirectory = workingDirectory,
+                Arguments = arguments,
+                UseShellExecute = true
+            };
+
+            try
+            {
+                Process.Start(process);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

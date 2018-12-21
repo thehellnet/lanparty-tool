@@ -47,16 +47,16 @@ namespace LanPartyTool.config
             }
         }
 
-        private string _serverAddress = "";
+        private string _serverUrl = "";
 
-        public string ServerAddress
+        public string ServerUrl
         {
-            get => _serverAddress;
+            get => _serverUrl;
             set
             {
-                if (_serverAddress == value) return;
-                _serverAddress = value ?? "";
-                OnPropertyChanged("ServerAddress");
+                if (_serverUrl == value) return;
+                _serverUrl = value ?? "";
+                OnPropertyChanged("ServerUrl");
             }
         }
 

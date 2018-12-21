@@ -14,7 +14,7 @@ namespace LanPartyTool.utility
 
         private static readonly ILog Logger = LogManager.GetLogger(typeof(ServerUtility));
 
-        public static string DefaultServerAddress()
+        public static string DefaultServerUrl()
         {
             foreach (var serverUrl in PossibleServerUrls())
             {
