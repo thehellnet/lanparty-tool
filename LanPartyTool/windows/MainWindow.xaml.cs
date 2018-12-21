@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Dynamic;
 using System.IO;
+using System.IO.Ports;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
@@ -34,6 +36,8 @@ namespace LanPartyTool.windows
 
             Title = $"{Application.ResourceAssembly.GetName().Name} {Application.ResourceAssembly.GetName().Version}";
 
+            SerialPortComboBox.ItemsSource = SerialPort.GetPortNames();
+
             GameExeText.SetBinding(TextBox.TextProperty, new Binding
             {
                 Path = new PropertyPath("GameExe"),
@@ -60,6 +64,13 @@ namespace LanPartyTool.windows
                 Path = new PropertyPath("ServerUrl"),
                 Source = _config,
                 Mode = BindingMode.OneWay
+            });
+
+            SerialPortComboBox.SetBinding(Selector.SelectedItemProperty, new Binding
+            {
+                Path = new PropertyPath("SerialPort"),
+                Source = _config,
+                Mode = BindingMode.TwoWay
             });
 
             LogEvent.OnLogEvent += NewLogEvent;
@@ -212,6 +223,10 @@ namespace LanPartyTool.windows
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void RestartAgentButton_Click(object sender, RoutedEventArgs e)
+        {
         }
     }
 }

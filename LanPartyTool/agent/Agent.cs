@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
@@ -90,6 +91,14 @@ namespace LanPartyTool.agent
                 Logger.Debug("Getting default server url");
                 _config.ServerUrl = ServerUtility.DefaultServerUrl();
             }
+
+            if (_config.SerialPort == "")
+            {
+                Logger.Debug("Getting default serial port");
+                var portNames = SerialPort.GetPortNames();
+                var portName = portNames.Length > 0 ? portNames[0] : "";
+                _config.SerialPort = portName;
+            }
         }
 
         private bool CheckConfig()
@@ -150,6 +159,14 @@ namespace LanPartyTool.agent
             }
 
             Logger.Debug("Server Address correct correct");
+
+            if (_config.SerialPort == "")
+            {
+                Logger.Error("Invalid Serial Port");
+                return false;
+            }
+
+            Logger.Debug("Serial Port correct");
 
             return true;
         }
