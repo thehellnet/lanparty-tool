@@ -1,9 +1,13 @@
 ﻿using System.ComponentModel;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace LanPartyTool.config
 {
     internal sealed class Config : INotifyPropertyChanged
     {
+        private const string ConfigFileName = "config.json";
+
         private static Config _instance;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -18,6 +22,7 @@ namespace LanPartyTool.config
                 if (_gameExe == value) return;
                 _gameExe = value ?? "";
                 OnPropertyChanged("GameExe");
+                Save();
             }
         }
 
@@ -31,6 +36,7 @@ namespace LanPartyTool.config
                 if (_toolCfg == value) return;
                 _toolCfg = value ?? "";
                 OnPropertyChanged("ToolCfg");
+                Save();
             }
         }
 
@@ -44,6 +50,7 @@ namespace LanPartyTool.config
                 if (_profileCfg == value) return;
                 _profileCfg = value ?? "";
                 OnPropertyChanged("ProfileCfg");
+                Save();
             }
         }
 
@@ -57,11 +64,13 @@ namespace LanPartyTool.config
                 if (_serverUrl == value) return;
                 _serverUrl = value ?? "";
                 OnPropertyChanged("ServerUrl");
+                Save();
             }
         }
 
         private Config()
         {
+            Load();
         }
 
         public static Config GetInstance()
@@ -72,6 +81,34 @@ namespace LanPartyTool.config
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void Load()
+        {
+            if (!File.Exists(ConfigFileName))
+            {
+                return;
+            }
+
+            var jsonString = File.ReadAllText(ConfigFileName);
+            dynamic json = JsonConvert.DeserializeObject(jsonString);
+            _gameExe = json.gameExe.ToString();
+            _toolCfg = json.toolCfg.ToString();
+            _profileCfg = json.profileCfg.ToString();
+            _serverUrl = json.serverUrl.ToString();
+        }
+
+        private void Save()
+        {
+            var json = new
+            {
+                gameExe = _gameExe,
+                toolCfg = _toolCfg,
+                profileCfg = _profileCfg,
+                serverUrl = _serverUrl
+            };
+            var jsonString = JsonConvert.SerializeObject(json, Formatting.Indented);
+            File.WriteAllText(ConfigFileName, jsonString);
         }
     }
 }
