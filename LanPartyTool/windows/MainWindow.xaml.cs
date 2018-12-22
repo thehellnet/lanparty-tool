@@ -180,19 +180,19 @@ namespace LanPartyTool.windows
                 {
                     switch (_status.SerialPortStatus)
                     {
-                        case SerialPortReader.Status.Closed:
+                        case SerialPortReader.PortStatus.Closed:
                             SerialPortStatusText.Text = "Closed";
                             break;
-                        case SerialPortReader.Status.Preparing:
+                        case SerialPortReader.PortStatus.Preparing:
                             SerialPortStatusText.Text = "Preparing";
                             break;
-                        case SerialPortReader.Status.Waiting:
-                            SerialPortStatusText.Text = "Waiting";
+                        case SerialPortReader.PortStatus.Open:
+                            SerialPortStatusText.Text = "Open";
                             break;
-                        case SerialPortReader.Status.Parsing:
+                        case SerialPortReader.PortStatus.Parsing:
                             SerialPortStatusText.Text = "Parsing";
                             break;
-                        case SerialPortReader.Status.Closing:
+                        case SerialPortReader.PortStatus.Closing:
                             SerialPortStatusText.Text = "Closing";
                             break;
                         default:

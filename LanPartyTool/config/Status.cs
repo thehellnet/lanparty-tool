@@ -10,7 +10,7 @@ namespace LanPartyTool.config
 
         private static Status _instance;
 
-        private SerialPortReader.Status _serialPortStatus = SerialPortReader.Status.Closed;
+        private SerialPortReader.PortStatus _serialPortStatus = SerialPortReader.PortStatus.Closed;
 
         private ServerSocket.Status _socketStatus = ServerSocket.Status.Closed;
 
@@ -29,7 +29,7 @@ namespace LanPartyTool.config
             }
         }
 
-        public SerialPortReader.Status SerialPortStatus
+        public SerialPortReader.PortStatus SerialPortStatus
         {
             get => _serialPortStatus;
             set

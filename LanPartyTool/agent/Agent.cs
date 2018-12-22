@@ -14,15 +14,16 @@ namespace LanPartyTool.agent
     internal class Agent
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(Agent));
+
         private readonly Config _config = Config.GetInstance();
-
+        private readonly SerialPortReader _serialPortReader = new SerialPortReader();
         private readonly ServerSocket _serverSocket = new ServerSocket();
-
         private readonly Status _status = Status.GetInstance();
 
         public Agent()
         {
             _serverSocket.OnNewStatus += NewSocketStatusHandler;
+            _serialPortReader.OnNewStatus += NewSerialPortStatusHandler;
         }
 
         public void Start()
@@ -43,10 +44,13 @@ namespace LanPartyTool.agent
 
             if (!CheckConfig()) return;
 
-            CheckEntryPoint();
+            if (!CheckEntryPoint()) return;
 
-            _serverSocket.Start();
             _serverSocket.OnConnectionAccepted += NewConnectionHandler;
+            _serverSocket.Start();
+
+            _serialPortReader.OnNewBarcode += NewBarcodeHandler;
+            _serialPortReader.Start();
 
             Logger.Debug("Agent start sequence completed");
         }
@@ -54,6 +58,9 @@ namespace LanPartyTool.agent
         private void StopAgent()
         {
             Logger.Info("Agent stop");
+
+            _serialPortReader.OnNewBarcode -= NewBarcodeHandler;
+            _serialPortReader.Stop();
 
             _serverSocket.OnConnectionAccepted -= NewConnectionHandler;
             _serverSocket.Stop();
@@ -231,10 +238,19 @@ namespace LanPartyTool.agent
         {
             _status.SocketStatus = status;
         }
+        private void NewSerialPortStatusHandler(SerialPortReader.PortStatus status)
+        {
+            _status.SerialPortStatus = status;
+        }
 
         private void NewConnectionHandler(Socket socket)
         {
             new ClientSocket(socket).Start();
+        }
+
+        private void NewBarcodeHandler(string barcode)
+        {
+            Logger.Info($"New barcode scan: {barcode}");
         }
     }
 }
