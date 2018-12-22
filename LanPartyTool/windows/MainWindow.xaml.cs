@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Dynamic;
 using System.IO;
 using System.IO.Ports;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -27,6 +28,10 @@ namespace LanPartyTool.windows
 
         private readonly Status _status = Status.GetInstance();
         private readonly Config _config = Config.GetInstance();
+
+        public delegate void AgentRestartHandler();
+
+        public event AgentRestartHandler OnAgentRestart;
 
         private readonly List<dynamic> _logList = new List<dynamic>();
 
@@ -227,6 +232,7 @@ namespace LanPartyTool.windows
 
         private void RestartAgentButton_Click(object sender, RoutedEventArgs e)
         {
+            new Thread(() => { OnAgentRestart?.Invoke(); }).Start();
         }
     }
 }

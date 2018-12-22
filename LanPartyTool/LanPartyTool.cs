@@ -11,9 +11,9 @@ namespace LanPartyTool
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(LanPartyTool));
 
-        private readonly Config _config = Config.GetInstance();
-
         private readonly Agent _agent = new Agent();
+
+        private readonly Config _config = Config.GetInstance();
         private readonly MainWindow _mainWindow = new MainWindow();
 
         [STAThread]
@@ -27,6 +27,7 @@ namespace LanPartyTool
             }
             catch (Exception e)
             {
+                Logger.Error(e.Message);
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
             }
@@ -35,6 +36,9 @@ namespace LanPartyTool
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            _mainWindow.OnAgentRestart += AgentRestartHandler;
+
             _agent.Start();
             _mainWindow.Show();
         }
@@ -43,7 +47,16 @@ namespace LanPartyTool
         {
             _mainWindow.Close();
             _agent.Stop();
+
+            _mainWindow.OnAgentRestart -= AgentRestartHandler;
+
             base.OnExit(e);
+        }
+
+        private void AgentRestartHandler()
+        {
+            _agent.Stop();
+            _agent.Start();
         }
     }
 }

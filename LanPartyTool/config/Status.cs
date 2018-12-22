@@ -5,15 +5,15 @@ namespace LanPartyTool.config
 {
     internal sealed class Status : INotifyPropertyChanged
     {
-        private static Status _instance;
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public delegate void SocketStatusChangedHandler();
 
-        public event SocketStatusChangedHandler OnSocketStatusChanged;
+        private static Status _instance;
 
         private ServerSocket.Status _socketStatus = ServerSocket.Status.Closed;
+
+        private Status()
+        {
+        }
 
         public ServerSocket.Status SocketStatus
         {
@@ -27,9 +27,9 @@ namespace LanPartyTool.config
             }
         }
 
-        private Status()
-        {
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public event SocketStatusChangedHandler OnSocketStatusChanged;
 
         public static Status GetInstance()
         {

@@ -8,6 +8,10 @@ namespace LanPartyTool.agent
 {
     internal class ServerSocket
     {
+        public delegate void NewConnectionHandler(Socket socket);
+
+        public delegate void NewStatusHandler(Status status);
+
         public enum Status
         {
             Closed,
@@ -17,20 +21,16 @@ namespace LanPartyTool.agent
             Closing
         }
 
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(ServerSocket));
-
         private const int SocketPort = 19642;
         private const int SocketBacklog = 128;
 
-        public delegate void NewConnectionHandler(Socket socket);
-
-        public delegate void NewStatusHandler(Status status);
-
-        public event NewConnectionHandler OnConnectionAccepted;
-        public event NewStatusHandler OnNewStatus;
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(ServerSocket));
 
         private Socket _socket;
         private Thread _thread;
+
+        public event NewConnectionHandler OnConnectionAccepted;
+        public event NewStatusHandler OnNewStatus;
 
         public void Start()
         {
@@ -38,6 +38,7 @@ namespace LanPartyTool.agent
 
             Logger.Debug("Preparing socket");
             OnNewStatus?.Invoke(Status.Preparing);
+
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             _socket.Bind(new IPEndPoint(IPAddress.Any, SocketPort));
 
@@ -66,7 +67,6 @@ namespace LanPartyTool.agent
             OnNewStatus?.Invoke(Status.Closing);
 
             if (_socket != null && _socket.IsBound)
-            {
                 try
                 {
                     _socket.Close();
@@ -74,7 +74,6 @@ namespace LanPartyTool.agent
                 catch (SocketException)
                 {
                 }
-            }
 
             if (_thread != null)
             {
