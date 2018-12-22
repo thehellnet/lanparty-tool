@@ -12,9 +12,9 @@ namespace LanPartyTool.agent
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(Executor));
 
-        private readonly Config _config = Config.GetInstance();
-
         private readonly dynamic _command;
+
+        private readonly Config _config = Config.GetInstance();
 
         public Executor(dynamic command)
         {

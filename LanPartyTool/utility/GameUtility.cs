@@ -18,10 +18,7 @@ namespace LanPartyTool.utility
         public static string DefaultGameExe()
         {
             var installPath = DefaultInstallationDir();
-            if (installPath == "")
-            {
-                return "";
-            }
+            if (installPath == "") return "";
 
             var gameExePath = Path.Combine(installPath, Constants.GameExeFilename);
             return File.Exists(gameExePath) ? gameExePath : "";
@@ -30,24 +27,15 @@ namespace LanPartyTool.utility
         public static string DefaultToolCfg()
         {
             var gameExePath = DefaultGameExe();
-            if (gameExePath == "")
-            {
-                return "";
-            }
+            if (gameExePath == "") return "";
 
             var installFolderPath = Path.GetDirectoryName(gameExePath);
-            if (installFolderPath == null)
-            {
-                return "";
-            }
+            if (installFolderPath == null) return "";
 
             var installFolderRealPath = installFolderPath.Substring(3);
             var localPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             var virtualStoreInstallFolder = Path.Combine(localPath, "VirtualStore", installFolderRealPath);
-            if (!Directory.Exists(virtualStoreInstallFolder))
-            {
-                return "";
-            }
+            if (!Directory.Exists(virtualStoreInstallFolder)) return "";
 
             var cfgFileFolder = Path.Combine(virtualStoreInstallFolder, "main");
             var toolCfg = Path.Combine(cfgFileFolder, Constants.ToolCfgFilename);
@@ -57,31 +45,19 @@ namespace LanPartyTool.utility
         public static string DefaultProfileCfg()
         {
             var gameExePath = DefaultGameExe();
-            if (gameExePath == "")
-            {
-                return "";
-            }
+            if (gameExePath == "") return "";
 
             var installFolderPath = Path.GetDirectoryName(gameExePath);
-            if (installFolderPath == null)
-            {
-                return "";
-            }
+            if (installFolderPath == null) return "";
 
             var installFolderRealPath = installFolderPath.Substring(3);
             var localPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             var virtualStoreInstallFolder = Path.Combine(localPath, "VirtualStore", installFolderRealPath);
             var profilesFolder = Path.Combine(virtualStoreInstallFolder, "players", "profiles");
-            if (!Directory.Exists(profilesFolder))
-            {
-                return "";
-            }
+            if (!Directory.Exists(profilesFolder)) return "";
 
             var activeProfileFile = Path.Combine(profilesFolder, "active.txt");
-            if (!File.Exists(activeProfileFile))
-            {
-                return "";
-            }
+            if (!File.Exists(activeProfileFile)) return "";
 
             var activeProfileName = File.ReadAllText(activeProfileFile);
             var profileCfg = Path.Combine(profilesFolder, activeProfileName, "config_mp.cfg");
@@ -93,10 +69,7 @@ namespace LanPartyTool.utility
             foreach (var registryPath in Cod4RegistryPaths)
             {
                 var installPath = (string) Registry.GetValue(registryPath, "InstallPath", null);
-                if (installPath != null && Directory.Exists(installPath))
-                {
-                    return installPath;
-                }
+                if (installPath != null && Directory.Exists(installPath)) return installPath;
             }
 
             return "";
@@ -107,10 +80,7 @@ namespace LanPartyTool.utility
             foreach (var registryPath in Cod4RegistryPaths)
             {
                 var codkey = (string) Registry.GetValue(registryPath, "codkey", null);
-                if (codkey != null && codkey.Length == 20)
-                {
-                    return codkey.ToUpper();
-                }
+                if (codkey != null && codkey.Length == 20) return codkey.ToUpper();
             }
 
             return "";
@@ -119,10 +89,7 @@ namespace LanPartyTool.utility
         public static string FormatCodKey(string codKey)
         {
             var items = new List<string>();
-            for (var i = 0; i < codKey.Length; i += 4)
-            {
-                items.Add(codKey.Substring(i, 4));
-            }
+            for (var i = 0; i < codKey.Length; i += 4) items.Add(codKey.Substring(i, 4));
 
             return string.Join("-", items);
         }
@@ -130,10 +97,7 @@ namespace LanPartyTool.utility
         public static List<string> ReadCfg(string cfgPath)
         {
             var rows = new List<string>();
-            if (!File.Exists(cfgPath))
-            {
-                return rows;
-            }
+            if (!File.Exists(cfgPath)) return rows;
 
             var rawContent = File.ReadAllText(cfgPath);
             var lines = rawContent.Split(

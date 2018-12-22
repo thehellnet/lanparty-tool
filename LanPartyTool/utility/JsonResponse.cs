@@ -4,17 +4,17 @@ namespace LanPartyTool.agent
 {
     public class JsonResponse
     {
+        public JsonResponse(bool success = true)
+        {
+            Success = success;
+        }
+
         [JsonProperty(PropertyName = "success")]
         private bool Success { get; set; }
 
         [JsonProperty(PropertyName = "data")] private object Data { get; set; }
 
         [JsonProperty(PropertyName = "error")] private object Error { get; set; }
-
-        public JsonResponse(bool success = true)
-        {
-            Success = success;
-        }
 
         public static JsonResponse GetInstance(bool success = true)
         {

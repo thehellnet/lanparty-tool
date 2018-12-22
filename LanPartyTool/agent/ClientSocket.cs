@@ -46,18 +46,12 @@ namespace LanPartyTool.agent
                         break;
                     }
 
-                    if (readSize == 0)
-                    {
-                        break;
-                    }
+                    if (readSize == 0) break;
 
                     memoryStream.Write(buff, (int) memoryStream.Length, readSize);
                 } while (_socket.Available > 0);
 
-                if (memoryStream.Length == 0)
-                {
-                    break;
-                }
+                if (memoryStream.Length == 0) break;
 
                 var rawData = memoryStream.ToArray();
                 Logger.Debug($"Received new command of {rawData.Length} bytes");

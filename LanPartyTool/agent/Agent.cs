@@ -14,11 +14,11 @@ namespace LanPartyTool.agent
     internal class Agent
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(Agent));
-
-        private readonly Status _status = Status.GetInstance();
         private readonly Config _config = Config.GetInstance();
 
         private readonly ServerSocket _serverSocket = new ServerSocket();
+
+        private readonly Status _status = Status.GetInstance();
 
         public Agent()
         {
@@ -41,10 +41,7 @@ namespace LanPartyTool.agent
 
             InitConfig();
 
-            if (!CheckConfig())
-            {
-                return;
-            }
+            if (!CheckConfig()) return;
 
             CheckEntryPoint();
 
@@ -126,15 +123,9 @@ namespace LanPartyTool.agent
                 return false;
             }
 
-            if (!Directory.Exists(toolCfgDirPath))
-            {
-                Directory.CreateDirectory(toolCfgDirPath);
-            }
+            if (!Directory.Exists(toolCfgDirPath)) Directory.CreateDirectory(toolCfgDirPath);
 
-            if (!File.Exists(_config.ToolCfg))
-            {
-                File.Create(_config.ToolCfg).Dispose();
-            }
+            if (!File.Exists(_config.ToolCfg)) File.Create(_config.ToolCfg).Dispose();
 
             if (!File.Exists(_config.ToolCfg))
             {
@@ -183,10 +174,7 @@ namespace LanPartyTool.agent
             for (var i = 0; i < profileCfgRows.Count; i++)
             {
                 var row = profileCfgRows.ElementAt(i);
-                if (row.StartsWith(@"bind ."))
-                {
-                    entrypointLines.Add(i);
-                }
+                if (row.StartsWith(@"bind .")) entrypointLines.Add(i);
             }
 
             var entrypointRemove = false;
@@ -219,10 +207,7 @@ namespace LanPartyTool.agent
                     MessageBoxImage.Question,
                     MessageBoxResult.Yes);
 
-                if (result == MessageBoxResult.No)
-                {
-                    return false;
-                }
+                if (result == MessageBoxResult.No) return false;
             }
 
             if (entrypointRemove)
