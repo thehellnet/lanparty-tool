@@ -105,6 +105,7 @@
     <Compile Include="agent\Agent.cs" />
     <Compile Include="agent\ClientSocket.cs" />
     <Compile Include="agent\Executor.cs" />
+    <Compile Include="agent\SerialPortReader.cs" />
     <Compile Include="utility\JsonResponse.cs" />
     <Compile Include="agent\Protocol.cs" />
     <Compile Include="agent\ServerSocket.cs" />

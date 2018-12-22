@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Dynamic;
 using System.IO;
 using System.IO.Ports;
+using System.Net;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,18 +23,16 @@ namespace LanPartyTool.windows
 {
     public partial class MainWindow : Window
     {
+        public delegate void AgentRestartHandler();
+
         private const int MaxLogLines = 100;
 
         private static readonly ILog Logger = LogManager.GetLogger(typeof(MainWindow));
-
-        private readonly Status _status = Status.GetInstance();
         private readonly Config _config = Config.GetInstance();
 
-        public delegate void AgentRestartHandler();
-
-        public event AgentRestartHandler OnAgentRestart;
-
         private readonly List<dynamic> _logList = new List<dynamic>();
+
+        private readonly Status _status = Status.GetInstance();
 
         public MainWindow()
         {
@@ -42,6 +41,9 @@ namespace LanPartyTool.windows
             Title = $"{Application.ResourceAssembly.GetName().Name} {Application.ResourceAssembly.GetName().Version}";
 
             SerialPortComboBox.ItemsSource = SerialPort.GetPortNames();
+
+            SocketStatusChangedHandler();
+            SerialPortStatusChangedHandler();
 
             GameExeText.SetBinding(TextBox.TextProperty, new Binding
             {
@@ -80,7 +82,10 @@ namespace LanPartyTool.windows
 
             LogEvent.OnLogEvent += NewLogEvent;
             _status.OnSocketStatusChanged += SocketStatusChangedHandler;
+            _status.OnSerialPortStatusChanged += SerialPortStatusChangedHandler;
         }
+
+        public event AgentRestartHandler OnAgentRestart;
 
         private void NewLogEvent(Level level, string message)
         {
@@ -114,10 +119,7 @@ namespace LanPartyTool.windows
             logItem.message = message.Trim();
 
             _logList.Add(logItem);
-            while (_logList.Count > MaxLogLines)
-            {
-                _logList.RemoveAt(0);
-            }
+            while (_logList.Count > MaxLogLines) _logList.RemoveAt(0);
 
             LogText.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
             {
@@ -171,6 +173,34 @@ namespace LanPartyTool.windows
                 }));
         }
 
+        private void SerialPortStatusChangedHandler()
+        {
+            SerialPortStatusText.Dispatcher.Invoke(DispatcherPriority.Background,
+                new Action(() =>
+                {
+                    switch (_status.SerialPortStatus)
+                    {
+                        case SerialPortReader.Status.Closed:
+                            SerialPortStatusText.Text = "Closed";
+                            break;
+                        case SerialPortReader.Status.Preparing:
+                            SerialPortStatusText.Text = "Preparing";
+                            break;
+                        case SerialPortReader.Status.Waiting:
+                            SerialPortStatusText.Text = "Waiting";
+                            break;
+                        case SerialPortReader.Status.Parsing:
+                            SerialPortStatusText.Text = "Parsing";
+                            break;
+                        case SerialPortReader.Status.Closing:
+                            SerialPortStatusText.Text = "Closing";
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }));
+        }
+
         private void GameExeButton_Click(object sender, RoutedEventArgs e)
         {
             WindowsUtility.OpenFileFolder(_config.GameExe);
@@ -200,16 +230,13 @@ namespace LanPartyTool.windows
 
         private void LaunchServer()
         {
-            var addresses = System.Net.Dns.GetHostAddresses(_config.ServerUrl);
+            var addresses = Dns.GetHostAddresses(_config.ServerUrl);
             var serverAddress = addresses[0].ToString();
 
             var arguments = " +connect " + serverAddress;
 
             var directoryInfo = new FileInfo(_config.GameExe).Directory;
-            if (directoryInfo == null)
-            {
-                return;
-            }
+            if (directoryInfo == null) return;
 
             var workingDirectory = directoryInfo.FullName;
 

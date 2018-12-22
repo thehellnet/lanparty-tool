@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System.IO;
 using log4net;
-using log4net.Repository.Hierarchy;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -15,9 +14,20 @@ namespace LanPartyTool.config
 
         private static Config _instance;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         private string _gameExe = "";
+
+        private string _profileCfg = "";
+
+        private string _serialPort = "";
+
+        private string _serverUrl = "";
+
+        private string _toolCfg = "";
+
+        private Config()
+        {
+            Load();
+        }
 
         public string GameExe
         {
@@ -31,8 +41,6 @@ namespace LanPartyTool.config
             }
         }
 
-        private string _toolCfg = "";
-
         public string ToolCfg
         {
             get => _toolCfg;
@@ -44,8 +52,6 @@ namespace LanPartyTool.config
                 Save();
             }
         }
-
-        private string _profileCfg = "";
 
         public string ProfileCfg
         {
@@ -59,8 +65,6 @@ namespace LanPartyTool.config
             }
         }
 
-        private string _serverUrl = "";
-
         public string ServerUrl
         {
             get => _serverUrl;
@@ -72,8 +76,6 @@ namespace LanPartyTool.config
                 Save();
             }
         }
-
-        private string _serialPort = "";
 
         public string SerialPort
         {
@@ -87,10 +89,7 @@ namespace LanPartyTool.config
             }
         }
 
-        private Config()
-        {
-            Load();
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public static Config GetInstance()
         {
@@ -106,10 +105,7 @@ namespace LanPartyTool.config
         {
             Logger.Debug("Loading configuration to file");
 
-            if (!File.Exists(ConfigFileName))
-            {
-                return;
-            }
+            if (!File.Exists(ConfigFileName)) return;
 
             var jsonString = File.ReadAllText(ConfigFileName);
             var json = JObject.Parse(jsonString);
