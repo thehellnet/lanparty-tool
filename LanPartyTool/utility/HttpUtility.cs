@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using log4net;
 using LanPartyTool.agent;
 using Newtonsoft.Json;
+using RestSharp;
 
 namespace LanPartyTool.utility
 {
@@ -22,39 +22,27 @@ namespace LanPartyTool.utility
         {
             Logger.Debug("Doing POST HTTP Request");
 
-            var requestData = new Dictionary<string, dynamic>
+            var requestData = new
             {
-                {"jsonrpc", "2.0"},
-                {"method", "action"},
-                {"params", requestBody},
-                {"id", 0}
+                jsonrpc = "2.0",
+                method = "action",
+                @params = requestBody,
+                id = 0
             };
 
-            var jsonString = JsonConvert.SerializeObject(requestData, Formatting.None);
-            var stringContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
-            HttpResponseMessage responseMessage;
-            try
-            {
-                responseMessage = HttpClient.PostAsync(url, stringContent).Result;
-            }
-            catch (AggregateException)
+            var request = new RestRequest(Method.POST);
+            request.AddJsonBody(requestData);
+            request.AddHeader("Content-Type", "application/json");
+
+            var client = new RestClient(url) {Timeout = 2000};
+            var response = client.Execute(request);
+            if (!response.IsSuccessful)
             {
                 Logger.Debug("Unable to complete HTTP request");
                 return null;
             }
 
-            if (!responseMessage.IsSuccessStatusCode) return null;
-
-            string responseString;
-            try
-            {
-                responseString = responseMessage.Content.ReadAsStringAsync().Result;
-            }
-            catch (AggregateException)
-            {
-                Logger.Debug("Unable to read HTTP response");
-                return null;
-            }
+            var responseString = response.Content;
 
             var responseJson = JsonConvert.DeserializeObject<JsonRpcResponse>(responseString);
             return responseJson.Result;
