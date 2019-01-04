@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Http;
-using System.Text;
 using log4net;
 using LanPartyTool.agent;
 using Newtonsoft.Json;

@@ -50,7 +50,17 @@ namespace LanPartyTool.agent
             };
 
             Logger.Debug("Opening serial port");
-            _serialPort.Open();
+            try
+            {
+                _serialPort.Open();
+            }
+            catch (IOException e)
+            {
+                Logger.Error(e.Message);
+                OnNewStatus?.Invoke(PortStatus.Closed);
+                return;
+            }
+
             OnNewStatus?.Invoke(PortStatus.Open);
 
             Logger.Debug("Launching serial port loop");
