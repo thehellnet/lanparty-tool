@@ -252,6 +252,26 @@ namespace LanPartyTool.agent
         private void NewBarcodeHandler(string barcode)
         {
             Logger.Info($"New barcode scan: {barcode}");
+
+            var cfgLines = ServerUtility.GetCfg(_config.ServerUrl, barcode);
+            if (cfgLines == null) return;
+
+            ApplyNewCfg(cfgLines);
+        }
+
+        private void ApplyNewCfg(List<string> cfgLines)
+        {
+            if (cfgLines == null) return;
+
+            Logger.Debug($"New CFG with {cfgLines.Count} lines");
+
+            Logger.Debug("Updating tool CFG");
+            GameUtility.WriteCfg(_config.ToolCfg, cfgLines);
+
+            Thread.Sleep(1000);
+
+            Logger.Debug("Triggering keyboard keypress");
+            WindowsUtility.SendKeyDown(Constants.GameExeName);
         }
     }
 }

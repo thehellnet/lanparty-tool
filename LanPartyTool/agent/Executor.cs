@@ -62,6 +62,13 @@ namespace LanPartyTool.agent
                 return JsonResponse.GetErrorInstance("No CFG lines");
             }
 
+            ApplyNewCfg(cfgLines);
+
+            return JsonResponse.GetSuccessInstance();
+        }
+
+        private void ApplyNewCfg(List<string> cfgLines)
+        {
             Logger.Debug($"New CFG with {cfgLines.Count} lines");
 
             Logger.Debug("Updating tool CFG");
@@ -71,8 +78,6 @@ namespace LanPartyTool.agent
 
             Logger.Debug("Triggering keyboard keypress");
             WindowsUtility.SendKeyDown(Constants.GameExeName);
-
-            return JsonResponse.GetSuccessInstance();
         }
     }
 }

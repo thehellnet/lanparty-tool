@@ -10,11 +10,11 @@ namespace LanPartyTool.agent
         }
 
         [JsonProperty(PropertyName = "success")]
-        private bool Success { get; set; }
+        public bool Success { get; private set; }
 
-        [JsonProperty(PropertyName = "data")] private object Data { get; set; }
+        [JsonProperty(PropertyName = "data")] public object Data { get; private set; }
 
-        [JsonProperty(PropertyName = "error")] private object Error { get; set; }
+        [JsonProperty(PropertyName = "error")] public object Error { get; private set; }
 
         public static JsonResponse GetInstance(bool success = true)
         {

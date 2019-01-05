@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using log4net;
+using Newtonsoft.Json.Linq;
 
 namespace LanPartyTool.utility
 {
@@ -12,6 +13,7 @@ namespace LanPartyTool.utility
         private const int ServerPort = 8069;
         private const string ServerEndPoint = "/ap1/v1/tool";
         private const string WelcomeEndPoint = "/welcome";
+        private const string GetCfgEndPoint = "/get_cfg";
 
         private static readonly ILog Logger = LogManager.GetLogger(typeof(ServerUtility));
 
@@ -19,7 +21,7 @@ namespace LanPartyTool.utility
         {
             foreach (var serverUrl in PossibleServerUrls())
             {
-                var result = HttpUtility.doPost($"{serverUrl}{WelcomeEndPoint}");
+                var result = HttpUtility.DoPost($"{serverUrl}{WelcomeEndPoint}");
                 if (result == null)
                 {
                     Logger.Debug($"\"{serverUrl}\" is not valid");
@@ -31,6 +33,27 @@ namespace LanPartyTool.utility
             }
 
             return "";
+        }
+
+        public static List<string> GetCfg(string serverUrl, string barcode)
+        {
+            var result = HttpUtility.DoPost($"{serverUrl}{GetCfgEndPoint}", new {barcode});
+            if (result == null)
+            {
+                Logger.Debug($"\"{serverUrl}\" is not valid");
+                return null;
+            }
+
+            if (result.Success == false)
+            {
+                Logger.Warn(result.Error as string);
+                return null;
+            }
+
+            var rawData = result.Data as JArray;
+            var cfgLines = rawData.ToObject<List<string>>();
+
+            return cfgLines;
         }
 
         private static IEnumerable<string> PossibleServerUrls()

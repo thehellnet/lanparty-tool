@@ -104,27 +104,31 @@ namespace LanPartyTool.agent
         {
             Logger.Debug("Starting loop");
 
-            try
-            {
-                var line = "";
+            var line = "";
 
-                while (_serialPort.IsOpen)
+            while (_serialPort.IsOpen)
+            {
+                int c;
+
+                try
                 {
-                    var c = _serialPort.ReadChar();
-                    if (c == '\n' || c == '\r')
-                    {
-                        if (line.Length > 0) NewSerialLine(line);
-
-                        line = "";
-                        continue;
-                    }
-
-                    line += (char) c;
+                    c = _serialPort.ReadChar();
                 }
-            }
-            catch (Exception e)
-            {
-                Logger.Error($"Error on serial port: {e.Message}");
+                catch (Exception e)
+                {
+                    Logger.Error($"Error on serial port: {e.Message}");
+                    continue;
+                }
+
+                if (c == '\n' || c == '\r')
+                {
+                    if (line.Length > 0) NewSerialLine(line);
+
+                    line = "";
+                    continue;
+                }
+
+                line += (char) c;
             }
 
             Logger.Debug("Loop end");
