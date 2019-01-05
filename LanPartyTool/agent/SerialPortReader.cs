@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.IO.Ports;
 using System.Threading;
 using log4net;
@@ -46,7 +47,7 @@ namespace LanPartyTool.agent
                 Parity = Parity.None,
                 StopBits = StopBits.One,
                 Handshake = Handshake.None,
-                ReadTimeout = 0
+                ReadTimeout = SerialPort.InfiniteTimeout
             };
 
             Logger.Debug("Opening serial port");
@@ -54,7 +55,7 @@ namespace LanPartyTool.agent
             {
                 _serialPort.Open();
             }
-            catch (IOException e)
+            catch (Exception e)
             {
                 Logger.Error(e.Message);
                 OnNewStatus?.Invoke(PortStatus.Closed);
@@ -103,9 +104,36 @@ namespace LanPartyTool.agent
         {
             Logger.Debug("Starting loop");
 
-            while (_serialPort.IsOpen)
+            try
             {
+                var line = "";
+
+                while (_serialPort.IsOpen)
+                {
+                    var c = _serialPort.ReadChar();
+                    if (c == '\n' || c == '\r')
+                    {
+                        if (line.Length > 0) NewSerialLine(line);
+
+                        line = "";
+                        continue;
+                    }
+
+                    line += (char) c;
+                }
             }
+            catch (Exception e)
+            {
+                Logger.Error($"Error on serial port: {e.Message}");
+            }
+
+            Logger.Debug("Loop end");
+        }
+
+        private void NewSerialLine(string line)
+        {
+            Logger.Debug($"New line on serial port: {line}");
+            OnNewBarcode?.Invoke(line);
         }
     }
 }

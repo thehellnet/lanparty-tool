@@ -11,6 +11,7 @@ namespace LanPartyTool.utility
         private const string ServerProtocol = "http";
         private const int ServerPort = 8069;
         private const string ServerEndPoint = "/ap1/v1/tool";
+        private const string WelcomeEndPoint = "/welcome";
 
         private static readonly ILog Logger = LogManager.GetLogger(typeof(ServerUtility));
 
@@ -18,7 +19,7 @@ namespace LanPartyTool.utility
         {
             foreach (var serverUrl in PossibleServerUrls())
             {
-                var result = HttpUtility.doPost($"{serverUrl}/welcome", new {test = "Test"});
+                var result = HttpUtility.doPost($"{serverUrl}{WelcomeEndPoint}");
                 if (result == null)
                 {
                     Logger.Debug($"\"{serverUrl}\" is not valid");

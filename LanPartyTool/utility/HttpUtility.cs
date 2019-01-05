@@ -17,9 +17,11 @@ namespace LanPartyTool.utility
             HttpClient.Timeout = TimeSpan.FromSeconds(2);
         }
 
-        public static JsonResponse doPost(string url, dynamic requestBody)
+        public static JsonResponse doPost(string url, dynamic requestBody = null)
         {
             Logger.Debug("Doing POST HTTP Request");
+
+            if (requestBody == null) requestBody = new { };
 
             var requestData = new
             {

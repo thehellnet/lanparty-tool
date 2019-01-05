@@ -238,6 +238,7 @@ namespace LanPartyTool.agent
         {
             _status.SocketStatus = status;
         }
+
         private void NewSerialPortStatusHandler(SerialPortReader.PortStatus status)
         {
             _status.SerialPortStatus = status;
