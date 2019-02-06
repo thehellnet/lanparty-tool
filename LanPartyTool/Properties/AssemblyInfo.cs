@@ -8,7 +8,7 @@ using log4net.Config;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("The HellNet.org")]
 [assembly: AssemblyProduct("LanPartyTool")]
-[assembly: AssemblyCopyright("Copyright ©  2018 - Luca Cireddu")]
+[assembly: AssemblyCopyright("Copyright ©  2019 - Luca Cireddu")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -18,7 +18,7 @@ using log4net.Config;
 
 [assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)]
 
-[assembly: AssemblyVersion("0.1.2.0")]
-[assembly: AssemblyFileVersion("0.1.2.0")]
+[assembly: AssemblyVersion("0.2.0.0")]
+[assembly: AssemblyFileVersion("0.2.0.0")]
 
 [assembly: XmlConfigurator(ConfigFile = "log4net.config")]
