@@ -123,7 +123,8 @@ namespace LanPartyTool.agent
                     continue;
                 }
 
-                if (line.Count == 0 && c != 0x02) continue;
+                if (line.Count == 0 && c != 0x02)
+                    continue;
 
                 line.Add((byte) c);
 
@@ -147,12 +148,15 @@ namespace LanPartyTool.agent
 
         private static string ParseString(IReadOnlyCollection<byte> line)
         {
-            if (line == null) return null;
-            if (line.Count != 14) return null;
-            if (line.ElementAt(0) != 0x02) return null;
-            if (line.ElementAt(13) != 0x03) return null;
+            if (line == null)
+                return null;
+            if (line.Count != 14)
+                return null;
+            if (line.ElementAt(0) != 0x02)
+                return null;
+            if (line.ElementAt(13) != 0x03)
+                return null;
 
-            var rawData = line.Skip(1).ToArray();
             uint computedChecksum = 0;
             for (var i = 1; i < 11; i += 2)
             {
@@ -165,20 +169,23 @@ namespace LanPartyTool.agent
                     computedChecksum ^= val;
             }
 
-            var rawGarbage = line.Skip(1).Take(2).ToArray();
+            var rawVersion = line.Skip(1).Take(2).ToArray();
             var rawNumber = line.Skip(3).Take(8).ToArray();
             var rawChecksum = line.Skip(11).Take(2).ToArray();
 
-            var asciiGarbage = Encoding.UTF8.GetString(rawGarbage);
+            var asciiVersion = Encoding.UTF8.GetString(rawVersion);
             var asciiNumber = Encoding.UTF8.GetString(rawNumber);
             var asciiChecksum = Encoding.UTF8.GetString(rawChecksum);
 
             var number = Convert.ToUInt64(asciiNumber, 16);
             var checksum = Convert.ToUInt64(asciiChecksum, 16);
 
-            if (checksum != computedChecksum) return null;
+            if (checksum != computedChecksum)
+                return null;
 
             var barcode = number.ToString("D10");
+
+            Logger.Debug($"New barcode {barcode} - Version {asciiVersion}");
 
             return barcode;
         }
