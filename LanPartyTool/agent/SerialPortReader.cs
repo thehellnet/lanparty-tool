@@ -33,6 +33,8 @@ namespace LanPartyTool.agent
         private SerialPort _serialPort;
         private Thread _thread;
 
+        private DateTime lastBarcodeDateTime = DateTime.Now;
+
         public event NewBarcodeHandler OnNewBarcode;
         public event NewStatusHandler OnNewStatus;
 
@@ -143,6 +145,11 @@ namespace LanPartyTool.agent
         private void NewSerialLine(string line)
         {
             Logger.Debug($"New line on serial port: {line}");
+
+            if (lastBarcodeDateTime.AddSeconds(2) >= DateTime.Now)
+                return;
+
+            lastBarcodeDateTime = DateTime.Now;
             OnNewBarcode?.Invoke(line);
         }
 
