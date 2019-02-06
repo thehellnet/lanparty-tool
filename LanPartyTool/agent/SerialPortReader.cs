@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Ports;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using log4net;
 using LanPartyTool.config;
@@ -104,7 +107,7 @@ namespace LanPartyTool.agent
         {
             Logger.Debug("Starting loop");
 
-            var line = "";
+            var line = new List<byte>();
 
             while (_serialPort.IsOpen)
             {
@@ -120,15 +123,17 @@ namespace LanPartyTool.agent
                     continue;
                 }
 
-                if (c == '\n' || c == '\r')
+                if (line.Count == 0 && c != 0x02) continue;
+
+                line.Add((byte) c);
+
+                if (line.Count > 0 && c == 0x03)
                 {
-                    if (line.Length > 0) NewSerialLine(line);
+                    var barcode = ParseString(line);
+                    if (!string.IsNullOrEmpty(barcode)) NewSerialLine(barcode);
 
-                    line = "";
-                    continue;
+                    line.Clear();
                 }
-
-                line += (char) c;
             }
 
             Logger.Debug("Loop end");
@@ -138,6 +143,44 @@ namespace LanPartyTool.agent
         {
             Logger.Debug($"New line on serial port: {line}");
             OnNewBarcode?.Invoke(line);
+        }
+
+        private static string ParseString(IReadOnlyCollection<byte> line)
+        {
+            if (line == null) return null;
+            if (line.Count != 14) return null;
+            if (line.ElementAt(0) != 0x02) return null;
+            if (line.ElementAt(13) != 0x03) return null;
+
+            var rawData = line.Skip(1).ToArray();
+            uint computedChecksum = 0;
+            for (var i = 1; i < 11; i += 2)
+            {
+                var rawVal = line.Skip(i).Take(2).ToArray();
+                var asciiVal = Encoding.UTF8.GetString(rawVal);
+                var val = Convert.ToUInt16(asciiVal, 16);
+                if (i == 1)
+                    computedChecksum = val;
+                else
+                    computedChecksum ^= val;
+            }
+
+            var rawGarbage = line.Skip(1).Take(2).ToArray();
+            var rawNumber = line.Skip(3).Take(8).ToArray();
+            var rawChecksum = line.Skip(11).Take(2).ToArray();
+
+            var asciiGarbage = Encoding.UTF8.GetString(rawGarbage);
+            var asciiNumber = Encoding.UTF8.GetString(rawNumber);
+            var asciiChecksum = Encoding.UTF8.GetString(rawChecksum);
+
+            var number = Convert.ToUInt64(asciiNumber, 16);
+            var checksum = Convert.ToUInt64(asciiChecksum, 16);
+
+            if (checksum != computedChecksum) return null;
+
+            var barcode = number.ToString("D10");
+
+            return barcode;
         }
     }
 }
