@@ -5,6 +5,7 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using log4net;
 using LanPartyTool.config;
 
@@ -130,13 +131,13 @@ namespace LanPartyTool.agent
 
                 line.Add((byte) c);
 
-                if (line.Count > 0 && c == 0x03)
-                {
-                    var barcode = ParseString(line);
-                    if (!string.IsNullOrEmpty(barcode)) NewSerialLine(barcode);
+                if (c != 0x03)
+                    continue;
 
-                    line.Clear();
-                }
+                var barcode = ParseString(line);
+                if (!string.IsNullOrEmpty(barcode)) NewSerialLine(barcode);
+
+                line.Clear();
             }
 
             Logger.Debug("Loop end");
@@ -150,7 +151,7 @@ namespace LanPartyTool.agent
                 return;
 
             lastBarcodeDateTime = DateTime.Now;
-            OnNewBarcode?.Invoke(line);
+            new Thread(() => { OnNewBarcode?.Invoke(line); }).Start();
         }
 
         private static string ParseString(IReadOnlyCollection<byte> line)
