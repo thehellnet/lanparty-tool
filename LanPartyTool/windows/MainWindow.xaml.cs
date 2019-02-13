@@ -18,6 +18,7 @@ using log4net.Core;
 using LanPartyTool.agent;
 using LanPartyTool.config;
 using LanPartyTool.utility;
+using DateTime = System.DateTime;
 
 namespace LanPartyTool.windows
 {
@@ -34,12 +35,22 @@ namespace LanPartyTool.windows
 
         private readonly Status _status = Status.GetInstance();
 
+        private readonly DispatcherTimer clockTimer = new DispatcherTimer();
+
         public MainWindow()
         {
             InitializeComponent();
 
-            Title = $"{Application.ResourceAssembly.GetName().Name} {Application.ResourceAssembly.GetName().Version}";
+            Title = $"{Application.ResourceAssembly.GetName().Name}";
 
+            VersionText.Text = $"ver. {Application.ResourceAssembly.GetName().Version}";
+
+            clockTimer.Tick += (sender, args) =>
+                ClockText.Text = $"{DateTime.Now}";
+            clockTimer.Interval = TimeSpan.FromSeconds(1);
+            clockTimer.Start();
+
+            ClockText.Text = $"{DateTime.Now}";
             SerialPortComboBox.ItemsSource = SerialPort.GetPortNames();
 
             SocketStatusChangedHandler();

@@ -26,32 +26,64 @@
                         Height="23" HorizontalAlignment="Right" Width="70" Click="ToolCfgButton_Click" />
                 <Button x:Name="ProfileCfgButton" Content="Open dir" Margin="0,69,10,0" VerticalAlignment="Top"
                         Height="23" HorizontalAlignment="Right" Width="70" Click="ProfileCfgButton_Click" />
-                <Label x:Name="SocketStatusLabel" Content="Socket status" HorizontalAlignment="Left"
-                       Margin="10,96,0,0" VerticalAlignment="Top" Height="23" />
-                <TextBox x:Name="SocketStatusText" Margin="95,97,0,0" TextWrapping="NoWrap" IsReadOnly="True"
-                         VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" Height="23" />
+
                 <Button x:Name="ShowCodKeyButton" Content="Show CodKey" Margin="0,125,115,0" VerticalAlignment="Top"
                         Height="23" HorizontalAlignment="Right" Width="100" Click="ShowCodKeyButton_Click" />
                 <Label x:Name="ServerUrlLabel" Content="Server URL" HorizontalAlignment="Left"
                        Margin="228,96,0,0" VerticalAlignment="Top" Height="23" />
                 <TextBox x:Name="ServerUrlText" Height="23" Margin="300,97,10,0" TextWrapping="NoWrap"
                          IsReadOnly="True" VerticalAlignment="Top" />
-                <ComboBox x:Name="SerialPortComboBox" Margin="300,125,325,0"
+                <ComboBox x:Name="SerialPortComboBox" Margin="95,97,537,0"
                           VerticalAlignment="Top" Height="23" />
                 <Label x:Name="ComPortLabel" Content="COM Port"
-                       Margin="228,125,0,0" VerticalAlignment="Top" Height="23" HorizontalAlignment="Left" Width="62" />
+                       Margin="10,97,0,0" VerticalAlignment="Top" Height="23" HorizontalAlignment="Left" Width="62" />
                 <Button x:Name="RunGameButton" Content="Run game" Margin="0,125,10,0" VerticalAlignment="Top"
                         Height="23" HorizontalAlignment="Right" Width="100" Click="RunGameButton_Click" />
                 <Button x:Name="RestartAgentButton" Content="Restart agent" Margin="0,125,220,0"
                         VerticalAlignment="Top"
                         Height="23" Click="RestartAgentButton_Click" HorizontalAlignment="Right" Width="100" />
-                <Label x:Name="SerialPortStatusLabel" Content="Serial status" HorizontalAlignment="Left"
-                    Margin="10,124,0,0" VerticalAlignment="Top" Height="23" />
-                <TextBox x:Name="SerialPortStatusText" Margin="95,125,0,0" TextWrapping="NoWrap" IsReadOnly="True"
-                    VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" Height="23" />
+
             </Grid>
         </GroupBox>
-        <RichTextBox x:Name="LogText" Margin="10,198,10,10" HorizontalScrollBarVisibility="Auto"
+        <RichTextBox x:Name="LogText" Margin="10,198,10,31" HorizontalScrollBarVisibility="Auto"
                      VerticalScrollBarVisibility="Auto" />
+        <StatusBar Margin="0,0,0,0" Height="26" VerticalAlignment="Bottom">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="200" />
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem Grid.Column="0">
+                <TextBlock Text="Serial port:" />
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="1">
+                <TextBlock x:Name="SerialPortStatusText" />
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="2">
+                <TextBlock Text="Socket:" />
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="3">
+                <TextBlock x:Name="SocketStatusText" />
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="5">
+                <TextBlock x:Name="VersionText" Text="Version" />
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="6" HorizontalAlignment="Right">
+                <TextBlock x:Name="ClockText" Text="Version" />
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>
