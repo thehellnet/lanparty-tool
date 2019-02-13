@@ -18,7 +18,6 @@ using log4net.Core;
 using LanPartyTool.agent;
 using LanPartyTool.config;
 using LanPartyTool.utility;
-using DateTime = System.DateTime;
 
 namespace LanPartyTool.windows
 {
