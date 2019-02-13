@@ -37,6 +37,10 @@
                           VerticalAlignment="Top" Height="23" />
                 <Label x:Name="ComPortLabel" Content="COM Port"
                        Margin="10,97,0,0" VerticalAlignment="Top" Height="23" HorizontalAlignment="Left" Width="62" />
+                <Label x:Name="BarcodeLabel" Content="Last barcode"
+                       Margin="10,124,0,0" VerticalAlignment="Top" Height="23" HorizontalAlignment="Left" Width="80" />
+                <TextBox x:Name="BarcodeText" Height="23" Margin="95,125,325,0" TextWrapping="NoWrap"
+                         IsReadOnly="True" VerticalAlignment="Top" />
                 <Button x:Name="RunGameButton" Content="Run game" Margin="0,125,10,0" VerticalAlignment="Top"
                         Height="23" HorizontalAlignment="Right" Width="100" Click="RunGameButton_Click" />
                 <Button x:Name="RestartAgentButton" Content="Restart agent" Margin="0,125,220,0"

@@ -1,14 +1,17 @@
-﻿using LanPartyTool.agent;
+﻿using System.ComponentModel;
+using LanPartyTool.agent;
 
 namespace LanPartyTool.config
 {
-    internal sealed class Status
+    internal sealed class Status : INotifyPropertyChanged
     {
         public delegate void SerialPortStatusChangedHandler();
 
         public delegate void SocketStatusChangedHandler();
 
         private static Status _instance;
+
+        private string _lastBarcode = "";
 
         private SerialPortReader.PortStatus _serialPortStatus = SerialPortReader.PortStatus.Closed;
 
@@ -40,12 +43,30 @@ namespace LanPartyTool.config
             }
         }
 
+        public string LastBarcode
+        {
+            get => _lastBarcode;
+            set
+            {
+                if (_lastBarcode == value) return;
+                _lastBarcode = value ?? "";
+                OnPropertyChanged("LastBarcode");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public event SocketStatusChangedHandler OnSocketStatusChanged;
         public event SerialPortStatusChangedHandler OnSerialPortStatusChanged;
 
         public static Status GetInstance()
         {
             return _instance ?? (_instance = new Status());
+        }
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

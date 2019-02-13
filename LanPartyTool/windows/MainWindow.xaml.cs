@@ -90,6 +90,13 @@ namespace LanPartyTool.windows
                 Mode = BindingMode.TwoWay
             });
 
+            BarcodeText.SetBinding(TextBox.TextProperty, new Binding
+            {
+                Path = new PropertyPath("LastBarcode"),
+                Source = _status,
+                Mode = BindingMode.OneWay
+            });
+
             LogEvent.OnLogEvent += NewLogEvent;
             _status.OnSocketStatusChanged += SocketStatusChangedHandler;
             _status.OnSerialPortStatusChanged += SerialPortStatusChangedHandler;

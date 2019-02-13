@@ -253,6 +253,8 @@ namespace LanPartyTool.agent
         {
             Logger.Info($"New barcode scan: {barcode}");
 
+            _status.LastBarcode = barcode;
+
             var cfgLines = ServerUtility.GetCfg(_config.ServerUrl, barcode);
             if (cfgLines == null) return;
 
