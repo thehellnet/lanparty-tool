@@ -183,5 +183,10 @@
   <ItemGroup>
     <Resource Include="lanpartytool.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="sounds\ping.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

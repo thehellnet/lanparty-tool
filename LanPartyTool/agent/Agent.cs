@@ -2,6 +2,7 @@
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
+using System.Media;
 using System.Net.Sockets;
 using System.Threading;
 using System.Windows;
@@ -255,6 +256,8 @@ namespace LanPartyTool.agent
 
             _status.LastBarcode = barcode;
 
+            PlayPing();
+
             var cfgLines = ServerUtility.GetCfg(_config.ServerUrl, barcode);
             if (cfgLines == null) return;
 
@@ -274,6 +277,22 @@ namespace LanPartyTool.agent
 
             Logger.Debug("Triggering keyboard keypress");
             WindowsUtility.SendKeyDown(Constants.GameExeName);
+        }
+
+        private static void PlayPing()
+        {
+            //Console.Beep(1000, 500);
+
+            new Thread(() =>
+            {
+                Logger.Debug("Playing ping sound");
+
+                var player = new SoundPlayer {SoundLocation = @"sounds/ping.wav"};
+                player.Load();
+                player.PlaySync();
+                player.Stop();
+                player.Dispose();
+            }).Start();
         }
     }
 }
