@@ -5,7 +5,6 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using log4net;
 using LanPartyTool.config;
 
