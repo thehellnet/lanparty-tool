@@ -10,23 +10,26 @@
             <Grid>
                 <Label x:Name="GameExeLabel" Content="Game EXE" HorizontalAlignment="Left" Margin="10,12,0,0"
                        VerticalAlignment="Top" Height="23" />
-                <TextBox x:Name="GameExeText" Height="23" Margin="95,13,85,0" TextWrapping="NoWrap" IsReadOnly="True"
+                <TextBox x:Name="GameExeText" Height="23" Margin="95,13,160,0" TextWrapping="NoWrap" IsReadOnly="True"
                          VerticalAlignment="Top" />
                 <Label x:Name="ToolCfgLabel" Content="Tool CFG" HorizontalAlignment="Left" Margin="10,40,0,0"
                        VerticalAlignment="Top" Height="23" />
-                <TextBox x:Name="ToolCfgText" Height="23" Margin="95,41,85,0" TextWrapping="NoWrap" IsReadOnly="True"
+                <TextBox x:Name="ToolCfgText" Height="23" Margin="95,41,160,0" TextWrapping="NoWrap" IsReadOnly="True"
                          VerticalAlignment="Top" />
                 <Label x:Name="ProfileCfgLabel" Content="Profile CFG" HorizontalAlignment="Left" Margin="10,68,0,0"
                        VerticalAlignment="Top" Width="80" Height="23" />
-                <TextBox x:Name="ProfileCfgText" Height="23" Margin="95,69,85,0" TextWrapping="NoWrap"
+                <TextBox x:Name="ProfileCfgText" Height="23" Margin="95,69,160,0" TextWrapping="NoWrap"
                          IsReadOnly="True" VerticalAlignment="Top" />
                 <Button x:Name="GameExeButton" Content="Open dir" Margin="0,13,10,0" VerticalAlignment="Top"
                         Height="23" HorizontalAlignment="Right" Width="70" Click="GameExeButton_Click" />
                 <Button x:Name="ToolCfgButton" Content="Open dir" Margin="0,41,10,0" VerticalAlignment="Top"
                         Height="23" HorizontalAlignment="Right" Width="70" Click="ToolCfgButton_Click" />
+                <Button x:Name="ToolCfgEditButton" Content="Edit" Margin="0,41,85,0" VerticalAlignment="Top"
+                        Height="23" HorizontalAlignment="Right" Width="70" Click="ToolCfgEditButton_Click" />
                 <Button x:Name="ProfileCfgButton" Content="Open dir" Margin="0,69,10,0" VerticalAlignment="Top"
                         Height="23" HorizontalAlignment="Right" Width="70" Click="ProfileCfgButton_Click" />
-
+                <Button x:Name="ProfileCfgEditButton" Content="Edit" Margin="0,69,85,0" VerticalAlignment="Top"
+                        Height="23" HorizontalAlignment="Right" Width="70" Click="ProfileCfgEditButton_Click" />
                 <Button x:Name="ShowCodKeyButton" Content="Show CodKey" Margin="0,125,115,0" VerticalAlignment="Top"
                         Height="23" HorizontalAlignment="Right" Width="100" Click="ShowCodKeyButton_Click" />
                 <Label x:Name="ServerUrlLabel" Content="Server URL" HorizontalAlignment="Left"
@@ -46,7 +49,7 @@
                 <Button x:Name="RestartAgentButton" Content="Restart agent" Margin="0,125,220,0"
                         VerticalAlignment="Top"
                         Height="23" Click="RestartAgentButton_Click" HorizontalAlignment="Right" Width="100" />
-                <Button x:Name="ChangeBarcodeButton" Content="Change barcode" Margin="0,125,325,0"
+                <Button x:Name="ChangeBarcodeButton" Content="Restart agent" Margin="0,125,325,0"
                         VerticalAlignment="Top"
                         Height="23" Click="ChangeBarcodeButton_Click" HorizontalAlignment="Right" Width="100" />
 

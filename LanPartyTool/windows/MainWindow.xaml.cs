@@ -283,5 +283,15 @@ namespace LanPartyTool.windows
         {
             new Thread(() => { }).Start();
         }
+
+        private void ToolCfgEditButton_Click(object sender, RoutedEventArgs e)
+        {
+            new Thread(() => { }).Start();
+        }
+
+        private void ProfileCfgEditButton_Click(object sender, RoutedEventArgs e)
+        {
+            new Thread(() => { }).Start();
+        }
     }
 }
