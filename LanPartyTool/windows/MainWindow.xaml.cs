@@ -90,7 +90,7 @@ namespace LanPartyTool.windows
                 Mode = BindingMode.TwoWay
             });
 
-            BarcodeText.SetBinding(TextBox.TextProperty, new Binding
+            LastBarcodeText.SetBinding(TextBox.TextProperty, new Binding
             {
                 Path = new PropertyPath("LastBarcode"),
                 Source = _status,
@@ -277,6 +277,11 @@ namespace LanPartyTool.windows
         private void RestartAgentButton_Click(object sender, RoutedEventArgs e)
         {
             new Thread(() => { OnAgentRestart?.Invoke(); }).Start();
+        }
+
+        private void ChangeBarcodeButton_Click(object sender, RoutedEventArgs e)
+        {
+            new Thread(() => { }).Start();
         }
     }
 }

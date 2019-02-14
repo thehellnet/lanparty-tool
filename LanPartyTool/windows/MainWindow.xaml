@@ -37,15 +37,18 @@
                           VerticalAlignment="Top" Height="23" />
                 <Label x:Name="ComPortLabel" Content="COM Port"
                        Margin="10,97,0,0" VerticalAlignment="Top" Height="23" HorizontalAlignment="Left" Width="62" />
-                <Label x:Name="BarcodeLabel" Content="Last barcode"
+                <Label x:Name="BarcodeLabel" Content="Barcode"
                        Margin="10,124,0,0" VerticalAlignment="Top" Height="23" HorizontalAlignment="Left" Width="80" />
-                <TextBox x:Name="BarcodeText" Height="23" Margin="95,125,325,0" TextWrapping="NoWrap"
-                         IsReadOnly="True" VerticalAlignment="Top" />
+                <TextBox x:Name="BarcodeText" Height="23" Margin="95,125,430,0" TextWrapping="NoWrap"
+                         VerticalAlignment="Top" />
                 <Button x:Name="RunGameButton" Content="Run game" Margin="0,125,10,0" VerticalAlignment="Top"
                         Height="23" HorizontalAlignment="Right" Width="100" Click="RunGameButton_Click" />
                 <Button x:Name="RestartAgentButton" Content="Restart agent" Margin="0,125,220,0"
                         VerticalAlignment="Top"
                         Height="23" Click="RestartAgentButton_Click" HorizontalAlignment="Right" Width="100" />
+                <Button x:Name="ChangeBarcodeButton" Content="Change barcode" Margin="0,125,325,0"
+                        VerticalAlignment="Top"
+                        Height="23" Click="ChangeBarcodeButton_Click" HorizontalAlignment="Right" Width="100" />
 
             </Grid>
         </GroupBox>
@@ -59,6 +62,8 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="80" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="80" />
                             <ColumnDefinition Width="Auto" />
@@ -82,11 +87,17 @@
             <StatusBarItem Grid.Column="3">
                 <TextBlock x:Name="SocketStatusText" />
             </StatusBarItem>
-            <StatusBarItem Grid.Column="5">
-                <TextBlock x:Name="VersionText" Text="Version" />
+            <StatusBarItem Grid.Column="4">
+                <TextBlock Text="Last barcode:" />
             </StatusBarItem>
-            <StatusBarItem Grid.Column="6" HorizontalAlignment="Right">
-                <TextBlock x:Name="ClockText" Text="Version" />
+            <StatusBarItem Grid.Column="5">
+                <TextBlock x:Name="LastBarcodeText" />
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="7">
+                <TextBlock x:Name="VersionText" />
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="8" HorizontalAlignment="Right">
+                <TextBlock x:Name="ClockText" />
             </StatusBarItem>
         </StatusBar>
     </Grid>
