@@ -9,49 +9,60 @@
         <GroupBox x:Name="PathGroupBox" Header="Configuration" Height="183" Margin="10,10,10,0" VerticalAlignment="Top">
             <Grid>
                 <Label x:Name="GameExeLabel" Content="Game EXE" HorizontalAlignment="Left" Margin="10,12,0,0"
-                       VerticalAlignment="Top" Height="23" />
+                       VerticalAlignment="Top" Height="23" IsTabStop="False" />
                 <TextBox x:Name="GameExeText" Height="23" Margin="95,13,160,0" TextWrapping="NoWrap" IsReadOnly="True"
-                         VerticalAlignment="Top" />
+                         VerticalAlignment="Top" IsTabStop="False" />
                 <Label x:Name="ToolCfgLabel" Content="Tool CFG" HorizontalAlignment="Left" Margin="10,40,0,0"
-                       VerticalAlignment="Top" Height="23" />
+                       VerticalAlignment="Top" Height="23" IsTabStop="False" />
                 <TextBox x:Name="ToolCfgText" Height="23" Margin="95,41,160,0" TextWrapping="NoWrap" IsReadOnly="True"
-                         VerticalAlignment="Top" />
+                         VerticalAlignment="Top" IsTabStop="False" />
                 <Label x:Name="ProfileCfgLabel" Content="Profile CFG" HorizontalAlignment="Left" Margin="10,68,0,0"
-                       VerticalAlignment="Top" Width="80" Height="23" />
+                       VerticalAlignment="Top" Width="80" Height="23" IsTabStop="False" />
                 <TextBox x:Name="ProfileCfgText" Height="23" Margin="95,69,160,0" TextWrapping="NoWrap"
-                         IsReadOnly="True" VerticalAlignment="Top" />
+                         IsReadOnly="True" VerticalAlignment="Top" IsTabStop="False" />
                 <Button x:Name="GameExeButton" Content="Open dir" Margin="0,13,10,0" VerticalAlignment="Top"
-                        Height="23" HorizontalAlignment="Right" Width="70" Click="GameExeButton_Click" />
+                        Height="23" HorizontalAlignment="Right" Width="70" Click="GameExeButton_Click"
+                        TabIndex="2" />
                 <Button x:Name="ToolCfgButton" Content="Open dir" Margin="0,41,10,0" VerticalAlignment="Top"
-                        Height="23" HorizontalAlignment="Right" Width="70" Click="ToolCfgButton_Click" />
-                <Button x:Name="ToolCfgEditButton" Content="Edit" Margin="0,41,85,0" VerticalAlignment="Top"
-                        Height="23" HorizontalAlignment="Right" Width="70" Click="ToolCfgEditButton_Click" />
+                        Height="23" HorizontalAlignment="Right" Width="70" Click="ToolCfgButton_Click"
+                        TabIndex="3" />
                 <Button x:Name="ProfileCfgButton" Content="Open dir" Margin="0,69,10,0" VerticalAlignment="Top"
-                        Height="23" HorizontalAlignment="Right" Width="70" Click="ProfileCfgButton_Click" />
+                        Height="23" HorizontalAlignment="Right" Width="70" Click="ProfileCfgButton_Click"
+                        TabIndex="4" />
+                <Button x:Name="ToolCfgEditButton" Content="Edit" Margin="0,41,85,0" VerticalAlignment="Top"
+                        Height="23" HorizontalAlignment="Right" Width="70" Click="ToolCfgEditButton_Click"
+                        TabIndex="5" />
                 <Button x:Name="ProfileCfgEditButton" Content="Edit" Margin="0,69,85,0" VerticalAlignment="Top"
-                        Height="23" HorizontalAlignment="Right" Width="70" Click="ProfileCfgEditButton_Click" />
+                        Height="23" HorizontalAlignment="Right" Width="70" Click="ProfileCfgEditButton_Click"
+                        TabIndex="6" />
                 <Button x:Name="ShowCodKeyButton" Content="Show CodKey" Margin="0,125,115,0" VerticalAlignment="Top"
-                        Height="23" HorizontalAlignment="Right" Width="100" Click="ShowCodKeyButton_Click" />
+                        Height="23" HorizontalAlignment="Right" Width="100" Click="ShowCodKeyButton_Click"
+                        TabIndex="9" />
                 <Label x:Name="ServerUrlLabel" Content="Server URL" HorizontalAlignment="Left"
-                       Margin="228,96,0,0" VerticalAlignment="Top" Height="23" />
+                       Margin="228,96,0,0" VerticalAlignment="Top" Height="23"
+                       IsTabStop="False" />
                 <TextBox x:Name="ServerUrlText" Height="23" Margin="300,97,10,0" TextWrapping="NoWrap"
-                         IsReadOnly="True" VerticalAlignment="Top" />
+                         IsReadOnly="True" VerticalAlignment="Top" IsTabStop="False" />
                 <ComboBox x:Name="SerialPortComboBox" Margin="95,97,537,0"
-                          VerticalAlignment="Top" Height="23" />
+                          VerticalAlignment="Top" Height="23"
+                          TabIndex="7" />
                 <Label x:Name="ComPortLabel" Content="COM Port"
-                       Margin="10,97,0,0" VerticalAlignment="Top" Height="23" HorizontalAlignment="Left" Width="62" />
+                       Margin="10,97,0,0" VerticalAlignment="Top" Height="23" HorizontalAlignment="Left" Width="62"
+                       IsTabStop="False" />
                 <Label x:Name="BarcodeLabel" Content="Barcode"
-                       Margin="10,124,0,0" VerticalAlignment="Top" Height="23" HorizontalAlignment="Left" Width="80" />
+                       Margin="10,124,0,0" VerticalAlignment="Top" Height="23" HorizontalAlignment="Left" Width="80"
+                       IsTabStop="False" />
                 <TextBox x:Name="BarcodeText" Height="23" Margin="95,125,430,0" TextWrapping="NoWrap"
-                         VerticalAlignment="Top" />
+                         VerticalAlignment="Top" TabIndex="0" />
                 <Button x:Name="RunGameButton" Content="Run game" Margin="0,125,10,0" VerticalAlignment="Top"
-                        Height="23" HorizontalAlignment="Right" Width="100" Click="RunGameButton_Click" />
+                        Height="23" HorizontalAlignment="Right" Width="100" Click="RunGameButton_Click" TabIndex="10" />
                 <Button x:Name="RestartAgentButton" Content="Restart agent" Margin="0,125,220,0"
-                        VerticalAlignment="Top"
-                        Height="23" Click="RestartAgentButton_Click" HorizontalAlignment="Right" Width="100" />
-                <Button x:Name="ChangeBarcodeButton" Content="Restart agent" Margin="0,125,325,0"
-                        VerticalAlignment="Top"
-                        Height="23" Click="ChangeBarcodeButton_Click" HorizontalAlignment="Right" Width="100" />
+                        VerticalAlignment="Top" Height="23" Click="RestartAgentButton_Click"
+                        HorizontalAlignment="Right" Width="100" TabIndex="8" />
+                <Button x:Name="ChangeBarcodeButton" Content="Change barcode" Margin="0,125,325,0"
+                        VerticalAlignment="Top" Height="23" Click="ChangeBarcodeButton_Click"
+                        HorizontalAlignment="Right" Width="100"
+                        IsDefault="True" TabIndex="1" />
 
             </Grid>
         </GroupBox>

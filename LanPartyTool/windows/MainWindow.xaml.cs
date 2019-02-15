@@ -25,6 +25,11 @@ namespace LanPartyTool.windows
     {
         public delegate void AgentRestartHandler();
 
+        public delegate void ManualBarcodeHandler(string barcode);
+
+        public event AgentRestartHandler OnAgentRestart;
+        public event ManualBarcodeHandler OnManualBarcode;
+
         private const int MaxLogLines = 100;
 
         private static readonly ILog Logger = LogManager.GetLogger(typeof(MainWindow));
@@ -100,9 +105,9 @@ namespace LanPartyTool.windows
             LogEvent.OnLogEvent += NewLogEvent;
             _status.OnSocketStatusChanged += SocketStatusChangedHandler;
             _status.OnSerialPortStatusChanged += SerialPortStatusChangedHandler;
-        }
 
-        public event AgentRestartHandler OnAgentRestart;
+            BarcodeText.Focus();
+        }
 
         private void NewLogEvent(Level level, string message)
         {
@@ -281,7 +286,11 @@ namespace LanPartyTool.windows
 
         private void ChangeBarcodeButton_Click(object sender, RoutedEventArgs e)
         {
-            new Thread(() => { }).Start();
+            var barcode = BarcodeText.Text;
+            new Thread(() => { OnManualBarcode?.Invoke(barcode); }).Start();
+
+            BarcodeText.Dispatcher.Invoke(DispatcherPriority.Background,
+                new Action(() => { BarcodeText.Text = ""; }));
         }
 
         private void ToolCfgEditButton_Click(object sender, RoutedEventArgs e)

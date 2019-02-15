@@ -250,7 +250,7 @@ namespace LanPartyTool.agent
             new ClientSocket(socket).Start();
         }
 
-        private void NewBarcodeHandler(string barcode)
+        public void NewBarcodeHandler(string barcode)
         {
             Logger.Info($"New barcode scan: {barcode}");
 

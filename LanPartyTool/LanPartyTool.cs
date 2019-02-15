@@ -38,6 +38,7 @@ namespace LanPartyTool
             base.OnStartup(e);
 
             _mainWindow.OnAgentRestart += AgentRestartHandler;
+            _mainWindow.OnManualBarcode += ManualBarcodeHandler;
 
             _agent.Start();
             _mainWindow.Show();
@@ -57,6 +58,11 @@ namespace LanPartyTool
         {
             _agent.Stop();
             _agent.Start();
+        }
+
+        private void ManualBarcodeHandler(string barcode)
+        {
+            _agent.NewBarcodeHandler(barcode);
         }
     }
 }
