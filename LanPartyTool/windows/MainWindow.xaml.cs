@@ -95,14 +95,9 @@ namespace LanPartyTool.windows
                 Mode = BindingMode.TwoWay
             });
 
-            LastBarcodeText.SetBinding(TextBox.TextProperty, new Binding
-            {
-                Path = new PropertyPath("LastBarcode"),
-                Source = _status,
-                Mode = BindingMode.OneWay
-            });
-
             LogEvent.OnLogEvent += NewLogEvent;
+
+            _status.OnLastBarcodeChanged += LastBarcodeChangedHandler;
             _status.OnSocketStatusChanged += SocketStatusChangedHandler;
             _status.OnSerialPortStatusChanged += SerialPortStatusChangedHandler;
 
@@ -165,6 +160,12 @@ namespace LanPartyTool.windows
                 LogText.Document = document;
                 LogText.ScrollToEnd();
             }));
+        }
+
+        private void LastBarcodeChangedHandler(string barcode)
+        {
+            LastBarcodeText.Dispatcher.Invoke(DispatcherPriority.Background,
+                new Action((() => LastBarcodeText.Text = barcode)));
         }
 
         private void SocketStatusChangedHandler()

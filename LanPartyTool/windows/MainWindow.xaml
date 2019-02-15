@@ -107,7 +107,7 @@
             <StatusBarItem Grid.Column="5">
                 <TextBlock x:Name="LastBarcodeText" />
             </StatusBarItem>
-            <StatusBarItem Grid.Column="7">
+            <StatusBarItem Grid.Column="7" HorizontalAlignment="Right">
                 <TextBlock x:Name="VersionText" />
             </StatusBarItem>
             <StatusBarItem Grid.Column="8" HorizontalAlignment="Right">

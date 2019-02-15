@@ -1,10 +1,11 @@
-﻿using System.ComponentModel;
-using LanPartyTool.agent;
+﻿using LanPartyTool.agent;
 
 namespace LanPartyTool.config
 {
-    internal sealed class Status : INotifyPropertyChanged
+    internal sealed class Status
     {
+        public delegate void LastBarcodeChangedHandler(string barcode);
+
         public delegate void SerialPortStatusChangedHandler();
 
         public delegate void SocketStatusChangedHandler();
@@ -50,23 +51,17 @@ namespace LanPartyTool.config
             {
                 if (_lastBarcode == value) return;
                 _lastBarcode = value ?? "";
-                OnPropertyChanged("LastBarcode");
+                OnLastBarcodeChanged?.Invoke(_lastBarcode);
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
+        public event LastBarcodeChangedHandler OnLastBarcodeChanged;
         public event SocketStatusChangedHandler OnSocketStatusChanged;
         public event SerialPortStatusChangedHandler OnSerialPortStatusChanged;
 
         public static Status GetInstance()
         {
             return _instance ?? (_instance = new Status());
-        }
-
-        private void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
