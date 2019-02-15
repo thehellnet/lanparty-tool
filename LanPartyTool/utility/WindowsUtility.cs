@@ -8,6 +8,12 @@ namespace LanPartyTool.utility
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(WindowsUtility));
 
+        public static void EditFile(string path)
+
+        {
+            if (path != null) Process.Start(path);
+        }
+
         public static void OpenFileFolder(string path)
 
         {

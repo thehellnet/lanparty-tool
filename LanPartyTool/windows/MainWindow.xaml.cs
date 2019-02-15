@@ -286,12 +286,12 @@ namespace LanPartyTool.windows
 
         private void ToolCfgEditButton_Click(object sender, RoutedEventArgs e)
         {
-            new Thread(() => { }).Start();
+            new Thread(() => { WindowsUtility.EditFile(_config.ToolCfg); }).Start();
         }
 
         private void ProfileCfgEditButton_Click(object sender, RoutedEventArgs e)
         {
-            new Thread(() => { }).Start();
+            new Thread(() => { WindowsUtility.EditFile(_config.ProfileCfg); }).Start();
         }
     }
 }
