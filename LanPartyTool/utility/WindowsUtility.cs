@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
+using WindowsInput;
+using WindowsInput.Native;
 using log4net;
 
 namespace LanPartyTool.utility
@@ -26,14 +28,20 @@ namespace LanPartyTool.utility
             if (path != null) Process.Start(path);
         }
 
-        public static void SendKeyDown(string processName)
+        //public static void SendKeyDown(string processName = Constants.GameExeName)
+        //{
+        //    var processes = Process.GetProcessesByName(processName);
+        //    foreach (var process in processes)
+        //    {
+        //        Logger.Debug($"PostMessage to process {process.Id} [{process.ProcessName}]");
+        //        KeyboardUtility.Send(KeyboardUtility.ScanCodeShort.OEM_PERIOD);
+        //    }
+        //}
+
+        public static void SendKeyDown()
         {
-            var processes = Process.GetProcessesByName(processName);
-            foreach (var process in processes)
-            {
-                Logger.Debug($"PostMessage to process {process.Id} [{process.ProcessName}]");
-                KeyboardUtility.Send(KeyboardUtility.ScanCodeShort.OEM_PERIOD);
-            }
+            var inputSimulator = new InputSimulator();
+            inputSimulator.Keyboard.KeyPress(VirtualKeyCode.OEM_PERIOD);
         }
     }
 }

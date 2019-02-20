@@ -276,7 +276,7 @@ namespace LanPartyTool.agent
             Thread.Sleep(1000);
 
             Logger.Debug("Triggering keyboard keypress");
-            WindowsUtility.SendKeyDown(Constants.GameExeName);
+            WindowsUtility.SendKeyDown();
         }
 
         private static void PlayPing()
