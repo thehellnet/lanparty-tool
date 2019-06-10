@@ -13,7 +13,7 @@ namespace LanPartyTool.utility
         private const int ServerPort = 8069;
         private const string ServerEndPoint = "/ap1/v1/tool";
         private const string WelcomeEndPoint = "/welcome";
-        private const string GetCfgEndPoint = "/get_cfg";
+        private const string GetCfgEndPoint = "/getCfg";
 
         private static readonly ILog Logger = LogManager.GetLogger(typeof(ServerUtility));
 
