@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Resources;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
 using log4net.Config;
@@ -18,7 +19,10 @@ using log4net.Config;
 
 [assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)]
 
-[assembly: AssemblyVersion("0.9.0.0")]
-[assembly: AssemblyFileVersion("0.9.0.0")]
+[assembly: AssemblyVersion("0.9.1.0")]
+[assembly: AssemblyFileVersion("0.9.1.0")]
 
 [assembly: XmlConfigurator(ConfigFile = "log4net.config")]
+[assembly: Guid("94403695-D3D3-4A0C-A7A8-A8B9FAAF5E9B")]
+[assembly: NeutralResourcesLanguage("en")]
+

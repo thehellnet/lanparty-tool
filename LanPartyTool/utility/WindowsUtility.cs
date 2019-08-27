@@ -13,7 +13,19 @@ namespace LanPartyTool.utility
         public static void EditFile(string path)
 
         {
-            if (path != null) Process.Start(path);
+            if (path == null) return;
+            if (!File.Exists(path)) return;
+
+            var editor = @"notepad.exe";
+
+            const string notepadPlusPlus = @"C:\\Program Files\\Notepad++\\notepad++.exe";
+            if (File.Exists(notepadPlusPlus))
+            {
+                editor = notepadPlusPlus;
+            }
+
+            var process = new Process {StartInfo = {FileName = editor, Arguments = path}};
+            process.Start();
         }
 
         public static void OpenFileFolder(string path)

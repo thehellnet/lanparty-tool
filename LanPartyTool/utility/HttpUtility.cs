@@ -7,7 +7,7 @@ using RestSharp;
 
 namespace LanPartyTool.utility
 {
-    internal class HttpUtility
+    public class HttpUtility
     {
         private static readonly int HTTP_CLIENT_TIMEOUT = 3000;
 
