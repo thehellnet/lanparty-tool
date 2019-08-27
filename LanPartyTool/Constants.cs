@@ -8,7 +8,7 @@
         public const string GameExeFilename = GameExeName + ".exe";
         public const string ToolCfgFilename = ToolCfgName + ".cfg";
 
-        public const string notepadExeFilename = @"notepad.exe";
-        public const string notepadPlusPlusExeFilepath = @"C:\\Program Files\\Notepad++\\notepad++.exe";
+        public const string NotepadExeFilename = @"notepad.exe";
+        public const string NotepadPlusPlusExeFilepath = @"C:\\Program Files\\Notepad++\\notepad++.exe";
     }
 }
