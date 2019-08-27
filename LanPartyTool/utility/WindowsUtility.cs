@@ -16,12 +16,10 @@ namespace LanPartyTool.utility
             if (path == null) return;
             if (!File.Exists(path)) return;
 
-            var editor = @"notepad.exe";
-
-            const string notepadPlusPlus = @"C:\\Program Files\\Notepad++\\notepad++.exe";
-            if (File.Exists(notepadPlusPlus))
+            var editor = Constants.notepadExeFilename;
+            if (File.Exists(Constants.notepadPlusPlusExeFilepath))
             {
-                editor = notepadPlusPlus;
+                editor = Constants.notepadPlusPlusExeFilepath;
             }
 
             var process = new Process {StartInfo = {FileName = editor, Arguments = path}};
