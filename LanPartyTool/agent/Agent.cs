@@ -6,9 +6,9 @@ using System.Media;
 using System.Net.Sockets;
 using System.Threading;
 using System.Windows;
-using log4net;
 using LanPartyTool.config;
 using LanPartyTool.utility;
+using log4net;
 
 namespace LanPartyTool.agent
 {
@@ -45,7 +45,7 @@ namespace LanPartyTool.agent
 
             if (!CheckConfig()) return;
 
-            if (!CheckEntryPoint()) return;
+            if (!CheckEntryPoints()) return;
 
             _serverSocket.OnConnectionAccepted += NewConnectionHandler;
             _serverSocket.Start();
@@ -170,11 +170,12 @@ namespace LanPartyTool.agent
             return true;
         }
 
-        private bool CheckEntryPoint()
+        private bool CheckEntryPoints()
         {
             Logger.Info("Checking entry point presence");
 
-            var entrypointLines = new List<int>();
+            var entrypointExecLines = new List<int>();
+            var entrypointDumpLines = new List<int>();
 
             var profileCfgPath = _config.ProfileCfg;
             var profileCfgRows = GameUtility.ReadCfg(profileCfgPath);
@@ -182,29 +183,31 @@ namespace LanPartyTool.agent
             for (var i = 0; i < profileCfgRows.Count; i++)
             {
                 var row = profileCfgRows.ElementAt(i);
-                if (row.StartsWith(@"bind .")) entrypointLines.Add(i);
+                if (row.StartsWith(@"bind ."))
+                {
+                    Logger.Debug($"Entrypoint bind command for exec found at line {i + 1}");
+                    entrypointExecLines.Add(i);
+                }
+
+                if (row.StartsWith(@"bind ,"))
+                {
+                    Logger.Debug($"Entrypoint bind command for dump found at line {i + 1}");
+                    entrypointDumpLines.Add(i);
+                }
             }
 
-            var entrypointRemove = false;
-            var entrypointAdd = false;
+            if (entrypointExecLines.Count > 1) Logger.Warn("Multiple entrypoint bind command for exec found");
+            if (entrypointDumpLines.Count > 1) Logger.Warn("Multiple entrypoint bind command for dump found");
 
-            switch (entrypointLines.Count)
-            {
-                case 1:
-                    Logger.Debug($"Entrypoint bind command found at line {entrypointLines[0] + 1}");
-                    break;
-                case 0:
-                    Logger.Warn("Entrypoint bind command not found. Adding...");
-                    entrypointAdd = true;
-                    break;
-                default:
-                    Logger.Warn("Multiple entrypoint bind command found. Removing unuseful...");
-                    entrypointRemove = true;
-                    entrypointAdd = true;
-                    break;
-            }
+            if (entrypointExecLines.Count == 0) Logger.Warn("Entrypoint bind command for exec not found");
+            if (entrypointDumpLines.Count == 0) Logger.Warn("Entrypoint bind command for dump not found");
 
-            if (entrypointRemove || entrypointAdd)
+            var entrypointExecRemove = entrypointExecLines.Count > 1;
+            var entrypointDumpRemove = entrypointDumpLines.Count > 1;
+            var entrypointExecAdd = entrypointExecLines.Count == 0 || entrypointExecRemove;
+            var entrypointDumpAdd = entrypointDumpLines.Count == 0 || entrypointDumpRemove;
+
+            if (entrypointExecRemove || entrypointDumpRemove || entrypointExecAdd || entrypointDumpAdd)
             {
                 var result = MessageBox.Show(
                     "Some changes are required in profile CFG.\n" +
@@ -218,18 +221,32 @@ namespace LanPartyTool.agent
                 if (result == MessageBoxResult.No) return false;
             }
 
-            if (entrypointRemove)
+            if (entrypointExecRemove)
             {
                 profileCfgRows.RemoveAll(row => row.StartsWith(@"bind ."));
                 GameUtility.WriteCfg(profileCfgPath, profileCfgRows);
-                Logger.Debug("Entrypoint bind commands removed from list");
+                Logger.Debug("Entrypoint bind commands for exec removed from list");
             }
 
-            if (entrypointAdd)
+            if (entrypointExecAdd)
             {
-                profileCfgRows.Add($"bind . \"exec {Constants.ToolCfgName}\"");
+                profileCfgRows.Add($"bind . \"exec {Constants.ToolCfgExecName}\"");
                 GameUtility.WriteCfg(profileCfgPath, profileCfgRows);
-                Logger.Debug("Entrypoint bind command added in profile cfg");
+                Logger.Debug("Entrypoint bind command for exec added in profile cfg");
+            }
+
+            if (entrypointDumpRemove)
+            {
+                profileCfgRows.RemoveAll(row => row.StartsWith(@"bind ,"));
+                GameUtility.WriteCfg(profileCfgPath, profileCfgRows);
+                Logger.Debug("Entrypoint bind commands for dump removed from list");
+            }
+
+            if (entrypointDumpAdd)
+            {
+                profileCfgRows.Add($"bind , \"writeconfig {Constants.ToolCfgDumpName}\"");
+                GameUtility.WriteCfg(profileCfgPath, profileCfgRows);
+                Logger.Debug("Entrypoint bind command for dump added in profile cfg");
             }
 
             return true;
@@ -276,7 +293,7 @@ namespace LanPartyTool.agent
             Thread.Sleep(1000);
 
             Logger.Debug("Triggering keyboard keypress");
-            WindowsUtility.SendKeyDown();
+            WindowsUtility.SendKeyDownExec();
         }
 
         private static void PlayPing()

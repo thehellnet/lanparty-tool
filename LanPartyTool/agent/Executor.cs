@@ -77,7 +77,7 @@ namespace LanPartyTool.agent
             Thread.Sleep(1000);
 
             Logger.Debug("Triggering keyboard keypress");
-            WindowsUtility.SendKeyDown();
+            WindowsUtility.SendKeyDownExec();
         }
     }
 }

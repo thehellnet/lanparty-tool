@@ -9,12 +9,6 @@ namespace LanPartyTool.utility
 {
     internal static class GameUtility
     {
-        private static readonly string[] Cod4RegistryPaths =
-        {
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Activision\Call of Duty 4",
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Activision\Call of Duty 4"
-        };
-
         public static string DefaultGameExe()
         {
             var installPath = DefaultInstallationDir();
@@ -38,7 +32,7 @@ namespace LanPartyTool.utility
             if (!Directory.Exists(virtualStoreInstallFolder)) return "";
 
             var cfgFileFolder = Path.Combine(virtualStoreInstallFolder, "main");
-            var toolCfg = Path.Combine(cfgFileFolder, Constants.ToolCfgFilename);
+            var toolCfg = Path.Combine(cfgFileFolder, Constants.ToolCfgExecFilename);
             return toolCfg;
         }
 
@@ -66,7 +60,7 @@ namespace LanPartyTool.utility
 
         public static string DefaultInstallationDir()
         {
-            foreach (var registryPath in Cod4RegistryPaths)
+            foreach (var registryPath in Constants.Cod4RegistryPaths)
             {
                 var installPath = (string) Registry.GetValue(registryPath, "InstallPath", null);
                 if (installPath != null && Directory.Exists(installPath)) return installPath;
@@ -77,7 +71,7 @@ namespace LanPartyTool.utility
 
         public static string ReadCodKey()
         {
-            foreach (var registryPath in Cod4RegistryPaths)
+            foreach (var registryPath in Constants.Cod4RegistryPaths)
             {
                 var codkey = (string) Registry.GetValue(registryPath, "codkey", null);
                 if (codkey != null && codkey.Length == 20) return codkey.ToUpper();
@@ -90,8 +84,22 @@ namespace LanPartyTool.utility
         {
             var items = new List<string>();
             for (var i = 0; i < codKey.Length; i += 4) items.Add(codKey.Substring(i, 4));
-
             return string.Join("-", items);
+        }
+
+        public static List<string> DumpCfg()
+        {
+            WindowsUtility.SendKeyDownDump();
+
+            var gameExePath = DefaultGameExe();
+            var installFolderPath = Path.GetDirectoryName(gameExePath);
+            var installFolderRealPath = installFolderPath.Substring(3);
+            var localPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            var virtualStoreInstallFolder = Path.Combine(localPath, "VirtualStore", installFolderRealPath);
+            var profilesFolder = Path.Combine(virtualStoreInstallFolder, "players");
+            var cfgPath = Path.Combine(profilesFolder, Constants.ToolCfgDumpFilename);
+
+            return ReadCfg(cfgPath);
         }
 
         public static List<string> ReadCfg(string cfgPath)

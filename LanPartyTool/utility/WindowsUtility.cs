@@ -17,10 +17,7 @@ namespace LanPartyTool.utility
             if (!File.Exists(path)) return;
 
             var editor = Constants.NotepadExeFilename;
-            if (File.Exists(Constants.NotepadPlusPlusExeFilepath))
-            {
-                editor = Constants.NotepadPlusPlusExeFilepath;
-            }
+            if (File.Exists(Constants.NotepadPlusPlusExeFilepath)) editor = Constants.NotepadPlusPlusExeFilepath;
 
             var process = new Process {StartInfo = {FileName = editor, Arguments = path}};
             process.Start();
@@ -38,20 +35,20 @@ namespace LanPartyTool.utility
             if (path != null) Process.Start(path);
         }
 
-        //public static void SendKeyDown(string processName = Constants.GameExeName)
-        //{
-        //    var processes = Process.GetProcessesByName(processName);
-        //    foreach (var process in processes)
-        //    {
-        //        Logger.Debug($"PostMessage to process {process.Id} [{process.ProcessName}]");
-        //        KeyboardUtility.Send(KeyboardUtility.ScanCodeShort.OEM_PERIOD);
-        //    }
-        //}
+        public static void SendKeyDownExec()
+        {
+            SendKeyDown(VirtualKeyCode.OEM_PERIOD);
+        }
 
-        public static void SendKeyDown()
+        public static void SendKeyDownDump()
+        {
+            SendKeyDown(VirtualKeyCode.OEM_COMMA);
+        }
+
+        private static void SendKeyDown(VirtualKeyCode virtualKeyCode)
         {
             var inputSimulator = new InputSimulator();
-            inputSimulator.Keyboard.KeyPress(VirtualKeyCode.OEM_PERIOD);
+            inputSimulator.Keyboard.KeyPress(virtualKeyCode);
         }
     }
 }
