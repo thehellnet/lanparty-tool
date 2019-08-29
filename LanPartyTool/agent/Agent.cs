@@ -180,16 +180,19 @@ namespace LanPartyTool.agent
             var profileCfgPath = _config.ProfileCfg;
             var profileCfgRows = GameUtility.ReadCfg(profileCfgPath);
 
+            var execBindCmd = $"bind {Constants.CommandExecKey}";
+            var dumpBindCmd = $"bind {Constants.CommandDumpKey}";
+
             for (var i = 0; i < profileCfgRows.Count; i++)
             {
                 var row = profileCfgRows.ElementAt(i);
-                if (row.StartsWith(@"bind ."))
+                if (row.StartsWith(execBindCmd))
                 {
                     Logger.Debug($"Entrypoint bind command for exec found at line {i + 1}");
                     entrypointExecLines.Add(i);
                 }
 
-                if (row.StartsWith(@"bind ,"))
+                if (row.StartsWith(dumpBindCmd))
                 {
                     Logger.Debug($"Entrypoint bind command for dump found at line {i + 1}");
                     entrypointDumpLines.Add(i);
@@ -223,28 +226,28 @@ namespace LanPartyTool.agent
 
             if (entrypointExecRemove)
             {
-                profileCfgRows.RemoveAll(row => row.StartsWith(@"bind ."));
+                profileCfgRows.RemoveAll(row => row.StartsWith(execBindCmd));
                 GameUtility.WriteCfg(profileCfgPath, profileCfgRows);
                 Logger.Debug("Entrypoint bind commands for exec removed from list");
             }
 
             if (entrypointExecAdd)
             {
-                profileCfgRows.Add($"bind . \"exec {Constants.ToolCfgExecName}\"");
+                profileCfgRows.Add($"{execBindCmd} \"exec {Constants.ToolCfgExecName}\"");
                 GameUtility.WriteCfg(profileCfgPath, profileCfgRows);
                 Logger.Debug("Entrypoint bind command for exec added in profile cfg");
             }
 
             if (entrypointDumpRemove)
             {
-                profileCfgRows.RemoveAll(row => row.StartsWith(@"bind ,"));
+                profileCfgRows.RemoveAll(row => row.StartsWith(dumpBindCmd));
                 GameUtility.WriteCfg(profileCfgPath, profileCfgRows);
                 Logger.Debug("Entrypoint bind commands for dump removed from list");
             }
 
             if (entrypointDumpAdd)
             {
-                profileCfgRows.Add($"bind , \"writeconfig {Constants.ToolCfgDumpName}\"");
+                profileCfgRows.Add($"{dumpBindCmd} \"writeconfig {Constants.ToolCfgDumpName}\"");
                 GameUtility.WriteCfg(profileCfgPath, profileCfgRows);
                 Logger.Debug("Entrypoint bind command for dump added in profile cfg");
             }
@@ -298,8 +301,6 @@ namespace LanPartyTool.agent
 
         private static void PlayPing()
         {
-            //Console.Beep(1000, 500);
-
             new Thread(() =>
             {
                 Logger.Debug("Playing ping sound");

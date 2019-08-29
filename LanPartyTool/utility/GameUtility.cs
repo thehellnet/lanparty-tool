@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using Microsoft.Win32;
 
 namespace LanPartyTool.utility
@@ -91,6 +92,8 @@ namespace LanPartyTool.utility
         {
             WindowsUtility.SendKeyDownDump();
 
+            Thread.Sleep(1000);
+
             var gameExePath = DefaultGameExe();
             var installFolderPath = Path.GetDirectoryName(gameExePath);
             var installFolderRealPath = installFolderPath.Substring(3);
@@ -99,7 +102,13 @@ namespace LanPartyTool.utility
             var profilesFolder = Path.Combine(virtualStoreInstallFolder, "players");
             var cfgPath = Path.Combine(profilesFolder, Constants.ToolCfgDumpFilename);
 
-            return ReadCfg(cfgPath);
+            if (!File.Exists(cfgPath)) return new List<string>();
+
+            var cfg = ReadCfg(cfgPath);
+
+            File.Delete(cfgPath);
+
+            return cfg;
         }
 
         public static List<string> ReadCfg(string cfgPath)

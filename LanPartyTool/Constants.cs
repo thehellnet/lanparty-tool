@@ -5,6 +5,9 @@
         public const string ToolCfgExecName = "lanpartytool";
         public const string ToolCfgDumpName = "lanpartydump";
 
+        public const string CommandExecKey = ".";
+        public const string CommandDumpKey = ",";
+
         public const string GameExeName = "iw3mp";
 
         public const string ToolCfgExecFilename = ToolCfgExecName + ".cfg";
