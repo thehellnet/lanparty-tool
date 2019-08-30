@@ -106,6 +106,12 @@ namespace LanPartyTool.agent
 
         private void ReadData(object sender, SerialDataReceivedEventArgs e)
         {
+            //            new Thread(ReadDataLoop).Start();
+            ReadDataLoop();
+        }
+
+        private void ReadDataLoop()
+        {
             Logger.Debug("Reading data");
 
             while (true)

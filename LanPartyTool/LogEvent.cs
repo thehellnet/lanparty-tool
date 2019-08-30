@@ -1,4 +1,5 @@
-﻿using log4net.Appender;
+﻿using System.Threading.Tasks;
+using log4net.Appender;
 using log4net.Core;
 
 namespace LanPartyTool
