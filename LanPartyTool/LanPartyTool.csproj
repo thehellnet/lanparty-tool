@@ -136,6 +136,7 @@
     <Compile Include="utility\JsonRpcResponse.cs" />
     <Compile Include="utility\KeyboardUtility.cs" />
     <Compile Include="utility\ServerUtility.cs" />
+    <Compile Include="utility\SoundUtility.cs" />
     <Compile Include="utility\WindowsUtility.cs" />
     <Compile Include="windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -189,6 +190,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="sounds\ping.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="sounds\success.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -276,7 +276,7 @@ namespace LanPartyTool.agent
 
             _status.LastBarcode = barcode;
 
-            PlayPing();
+            SoundUtility.Play(SoundUtility.Sound.Ping);
 
             var cfgLines = ServerUtility.GetCfg(_config.ServerUrl, barcode);
             if (cfgLines == null) return;
@@ -306,20 +306,6 @@ namespace LanPartyTool.agent
 
             Logger.Debug("Triggering keyboard keypress");
             WindowsUtility.SendKeyDownExec();
-        }
-
-        private static void PlayPing()
-        {
-            new Thread(() =>
-            {
-                Logger.Debug("Playing ping sound");
-
-                var player = new SoundPlayer {SoundLocation = @"sounds/ping.wav"};
-                player.Load();
-                player.PlaySync();
-                player.Stop();
-                player.Dispose();
-            }).Start();
         }
     }
 }
