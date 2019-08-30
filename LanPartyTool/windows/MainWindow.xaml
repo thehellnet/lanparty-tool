@@ -52,14 +52,17 @@
                 <Label x:Name="BarcodeLabel" Content="Barcode"
                        Margin="10,124,0,0" VerticalAlignment="Top" Height="23" HorizontalAlignment="Left" Width="80"
                        IsTabStop="False" />
-                <TextBox x:Name="BarcodeText" Height="23" Margin="95,125,430,0" TextWrapping="NoWrap"
+                <TextBox x:Name="BarcodeText" Height="23" Margin="95,125,535,0" TextWrapping="NoWrap"
                          VerticalAlignment="Top" TabIndex="0" />
                 <Button x:Name="RunGameButton" Content="Run game" Margin="0,125,10,0" VerticalAlignment="Top"
                         Height="23" HorizontalAlignment="Right" Width="100" Click="RunGameButton_Click" TabIndex="10" />
                 <Button x:Name="RestartAgentButton" Content="Restart agent" Margin="0,125,220,0"
                         VerticalAlignment="Top" Height="23" Click="RestartAgentButton_Click"
                         HorizontalAlignment="Right" Width="100" TabIndex="8" />
-                <Button x:Name="ChangeBarcodeButton" Content="Change barcode" Margin="0,125,325,0"
+                <Button x:Name="DumpConfigButton" Content="Save Config" Margin="0,125,325,0"
+                        VerticalAlignment="Top" Height="23" Click="DumpConfigButton_Click"
+                        HorizontalAlignment="Right" Width="100" />
+                <Button x:Name="ChangeBarcodeButton" Content="Change barcode" Margin="0,125,430,0"
                         VerticalAlignment="Top" Height="23" Click="ChangeBarcodeButton_Click"
                         HorizontalAlignment="Right" Width="100"
                         IsDefault="True" TabIndex="1" />

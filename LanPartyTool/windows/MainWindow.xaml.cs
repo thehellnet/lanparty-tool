@@ -27,8 +27,11 @@ namespace LanPartyTool.windows
 
         public delegate void ManualBarcodeHandler(string barcode);
 
+        public delegate void DumpConfigHandler();
+
         public event AgentRestartHandler OnAgentRestart;
         public event ManualBarcodeHandler OnManualBarcode;
+        public event DumpConfigHandler OnDumpConfig;
 
         private const int MaxLogLines = 100;
 
@@ -292,6 +295,11 @@ namespace LanPartyTool.windows
 
             BarcodeText.Dispatcher.Invoke(DispatcherPriority.Background,
                 new Action(() => { BarcodeText.Text = ""; }));
+        }
+
+        private void DumpConfigButton_Click(object sender, RoutedEventArgs e)
+        {
+            new Thread(() => { OnDumpConfig?.Invoke(); }).Start();
         }
 
         private void ToolCfgEditButton_Click(object sender, RoutedEventArgs e)

@@ -284,6 +284,15 @@ namespace LanPartyTool.agent
             ApplyNewCfg(cfgLines);
         }
 
+        public void DumpConfigHandler()
+        {
+            Logger.Info("Manual config dump");
+
+            var cfgLines = GameUtility.DumpCfg();
+
+            Logger.Debug($"CFG lines: {cfgLines.Count}");
+        }
+
         private void ApplyNewCfg(List<string> cfgLines)
         {
             if (cfgLines == null) return;
