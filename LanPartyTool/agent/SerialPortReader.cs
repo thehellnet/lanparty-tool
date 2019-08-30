@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
-using System.Media;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using LanPartyTool.config;
 using LanPartyTool.utility;
 using log4net;
@@ -34,14 +32,14 @@ namespace LanPartyTool.agent
         private readonly Status _status = Status.GetInstance();
 
         private readonly List<byte> line = new List<byte>();
+        private string _lastBarcode;
+        private DateTime _lastBarcodeDateTime = DateTime.Now;
 
         private SerialPort _serialPort;
-        private DateTime _lastBarcodeDateTime = DateTime.Now;
-        private string _lastBarcode;
+        private int _tokenCounts;
 
         private TokenStatus _tokenStatus = TokenStatus.Waiting;
-        private Watchdog _tokenWatchdog = new Watchdog();
-        private int _tokenCounts = 0;
+        private readonly Watchdog _tokenWatchdog = new Watchdog();
 
         public event NewBarcodeHandler OnNewBarcode;
         public event NewStatusHandler OnNewStatus;
@@ -138,7 +136,10 @@ namespace LanPartyTool.agent
                     continue;
 
                 var barcode = ParseString(line);
-                if (!string.IsNullOrEmpty(barcode)) NewSerialLine(barcode);
+                if (!string.IsNullOrEmpty(barcode))
+                {
+                    new Thread(() => { NewSerialLine(barcode); }).Start();
+                }
 
                 line.Clear();
             }
