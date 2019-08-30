@@ -23,5 +23,7 @@
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Activision\Call of Duty 4",
             @"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Activision\Call of Duty 4"
         };
+
+        public const int SerialBarcodeDebounceTimeout = 2;
     }
 }

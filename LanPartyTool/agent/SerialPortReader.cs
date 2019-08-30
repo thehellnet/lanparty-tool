@@ -136,7 +136,7 @@ namespace LanPartyTool.agent
         {
             Logger.Debug($"New line on serial port: {line}");
 
-            if (lastBarcodeDateTime.AddSeconds(2) >= DateTime.Now)
+            if (lastBarcodeDateTime.AddSeconds(Constants.SerialBarcodeDebounceTimeout) >= DateTime.Now)
                 return;
 
             lastBarcodeDateTime = DateTime.Now;
@@ -145,14 +145,10 @@ namespace LanPartyTool.agent
 
         private static string ParseString(IReadOnlyCollection<byte> line)
         {
-            if (line == null)
-                return null;
-            if (line.Count != 14)
-                return null;
-            if (line.ElementAt(0) != 0x02)
-                return null;
-            if (line.ElementAt(13) != 0x03)
-                return null;
+            if (line == null) return null;
+            if (line.Count != 14) return null;
+            if (line.ElementAt(0) != 0x02) return null;
+            if (line.ElementAt(13) != 0x03) return null;
 
             uint computedChecksum = 0;
             for (var i = 1; i < 11; i += 2)
