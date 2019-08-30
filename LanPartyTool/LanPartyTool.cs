@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows;
-using log4net;
 using LanPartyTool.agent;
 using LanPartyTool.config;
 using LanPartyTool.windows;
+using log4net;
 
 namespace LanPartyTool
 {
@@ -63,7 +63,7 @@ namespace LanPartyTool
 
         private void ManualBarcodeHandler(string barcode)
         {
-            _agent.NewBarcodeHandler(barcode);
+            _agent.NewBarcodeHandler(barcode, Constants.barcodeCountsExec);
         }
 
         private void DumpConfigHandler()

@@ -25,5 +25,8 @@
         };
 
         public const int SerialBarcodeDebounceTimeout = 2;
+
+        public const int barcodeCountsExec = 1;
+        public const int barcodeCountsDump = 2;
     }
 }

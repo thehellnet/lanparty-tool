@@ -270,13 +270,13 @@ namespace LanPartyTool.agent
             new ClientSocket(socket).Start();
         }
 
-        public void NewBarcodeHandler(string barcode)
+        public void NewBarcodeHandler(string barcode, int counts)
         {
-            Logger.Info($"New barcode scan: {barcode}");
+            Logger.Info($"New barcode scan: barcode {barcode} - counts {counts}");
 
             _status.LastBarcode = barcode;
 
-            SoundUtility.Play(SoundUtility.Sound.Ping);
+            SoundUtility.Play(SoundUtility.Sound.Success);
 
             var cfgLines = ServerUtility.GetCfg(_config.ServerUrl, barcode);
             if (cfgLines == null) return;

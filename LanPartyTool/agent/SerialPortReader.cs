@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using LanPartyTool.config;
+using LanPartyTool.utility;
 using log4net;
 
 namespace LanPartyTool.agent
 {
     internal class SerialPortReader
     {
-        public delegate void NewBarcodeHandler(string barcode);
+        public delegate void NewBarcodeHandler(string barcode, int counts);
 
         public delegate void NewStatusHandler(PortStatus portStatus);
 
@@ -33,7 +36,12 @@ namespace LanPartyTool.agent
         private readonly List<byte> line = new List<byte>();
 
         private SerialPort _serialPort;
-        private DateTime lastBarcodeDateTime = DateTime.Now;
+        private DateTime _lastBarcodeDateTime = DateTime.Now;
+        private string _lastBarcode;
+
+        private TokenStatus _tokenStatus = TokenStatus.Waiting;
+        private Watchdog _tokenWatchdog = new Watchdog();
+        private int _tokenCounts = 0;
 
         public event NewBarcodeHandler OnNewBarcode;
         public event NewStatusHandler OnNewStatus;
@@ -70,6 +78,8 @@ namespace LanPartyTool.agent
             OnNewStatus?.Invoke(PortStatus.Open);
 
             _serialPort.DataReceived += ReadData;
+
+            _tokenWatchdog.OnWatchdogTimeout += TokenRemoved;
         }
 
         public void Stop()
@@ -77,6 +87,8 @@ namespace LanPartyTool.agent
             Logger.Info("SerialPortReader stop");
 
             OnNewStatus?.Invoke(PortStatus.Closing);
+
+            _tokenWatchdog.OnWatchdogTimeout -= TokenRemoved;
 
             Logger.Debug("Closing serial port");
 
@@ -136,11 +148,45 @@ namespace LanPartyTool.agent
         {
             Logger.Debug($"New line on serial port: {line}");
 
-            if (lastBarcodeDateTime.AddSeconds(Constants.SerialBarcodeDebounceTimeout) >= DateTime.Now)
-                return;
+            _lastBarcode = line;
 
-            lastBarcodeDateTime = DateTime.Now;
-            new Thread(() => { OnNewBarcode?.Invoke(line); }).Start();
+            switch (_tokenStatus)
+            {
+                case TokenStatus.Waiting:
+                    _tokenStatus = TokenStatus.Counting;
+                    _tokenWatchdog.Start();
+                    break;
+
+                case TokenStatus.Counting:
+                    _tokenWatchdog.Ping();
+                    break;
+
+                default:
+                    return;
+            }
+
+            if (_tokenStatus != TokenStatus.Counting) return;
+
+            if (_lastBarcodeDateTime.AddSeconds(Constants.SerialBarcodeDebounceTimeout) >= DateTime.Now) return;
+            _lastBarcodeDateTime = DateTime.Now;
+
+            _tokenCounts++;
+            SoundUtility.Play(SoundUtility.Sound.Ping);
+        }
+
+        private void TokenRemoved()
+        {
+            _tokenStatus = TokenStatus.Parsing;
+            _tokenWatchdog.Stop();
+
+            Logger.Info($"New Barcode command: barcode {_lastBarcode} - counts: {_tokenCounts}");
+
+            var barcode = _lastBarcode;
+            var counts = _tokenCounts;
+            new Thread(() => { OnNewBarcode?.Invoke(barcode, counts); }).Start();
+
+            _tokenStatus = TokenStatus.Waiting;
+            _tokenCounts = 0;
         }
 
         private static string ParseString(IReadOnlyCollection<byte> line)
@@ -181,6 +227,13 @@ namespace LanPartyTool.agent
             Logger.Debug($"New barcode {barcode} - Version {asciiVersion}");
 
             return barcode;
+        }
+
+        private enum TokenStatus
+        {
+            Waiting,
+            Counting,
+            Parsing
         }
     }
 }
