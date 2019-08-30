@@ -5,8 +5,8 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using log4net;
 using LanPartyTool.config;
+using log4net;
 
 namespace LanPartyTool.agent
 {
@@ -30,9 +30,9 @@ namespace LanPartyTool.agent
         private readonly ServerSocket _serverSocket = new ServerSocket();
         private readonly Status _status = Status.GetInstance();
 
-        private SerialPort _serialPort;
-        private Thread _thread;
+        private readonly List<byte> line = new List<byte>();
 
+        private SerialPort _serialPort;
         private DateTime lastBarcodeDateTime = DateTime.Now;
 
         public event NewBarcodeHandler OnNewBarcode;
@@ -69,9 +69,7 @@ namespace LanPartyTool.agent
 
             OnNewStatus?.Invoke(PortStatus.Open);
 
-            Logger.Debug("Launching serial port loop");
-            _thread = new Thread(SerialLoop);
-            _thread.Start();
+            _serialPort.DataReceived += ReadData;
         }
 
         public void Stop()
@@ -82,6 +80,8 @@ namespace LanPartyTool.agent
 
             Logger.Debug("Closing serial port");
 
+            _serialPort.DataReceived -= ReadData;
+
             if (_serialPort != null && _serialPort.IsOpen)
                 try
                 {
@@ -91,39 +91,31 @@ namespace LanPartyTool.agent
                 {
                 }
 
-            if (_thread != null)
-            {
-                if (_thread.IsAlive)
-                {
-                    _thread.Interrupt();
-                    _thread.Join();
-                }
-
-                _thread = null;
-            }
-
             _serialPort = null;
         }
 
-        private void SerialLoop()
+        private void ReadData(object sender, SerialDataReceivedEventArgs e)
         {
-            Logger.Debug("Starting loop");
+            Logger.Debug("Reading data");
 
-            var line = new List<byte>();
-
-            while (_serialPort.IsOpen)
+            while (true)
             {
                 int c;
-
                 try
                 {
-                    c = _serialPort.ReadChar();
+                    c = _serialPort.ReadByte();
                 }
-                catch (Exception e)
+                catch (IOException)
                 {
-                    Logger.Error($"Error on serial port: {e.Message}");
-                    continue;
+                    break;
                 }
+                catch (Exception ex)
+                {
+                    Logger.Error($"Error on serial port: {ex.Message}");
+                    break;
+                }
+
+                if (c == -1) break;
 
                 if (line.Count == 0 && c != 0x02)
                     continue;
@@ -138,8 +130,6 @@ namespace LanPartyTool.agent
 
                 line.Clear();
             }
-
-            Logger.Debug("Loop end");
         }
 
         private void NewSerialLine(string line)
