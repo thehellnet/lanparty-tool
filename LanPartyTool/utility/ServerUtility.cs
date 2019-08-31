@@ -10,8 +10,9 @@ namespace LanPartyTool.utility
     internal class ServerUtility
     {
         private const string ServerProtocol = "http";
-        private const int ServerPort = 8069;
-        private const string ServerEndPoint = "/ap1/v1/tool";
+        private const int ServerPort = 8080;
+        private const string ServerEndPoint = "/lanparty_manager/api/v1/tool";
+        private const string PingEndPoint = "/ping";
         private const string WelcomeEndPoint = "/welcome";
         private const string GetCfgEndPoint = "/getCfg";
 
@@ -21,7 +22,7 @@ namespace LanPartyTool.utility
         {
             foreach (var serverUrl in PossibleServerUrls())
             {
-                var result = HttpUtility.DoPost($"{serverUrl}{WelcomeEndPoint}");
+                var result = HttpUtility.DoPost($"{serverUrl}{PingEndPoint}");
                 if (result == null)
                 {
                     Logger.Debug($"\"{serverUrl}\" is not valid");
@@ -33,6 +34,15 @@ namespace LanPartyTool.utility
             }
 
             return "";
+        }
+
+        public static void Welcome(string serverUrl)
+        {
+            var result = HttpUtility.DoPost($"{serverUrl}{WelcomeEndPoint}");
+            if (result == null)
+            {
+                Logger.Error($"\"{serverUrl}\" is not valid");
+            }
         }
 
         public static List<string> GetCfg(string serverUrl, string barcode)

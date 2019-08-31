@@ -26,6 +26,8 @@ namespace LanPartyTool.agent
 
         private static readonly ILog Logger = LogManager.GetLogger(typeof(ServerSocket));
 
+        private readonly object SYNC = new object();
+
         private Socket _socket;
         private Thread _thread;
 
@@ -34,61 +36,67 @@ namespace LanPartyTool.agent
 
         public void Start()
         {
-            Logger.Info("ServerSocket start");
-
-            Logger.Debug("Preparing socket");
-            OnNewStatus?.Invoke(Status.Preparing);
-
-            _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            _socket.Bind(new IPEndPoint(IPAddress.Any, SocketPort));
-
-            try
+            lock (SYNC)
             {
-                Logger.Debug("Socket Listen");
-                _socket.Listen(SocketBacklog);
-            }
-            catch (SocketException e)
-            {
-                Logger.Error(e.Message);
-                return;
-            }
+                Logger.Info("ServerSocket start");
 
-            OnNewStatus?.Invoke(Status.Listening);
+                Logger.Debug("Preparing socket");
+                OnNewStatus?.Invoke(Status.Preparing);
 
-            Logger.Debug("Preparing main loop thread");
-            _thread = new Thread(Loop);
-            _thread.Start();
+                _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                _socket.Bind(new IPEndPoint(IPAddress.Any, SocketPort));
+
+                try
+                {
+                    Logger.Debug("Socket Listen");
+                    _socket.Listen(SocketBacklog);
+                }
+                catch (SocketException e)
+                {
+                    Logger.Error(e.Message);
+                    return;
+                }
+
+                OnNewStatus?.Invoke(Status.Listening);
+
+                Logger.Debug("Preparing main loop thread");
+                _thread = new Thread(Loop);
+                _thread.Start();
+            }
         }
 
         public void Stop()
         {
-            Logger.Info("ServerSocket stop");
-
-            OnNewStatus?.Invoke(Status.Closing);
-
-            if (_socket != null && _socket.IsBound)
-                try
-                {
-                    _socket.Close();
-                }
-                catch (SocketException)
-                {
-                }
-
-            if (_thread != null)
+            lock (SYNC)
             {
-                if (_thread.IsAlive)
+                Logger.Info("ServerSocket stop");
+
+                OnNewStatus?.Invoke(Status.Closing);
+
+                if (_socket != null)
+                    try
+                    {
+                        _socket.Close();
+                    }
+                    catch (SocketException)
+                    {
+                    }
+
+                if (_thread != null)
                 {
-                    _thread.Interrupt();
-                    _thread.Join();
+                    if (_thread.IsAlive)
+                    {
+                        _thread.Interrupt();
+                        _thread.Join();
+                    }
+
+                    _thread = null;
                 }
 
-                _thread = null;
+                _socket = null;
+
+                OnNewStatus?.Invoke(Status.Closed);
             }
-
-            _socket = null;
-
-            OnNewStatus?.Invoke(Status.Closed);
         }
 
         private void Loop()

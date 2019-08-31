@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
-using log4net;
 using LanPartyTool.agent;
+using log4net;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -30,7 +30,7 @@ namespace LanPartyTool.utility
             request.AddHeader("content-type", "application/json");
             request.AddHeader("accept", "application/json");
 
-            var client = new RestClient(url) {Timeout = HTTP_CLIENT_TIMEOUT };
+            var client = new RestClient(url) {Timeout = HTTP_CLIENT_TIMEOUT};
             var response = client.Execute(request);
             if (!response.IsSuccessful)
             {

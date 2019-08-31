@@ -27,11 +27,15 @@ namespace LanPartyTool.agent
         }
 
         private static readonly ILog Logger = LogManager.GetLogger(typeof(SerialPortReader));
+
         private readonly Config _config = Config.GetInstance();
         private readonly ServerSocket _serverSocket = new ServerSocket();
         private readonly Status _status = Status.GetInstance();
+        private readonly Watchdog _tokenWatchdog = new Watchdog();
 
         private readonly List<byte> line = new List<byte>();
+
+        private readonly object SYNC = new object();
         private string _lastBarcode;
         private DateTime _lastBarcodeDateTime = DateTime.Now;
 
@@ -39,69 +43,78 @@ namespace LanPartyTool.agent
         private int _tokenCounts;
 
         private TokenStatus _tokenStatus = TokenStatus.Waiting;
-        private readonly Watchdog _tokenWatchdog = new Watchdog();
 
         public event NewBarcodeHandler OnNewBarcode;
         public event NewStatusHandler OnNewStatus;
 
         public void Start()
         {
-            Logger.Info("SerialPortReader start");
-
-            Logger.Debug("Preparing serial port");
-            OnNewStatus?.Invoke(PortStatus.Preparing);
-
-            _serialPort = new SerialPort(_config.SerialPort)
+            lock (SYNC)
             {
-                BaudRate = 9600,
-                DataBits = 8,
-                Parity = Parity.None,
-                StopBits = StopBits.One,
-                Handshake = Handshake.None,
-                ReadTimeout = SerialPort.InfiniteTimeout
-            };
+                Logger.Info("SerialPortReader start");
 
-            Logger.Debug("Opening serial port");
-            try
-            {
-                _serialPort.Open();
+                Logger.Debug("Preparing serial port");
+                OnNewStatus?.Invoke(PortStatus.Preparing);
+
+                _serialPort = new SerialPort(_config.SerialPort)
+                {
+                    BaudRate = 9600,
+                    DataBits = 8,
+                    Parity = Parity.None,
+                    StopBits = StopBits.One,
+                    Handshake = Handshake.None,
+                    ReadTimeout = SerialPort.InfiniteTimeout
+                };
+
+                Logger.Debug("Opening serial port");
+                try
+                {
+                    _serialPort.Open();
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e.Message);
+                    OnNewStatus?.Invoke(PortStatus.Closed);
+                    return;
+                }
+
+                OnNewStatus?.Invoke(PortStatus.Open);
+
+                _serialPort.DataReceived += ReadData;
+
+                _tokenWatchdog.OnWatchdogTimeout += TokenRemoved;
             }
-            catch (Exception e)
-            {
-                Logger.Error(e.Message);
-                OnNewStatus?.Invoke(PortStatus.Closed);
-                return;
-            }
-
-            OnNewStatus?.Invoke(PortStatus.Open);
-
-            _serialPort.DataReceived += ReadData;
-
-            _tokenWatchdog.OnWatchdogTimeout += TokenRemoved;
         }
 
         public void Stop()
+
         {
-            Logger.Info("SerialPortReader stop");
+            lock (SYNC)
+            {
+                Logger.Info("SerialPortReader stop");
 
-            OnNewStatus?.Invoke(PortStatus.Closing);
+                OnNewStatus?.Invoke(PortStatus.Closing);
 
-            _tokenWatchdog.OnWatchdogTimeout -= TokenRemoved;
+                _tokenWatchdog.OnWatchdogTimeout -= TokenRemoved;
 
-            Logger.Debug("Closing serial port");
+                Logger.Debug("Closing serial port");
 
-            _serialPort.DataReceived -= ReadData;
 
-            if (_serialPort != null && _serialPort.IsOpen)
-                try
+                if (_serialPort != null && _serialPort.IsOpen)
                 {
-                    _serialPort.Close();
-                }
-                catch (IOException)
-                {
+                    _serialPort.DataReceived -= ReadData;
+
+                    try
+                    {
+                        _serialPort.Close();
+                    }
+                    catch (IOException)
+                    {
+                    }
                 }
 
-            _serialPort = null;
+                _serialPort = null;
+            }
         }
 
         private void ReadData(object sender, SerialDataReceivedEventArgs e)
@@ -142,10 +155,7 @@ namespace LanPartyTool.agent
                     continue;
 
                 var barcode = ParseString(line);
-                if (!string.IsNullOrEmpty(barcode))
-                {
-                    new Thread(() => { NewSerialLine(barcode); }).Start();
-                }
+                if (!string.IsNullOrEmpty(barcode)) new Thread(() => { NewSerialLine(barcode); }).Start();
 
                 line.Clear();
             }

@@ -2,7 +2,6 @@
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
-using System.Media;
 using System.Net.Sockets;
 using System.Threading;
 using System.Windows;
@@ -20,6 +19,8 @@ namespace LanPartyTool.agent
         private readonly SerialPortReader _serialPortReader = new SerialPortReader();
         private readonly ServerSocket _serverSocket = new ServerSocket();
         private readonly Status _status = Status.GetInstance();
+
+        private readonly object SYNC = new object();
 
         public Agent()
         {
@@ -39,34 +40,42 @@ namespace LanPartyTool.agent
 
         private void StartAgent()
         {
-            Logger.Info("Agent start");
+            lock (SYNC)
+            {
+                Logger.Info("Agent start");
 
-            InitConfig();
+                InitConfig();
 
-            if (!CheckConfig()) return;
+                if (!CheckConfig()) return;
 
-            if (!CheckEntryPoints()) return;
+                if (!CheckEntryPoints()) return;
 
-            _serverSocket.OnConnectionAccepted += NewConnectionHandler;
-            _serverSocket.Start();
+                _serverSocket.OnConnectionAccepted += NewConnectionHandler;
+                _serverSocket.Start();
 
-            _serialPortReader.OnNewBarcode += NewBarcodeHandler;
-            _serialPortReader.Start();
+                _serialPortReader.OnNewBarcode += NewBarcodeHandler;
+                _serialPortReader.Start();
 
-            Logger.Debug("Agent start sequence completed");
+                SendWelcomeToServer();
+
+                Logger.Debug("Agent start sequence completed");
+            }
         }
 
         private void StopAgent()
         {
-            Logger.Info("Agent stop");
+            lock (SYNC)
+            {
+                Logger.Info("Agent stop");
 
-            _serialPortReader.OnNewBarcode -= NewBarcodeHandler;
-            _serialPortReader.Stop();
+                _serialPortReader.OnNewBarcode -= NewBarcodeHandler;
+                _serialPortReader.Stop();
 
-            _serverSocket.OnConnectionAccepted -= NewConnectionHandler;
-            _serverSocket.Stop();
+                _serverSocket.OnConnectionAccepted -= NewConnectionHandler;
+                _serverSocket.Stop();
 
-            Logger.Debug("Agent stop sequence completed");
+                Logger.Debug("Agent stop sequence completed");
+            }
         }
 
         private void InitConfig()
@@ -291,6 +300,12 @@ namespace LanPartyTool.agent
             var cfgLines = GameUtility.DumpCfg();
 
             Logger.Debug($"CFG lines: {cfgLines.Count}");
+        }
+
+        private void SendWelcomeToServer()
+        {
+            Logger.Info("Send Welcome message to server");
+            ServerUtility.Welcome(_config.ServerUrl);
         }
 
         private void ApplyNewCfg(List<string> cfgLines)
