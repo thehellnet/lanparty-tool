@@ -283,8 +283,6 @@ namespace LanPartyTool.agent
         {
             Logger.Info($"New barcode scan: barcode {barcode} - counts {counts}");
 
-            _status.LastBarcode = barcode;
-
             SoundUtility.Play(SoundUtility.Sound.Success);
 
             ParseBarcodeCommandResponse(barcode, counts);
@@ -307,15 +305,36 @@ namespace LanPartyTool.agent
 
         private void ParseBarcodeCommandResponse(string barcode, int counts)
         {
+            List<string> cfgLines;
+
             switch (counts)
             {
                 case 1:
-                    var cfgLines = ServerUtility.GetCfg(_config.ServerUrl, barcode);
+                    Logger.Info("Get new CFG");
+
+                    cfgLines = ServerUtility.GetCfg(_config.ServerUrl, barcode);
                     if (cfgLines == null) return;
+
                     ApplyNewCfg(cfgLines);
+
+                    _status.LastBarcode = barcode;
+
                     break;
 
                 case 2:
+                    Logger.Info("Save CFG");
+
+                    if (barcode != _status.LastBarcode)
+                    {
+                        Logger.Warn("CFG not saved for different barcode");
+                        return;
+                    }
+
+                    cfgLines = GameUtility.DumpCfg();
+                    if (cfgLines == null) return;
+
+                    ServerUtility.SaveCfg(_config.ServerUrl, barcode, cfgLines);
+
                     break;
 
                 default:

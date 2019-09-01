@@ -39,6 +39,8 @@ namespace LanPartyTool.agent
                 lastPingDateTime = DateTime.Now;
 
                 thread.Start();
+
+                Logger.Info("Watchdog started");
             }
         }
 
@@ -54,6 +56,8 @@ namespace LanPartyTool.agent
 
                 thread.Join();
                 thread = null;
+
+                Logger.Info("Watchdog stopped");
             }
         }
 

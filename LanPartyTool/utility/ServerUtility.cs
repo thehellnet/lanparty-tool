@@ -15,6 +15,7 @@ namespace LanPartyTool.utility
         private const string PingEndPoint = "/ping";
         private const string WelcomeEndPoint = "/welcome";
         private const string GetCfgEndPoint = "/getCfg";
+        private const string SaveCfgEndPoint = "/saveCfg";
 
         private static readonly ILog Logger = LogManager.GetLogger(typeof(ServerUtility));
 
@@ -39,10 +40,7 @@ namespace LanPartyTool.utility
         public static void Welcome(string serverUrl)
         {
             var result = HttpUtility.DoPost($"{serverUrl}{WelcomeEndPoint}");
-            if (result == null)
-            {
-                Logger.Error($"\"{serverUrl}\" is not valid");
-            }
+            if (result == null) Logger.Error($"\"{serverUrl}\" is not valid");
         }
 
         public static List<string> GetCfg(string serverUrl, string barcode)
@@ -63,6 +61,24 @@ namespace LanPartyTool.utility
             var rawData = result.Data as JArray;
             var cfgLines = rawData?.ToObject<List<string>>();
             return cfgLines;
+        }
+
+        public static bool SaveCfg(string serverUrl, string barcode, List<string> cfgLines)
+        {
+            var result = HttpUtility.DoPost($"{serverUrl}{SaveCfgEndPoint}", new {barcode, cfgLines});
+            if (result == null)
+            {
+                Logger.Debug($"\"{serverUrl}\" is not valid");
+                return false;
+            }
+
+            if (result.Success == false)
+            {
+                Logger.Warn(result.Error as string);
+                return false;
+            }
+
+            return true;
         }
 
         private static IEnumerable<string> PossibleServerUrls()
