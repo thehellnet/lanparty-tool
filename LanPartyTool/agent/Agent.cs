@@ -287,10 +287,7 @@ namespace LanPartyTool.agent
 
             SoundUtility.Play(SoundUtility.Sound.Success);
 
-            var cfgLines = ServerUtility.GetCfg(_config.ServerUrl, barcode);
-            if (cfgLines == null) return;
-
-            ApplyNewCfg(cfgLines);
+            ParseBarcodeCommandResponse(barcode, counts);
         }
 
         public void DumpConfigHandler()
@@ -306,6 +303,24 @@ namespace LanPartyTool.agent
         {
             Logger.Info("Send Welcome message to server");
             ServerUtility.Welcome(_config.ServerUrl);
+        }
+
+        private void ParseBarcodeCommandResponse(string barcode, int counts)
+        {
+            switch (counts)
+            {
+                case 1:
+                    var cfgLines = ServerUtility.GetCfg(_config.ServerUrl, barcode);
+                    if (cfgLines == null) return;
+                    ApplyNewCfg(cfgLines);
+                    break;
+
+                case 2:
+                    break;
+
+                default:
+                    return;
+            }
         }
 
         private void ApplyNewCfg(List<string> cfgLines)

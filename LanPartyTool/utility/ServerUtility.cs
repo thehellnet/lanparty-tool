@@ -61,8 +61,7 @@ namespace LanPartyTool.utility
             }
 
             var rawData = result.Data as JArray;
-            var cfgLines = rawData.ToObject<List<string>>();
-
+            var cfgLines = rawData?.ToObject<List<string>>();
             return cfgLines;
         }
 
