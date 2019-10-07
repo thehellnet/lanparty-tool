@@ -40,6 +40,12 @@ namespace LanPartyTool.agent
             {
                 Logger.Info("ServerSocket start");
 
+                if (_socket != null)
+                {
+                    Logger.Error("Already running");
+                    return;
+                }
+
                 Logger.Debug("Preparing socket");
                 OnNewStatus?.Invoke(Status.Preparing);
 
