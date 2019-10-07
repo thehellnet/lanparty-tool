@@ -19,7 +19,7 @@ namespace LanPartyTool.utility
             HttpClient.Timeout = TimeSpan.FromMilliseconds(HTTP_CLIENT_TIMEOUT);
         }
 
-        public static JsonResponse DoPost(string url, dynamic requestBody = null)
+        public static dynamic DoPost(string url, dynamic requestBody = null)
         {
             Logger.Debug("Doing POST HTTP Request");
 
@@ -40,7 +40,7 @@ namespace LanPartyTool.utility
 
             var responseString = response.Content;
 
-            var responseJson = JsonConvert.DeserializeObject<JsonResponse>(responseString);
+            var responseJson = JsonConvert.DeserializeObject(responseString);
             return responseJson;
         }
     }

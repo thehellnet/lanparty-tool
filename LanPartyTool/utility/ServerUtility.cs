@@ -52,13 +52,7 @@ namespace LanPartyTool.utility
                 return null;
             }
 
-            if (result.Success == false)
-            {
-                Logger.Warn(result.Error as string);
-                return null;
-            }
-
-            var rawData = result.Data as JArray;
+            var rawData = result as JArray;
             var cfgLines = rawData?.ToObject<List<string>>();
             return cfgLines;
         }
@@ -69,12 +63,6 @@ namespace LanPartyTool.utility
             if (result == null)
             {
                 Logger.Debug($"\"{serverUrl}\" is not valid");
-                return false;
-            }
-
-            if (result.Success == false)
-            {
-                Logger.Warn(result.Error as string);
                 return false;
             }
 
