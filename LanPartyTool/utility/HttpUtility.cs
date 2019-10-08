@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
+using System.Windows;
 using LanPartyTool.agent;
 using log4net;
 using Newtonsoft.Json;
@@ -30,17 +32,20 @@ namespace LanPartyTool.utility
             request.AddHeader("content-type", "application/json");
             request.AddHeader("accept", "application/json");
 
-            var client = new RestClient(url) {Timeout = HTTP_CLIENT_TIMEOUT};
+            var client = new RestClient(url)
+            {
+                Timeout = HTTP_CLIENT_TIMEOUT,
+                UserAgent = Application.ResourceAssembly.FullName
+            };
+
             var response = client.Execute(request);
-            if (!response.IsSuccessful)
+            if (response.StatusCode != HttpStatusCode.OK)
             {
                 Logger.Debug("Unable to complete HTTP request");
                 return null;
             }
 
-            var responseString = response.Content;
-
-            var responseJson = JsonConvert.DeserializeObject(responseString);
+            var responseJson = JsonConvert.DeserializeObject(response.Content);
             return responseJson;
         }
     }
