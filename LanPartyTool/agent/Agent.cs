@@ -30,52 +30,52 @@ namespace LanPartyTool.agent
 
         public void Start()
         {
-            new Thread(StartAgent).Start();
+            lock (SYNC)
+            {
+                StartAgent();
+            }
         }
 
         public void Stop()
         {
-            new Thread(StopAgent).Start();
+            lock (SYNC)
+            {
+                StopAgent();
+            }
         }
 
         private void StartAgent()
         {
-            lock (SYNC)
-            {
-                Logger.Info("Agent start");
+            Logger.Info("Agent start");
 
-                InitConfig();
+            InitConfig();
 
-                if (!CheckConfig()) return;
+            if (!CheckConfig()) return;
 
-                if (!CheckEntryPoints()) return;
+            if (!CheckEntryPoints()) return;
 
-                _serverSocket.OnConnectionAccepted += NewConnectionHandler;
-                _serverSocket.Start();
+            _serverSocket.OnConnectionAccepted += NewConnectionHandler;
+            _serverSocket.Start();
 
-                _serialPortReader.OnNewBarcode += NewBarcodeHandler;
-                _serialPortReader.Start();
+            _serialPortReader.OnNewBarcode += NewBarcodeHandler;
+            _serialPortReader.Start();
 
-                SendWelcomeToServer();
+            SendWelcomeToServer();
 
-                Logger.Debug("Agent start sequence completed");
-            }
+            Logger.Debug("Agent start sequence completed");
         }
 
         private void StopAgent()
         {
-            lock (SYNC)
-            {
-                Logger.Info("Agent stop");
+            Logger.Info("Agent stop");
 
-                _serialPortReader.OnNewBarcode -= NewBarcodeHandler;
-                _serialPortReader.Stop();
+            _serialPortReader.OnNewBarcode -= NewBarcodeHandler;
+            _serialPortReader.Stop();
 
-                _serverSocket.OnConnectionAccepted -= NewConnectionHandler;
-                _serverSocket.Stop();
+            _serverSocket.OnConnectionAccepted -= NewConnectionHandler;
+            _serverSocket.Stop();
 
-                Logger.Debug("Agent stop sequence completed");
-            }
+            Logger.Debug("Agent stop sequence completed");
         }
 
         private void InitConfig()
