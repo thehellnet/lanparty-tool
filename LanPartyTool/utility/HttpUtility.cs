@@ -41,7 +41,7 @@ namespace LanPartyTool.utility
             var response = client.Execute(request);
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                Logger.Debug("Unable to complete HTTP request");
+                Logger.Debug($"Unable to complete HTTP request. StatusCode ${response.StatusCode.ToString()}");
                 return null;
             }
 
