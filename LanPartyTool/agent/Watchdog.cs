@@ -6,9 +6,9 @@ namespace LanPartyTool.agent
 {
     internal class Watchdog
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(Watchdog));
-
         public delegate void WatchdogTimeoutHandler();
+
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(Watchdog));
 
         private readonly int interval;
 
@@ -84,11 +84,6 @@ namespace LanPartyTool.agent
                 new Thread(() => { OnWatchdogTimeout?.Invoke(); }).Start();
                 keepRunning = false;
                 break;
-            }
-
-            lock (sync)
-            {
-                thread = null;
             }
         }
     }
