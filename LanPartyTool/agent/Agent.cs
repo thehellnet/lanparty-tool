@@ -30,18 +30,36 @@ namespace LanPartyTool.agent
 
         public void Start()
         {
-            lock (SYNC)
+            new Thread(() =>
             {
-                StartAgent();
-            }
+                lock (SYNC)
+                {
+                    StartAgent();
+                }
+            }).Start();
         }
 
         public void Stop()
         {
-            lock (SYNC)
+            new Thread(() =>
             {
-                StopAgent();
-            }
+                lock (SYNC)
+                {
+                    StopAgent();
+                }
+            }).Start();
+        }
+
+        public void Restart()
+        {
+            new Thread(() =>
+            {
+                lock (SYNC)
+                {
+                    StopAgent();
+                    StartAgent();
+                }
+            }).Start();
         }
 
         private void StartAgent()

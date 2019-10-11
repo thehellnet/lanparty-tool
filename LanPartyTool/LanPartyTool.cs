@@ -57,8 +57,7 @@ namespace LanPartyTool
 
         private void AgentRestartHandler()
         {
-            _agent.Stop();
-            _agent.Start();
+            _agent.Restart();
         }
 
         private void ManualBarcodeHandler(string barcode)
