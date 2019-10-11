@@ -48,7 +48,7 @@ namespace LanPartyTool.utility
             var result = HttpUtility.DoPost($"{serverUrl}{GetCfgEndPoint}", new {barcode});
             if (result == null)
             {
-                Logger.Debug($"\"{serverUrl}\" is not valid");
+                Logger.Debug($"Null response... \"{serverUrl}\" is not valid");
                 return null;
             }
 
@@ -62,7 +62,7 @@ namespace LanPartyTool.utility
             var result = HttpUtility.DoPost($"{serverUrl}{SaveCfgEndPoint}", new {barcode, cfgLines});
             if (result == null)
             {
-                Logger.Debug($"\"{serverUrl}\" is not valid");
+                Logger.Debug($"Null response... \"{serverUrl}\" is not valid");
                 return false;
             }
 
