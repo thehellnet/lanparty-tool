@@ -19,8 +19,8 @@ namespace LanPartyTool.utility
             var editor = Constants.NotepadExeFilename;
             if (File.Exists(Constants.NotepadPlusPlusExeFilepath)) editor = Constants.NotepadPlusPlusExeFilepath;
 
-            var process = new Process {StartInfo = {FileName = editor, Arguments = path}};
-            process.Start();
+            var arguments = $"\"{path}\"";
+            Process.Start(editor, arguments);
         }
 
         public static void OpenFileFolder(string path)
