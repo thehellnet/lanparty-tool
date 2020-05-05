@@ -54,6 +54,8 @@ namespace LanPartyTool.agent
                 if (memoryStream.Length == 0) break;
 
                 var rawData = memoryStream.ToArray();
+                memoryStream.Dispose();
+
                 Logger.Debug($"Received new command of {rawData.Length} bytes");
 
                 var payload = Encoding.UTF8.GetString(rawData);

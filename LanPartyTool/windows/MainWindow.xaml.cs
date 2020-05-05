@@ -13,11 +13,11 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Threading;
-using log4net;
-using log4net.Core;
 using LanPartyTool.agent;
 using LanPartyTool.config;
 using LanPartyTool.utility;
+using log4net;
+using log4net.Core;
 
 namespace LanPartyTool.windows
 {
@@ -42,20 +42,18 @@ namespace LanPartyTool.windows
 
         private readonly Status _status = Status.GetInstance();
 
-        private readonly DispatcherTimer clockTimer = new DispatcherTimer();
+        private readonly DispatcherTimer _clockTimer = new DispatcherTimer();
 
         public MainWindow()
         {
             InitializeComponent();
 
-            Title = $"{Application.ResourceAssembly.GetName().Name}";
+            Title = $"{Application.ResourceAssembly.GetName().Name} {Application.ResourceAssembly.GetName().Version}";
 
-            VersionText.Text = $"ver. {Application.ResourceAssembly.GetName().Version}";
-
-            clockTimer.Tick += (sender, args) =>
+            _clockTimer.Tick += (sender, args) =>
                 ClockText.Text = $"{DateTime.Now}";
-            clockTimer.Interval = TimeSpan.FromSeconds(1);
-            clockTimer.Start();
+            _clockTimer.Interval = TimeSpan.FromSeconds(1);
+            _clockTimer.Start();
 
             ClockText.Text = $"{DateTime.Now}";
             SerialPortComboBox.ItemsSource = SerialPort.GetPortNames();
@@ -73,6 +71,13 @@ namespace LanPartyTool.windows
             ToolCfgText.SetBinding(TextBox.TextProperty, new Binding
             {
                 Path = new PropertyPath("ToolCfg"),
+                Source = _config,
+                Mode = BindingMode.OneWay
+            });
+
+            ProfileNameText.SetBinding(TextBox.TextProperty, new Binding
+            {
+                Path = new PropertyPath("ProfileName"),
                 Source = _config,
                 Mode = BindingMode.OneWay
             });

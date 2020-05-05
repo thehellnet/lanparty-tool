@@ -31,17 +31,16 @@ namespace LanPartyTool.agent
             return new JsonResponse(false) {Error = error};
         }
 
-        protected bool Equals(JsonResponse other)
+        private bool Equals(JsonResponse other)
         {
-            return Success == other.Success && Equals(Data, other.Data) && Equals(Error, other.Error);
+            return other != null && Success == other.Success && Equals(Data, other.Data) && Equals(Error, other.Error);
         }
 
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((JsonResponse) obj);
+            return obj.GetType() == this.GetType() && Equals((JsonResponse) obj);
         }
 
         public override int GetHashCode()

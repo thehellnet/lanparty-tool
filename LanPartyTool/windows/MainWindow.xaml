@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="LanPartyTool" Height="480" Width="800" MinWidth="800" MinHeight="480">
+        Title="LanPartyTool" Width="800" Height="480" MinWidth="800" MinHeight="480">
     <Grid>
         <GroupBox x:Name="PathGroupBox" Header="Configuration" Height="183" Margin="10,10,10,0" VerticalAlignment="Top">
             <Grid>
@@ -66,7 +66,6 @@
                         VerticalAlignment="Top" Height="23" Click="ChangeBarcodeButton_Click"
                         HorizontalAlignment="Right" Width="100"
                         IsDefault="True" TabIndex="1" />
-
             </Grid>
         </GroupBox>
         <RichTextBox x:Name="LogText" Margin="10,198,10,31" HorizontalScrollBarVisibility="Auto"
@@ -80,14 +79,15 @@
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="85" />
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="85" />
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="85" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="85" />
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="130" />
                         </Grid.ColumnDefinitions>
                     </Grid>
                 </ItemsPanelTemplate>
@@ -110,10 +110,13 @@
             <StatusBarItem Grid.Column="5">
                 <TextBlock x:Name="LastBarcodeText" />
             </StatusBarItem>
-            <StatusBarItem Grid.Column="7" HorizontalAlignment="Right">
-                <TextBlock x:Name="VersionText" />
+            <StatusBarItem Grid.Column="6">
+                <TextBlock Text="Profile:" />
             </StatusBarItem>
-            <StatusBarItem Grid.Column="8" HorizontalAlignment="Right">
+            <StatusBarItem Grid.Column="7">
+                <TextBlock x:Name="ProfileNameText" />
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="9" HorizontalAlignment="Right">
                 <TextBlock x:Name="ClockText" />
             </StatusBarItem>
         </StatusBar>

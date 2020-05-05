@@ -11,7 +11,7 @@ using log4net;
 
 namespace LanPartyTool.agent
 {
-    internal class SerialPortReader
+    internal class SerialPortReader : IDisposable
     {
         public delegate void NewBarcodeHandler(string barcode, int counts);
 
@@ -33,9 +33,9 @@ namespace LanPartyTool.agent
         private readonly Status _status = Status.GetInstance();
         private readonly Watchdog _tokenWatchdog = new Watchdog();
 
-        private readonly List<byte> line = new List<byte>();
+        private readonly List<byte> _line = new List<byte>();
 
-        private readonly object SYNC = new object();
+        private readonly object _sync = new object();
         private string _lastBarcode;
         private DateTime _lastBarcodeDateTime = DateTime.Now;
 
@@ -47,9 +47,14 @@ namespace LanPartyTool.agent
         public event NewBarcodeHandler OnNewBarcode;
         public event NewStatusHandler OnNewStatus;
 
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Start()
         {
-            lock (SYNC)
+            lock (_sync)
             {
                 Logger.Info("SerialPortReader start");
 
@@ -89,7 +94,7 @@ namespace LanPartyTool.agent
         public void Stop()
 
         {
-            lock (SYNC)
+            lock (_sync)
             {
                 Logger.Info("SerialPortReader stop");
 
@@ -146,18 +151,18 @@ namespace LanPartyTool.agent
 
                 if (c == -1) break;
 
-                if (line.Count == 0 && c != 0x02)
+                if (_line.Count == 0 && c != 0x02)
                     continue;
 
-                line.Add((byte) c);
+                _line.Add((byte) c);
 
                 if (c != 0x03)
                     continue;
 
-                var barcode = ParseString(line);
+                var barcode = ParseString(_line);
                 if (!string.IsNullOrEmpty(barcode)) new Thread(() => { NewSerialLine(barcode); }).Start();
 
-                line.Clear();
+                _line.Clear();
             }
         }
 

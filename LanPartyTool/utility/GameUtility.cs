@@ -37,7 +37,7 @@ namespace LanPartyTool.utility
             return toolCfg;
         }
 
-        public static string DefaultProfileCfg()
+        public static string DefaultProfileName()
         {
             var gameExePath = DefaultGameExe();
             if (gameExePath == "") return "";
@@ -55,11 +55,32 @@ namespace LanPartyTool.utility
             if (!File.Exists(activeProfileFile)) return "";
 
             var activeProfileName = File.ReadAllText(activeProfileFile);
+            return activeProfileName;
+        }
+
+        public static string DefaultProfileCfg()
+        {
+            var gameExePath = DefaultGameExe();
+            if (gameExePath == "") return "";
+
+            var installFolderPath = Path.GetDirectoryName(gameExePath);
+            if (installFolderPath == null) return "";
+
+            var installFolderRealPath = installFolderPath.Substring(3);
+            var localPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            var virtualStoreInstallFolder = Path.Combine(localPath, "VirtualStore", installFolderRealPath);
+            var profilesFolder = Path.Combine(virtualStoreInstallFolder, "players", "profiles");
+            if (!Directory.Exists(profilesFolder)) return "";
+
+            var activeProfileFile = Path.Combine(profilesFolder, "active.txt");
+            if (!File.Exists(activeProfileFile)) return "";
+
+            var activeProfileName = DefaultProfileName();
             var profileCfg = Path.Combine(profilesFolder, activeProfileName, "config_mp.cfg");
             return File.Exists(profileCfg) ? profileCfg : "";
         }
 
-        public static string DefaultInstallationDir()
+        private static string DefaultInstallationDir()
         {
             foreach (var registryPath in Constants.Cod4RegistryPaths)
             {

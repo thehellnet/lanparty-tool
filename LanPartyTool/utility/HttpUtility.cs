@@ -9,16 +9,16 @@ using RestSharp;
 
 namespace LanPartyTool.utility
 {
-    public class HttpUtility
+    public static class HttpUtility
     {
-        private static readonly int HTTP_CLIENT_TIMEOUT = 3000;
+        private const int HttpClientTimeout = 3000;
 
         private static readonly ILog Logger = LogManager.GetLogger(typeof(HttpUtility));
         private static readonly HttpClient HttpClient = new HttpClient();
 
         static HttpUtility()
         {
-            HttpClient.Timeout = TimeSpan.FromMilliseconds(HTTP_CLIENT_TIMEOUT);
+            HttpClient.Timeout = TimeSpan.FromMilliseconds(HttpClientTimeout);
         }
 
         public static dynamic DoPost(string url, dynamic requestBody = null)
@@ -32,16 +32,27 @@ namespace LanPartyTool.utility
             request.AddHeader("content-type", "application/json");
             request.AddHeader("accept", "application/json");
 
-            var client = new RestClient(url)
+            RestClient client;
+
+            try
             {
-                Timeout = HTTP_CLIENT_TIMEOUT,
-                UserAgent = Application.ResourceAssembly.FullName
-            };
+                client = new RestClient(url);
+            }
+            catch (UriFormatException e)
+            {
+                Logger.Error($"Error executing http call: {e.Message}");
+                return null;
+            }
+
+            client.Timeout = HttpClientTimeout;
+            client.UserAgent = Application.ResourceAssembly.FullName;
 
             var response = client.Execute(request);
+
+
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                Logger.Debug($"Unable to complete HTTP request. StatusCode ${response.StatusCode.ToString()}");
+                Logger.Debug($"Unable to complete HTTP request. StatusCode {response.StatusCode}");
                 return null;
             }
 

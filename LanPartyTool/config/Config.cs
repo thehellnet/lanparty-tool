@@ -15,13 +15,10 @@ namespace LanPartyTool.config
         private static Config _instance;
 
         private string _gameExe = "";
-
+        private string _profileName = "";
         private string _profileCfg = "";
-
         private string _serialPort = "";
-
         private string _serverUrl = "";
-
         private string _toolCfg = "";
 
         private Config()
@@ -36,7 +33,7 @@ namespace LanPartyTool.config
             {
                 if (_gameExe == value) return;
                 _gameExe = value ?? "";
-                OnPropertyChanged("GameExe");
+                OnPropertyChanged(nameof(GameExe));
                 Save();
             }
         }
@@ -48,7 +45,19 @@ namespace LanPartyTool.config
             {
                 if (_toolCfg == value) return;
                 _toolCfg = value ?? "";
-                OnPropertyChanged("ToolCfg");
+                OnPropertyChanged(nameof(ToolCfg));
+                Save();
+            }
+        }
+
+        public string ProfileName
+        {
+            get => _profileName;
+            set
+            {
+                if (_profileName == value) return;
+                _profileName = value ?? "";
+                OnPropertyChanged(nameof(ProfileName));
                 Save();
             }
         }
@@ -60,7 +69,7 @@ namespace LanPartyTool.config
             {
                 if (_profileCfg == value) return;
                 _profileCfg = value ?? "";
-                OnPropertyChanged("ProfileCfg");
+                OnPropertyChanged(nameof(ProfileCfg));
                 Save();
             }
         }
@@ -72,7 +81,7 @@ namespace LanPartyTool.config
             {
                 if (_serverUrl == value) return;
                 _serverUrl = value ?? "";
-                OnPropertyChanged("ServerUrl");
+                OnPropertyChanged(nameof(ServerUrl));
                 Save();
             }
         }
@@ -84,7 +93,7 @@ namespace LanPartyTool.config
             {
                 if (_serialPort == value) return;
                 _serialPort = value ?? "";
-                OnPropertyChanged("SerialPort");
+                OnPropertyChanged(nameof(SerialPort));
                 Save();
             }
         }
@@ -111,6 +120,7 @@ namespace LanPartyTool.config
             var json = JObject.Parse(jsonString);
             GameExe = json.GetValue("gameExe")?.ToString();
             ToolCfg = json.GetValue("toolCfg")?.ToString();
+            ProfileName = json.GetValue("profileName")?.ToString();
             ProfileCfg = json.GetValue("profileCfg")?.ToString();
             ServerUrl = json.GetValue("serverUrl")?.ToString();
             SerialPort = json.GetValue("serialPort")?.ToString();
@@ -124,6 +134,7 @@ namespace LanPartyTool.config
             {
                 gameExe = _gameExe,
                 toolCfg = _toolCfg,
+                profileName = _profileName,
                 profileCfg = _profileCfg,
                 serverUrl = _serverUrl,
                 serialPort = _serialPort

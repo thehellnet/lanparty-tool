@@ -20,7 +20,7 @@ namespace LanPartyTool.agent
         private readonly ServerSocket _serverSocket = new ServerSocket();
         private readonly Status _status = Status.GetInstance();
 
-        private readonly object SYNC = new object();
+        private readonly object _sync = new object();
 
         public Agent()
         {
@@ -32,7 +32,7 @@ namespace LanPartyTool.agent
         {
             new Thread(() =>
             {
-                lock (SYNC)
+                lock (_sync)
                 {
                     StartAgent();
                 }
@@ -43,7 +43,7 @@ namespace LanPartyTool.agent
         {
             new Thread(() =>
             {
-                lock (SYNC)
+                lock (_sync)
                 {
                     StopAgent();
                 }
@@ -54,7 +54,7 @@ namespace LanPartyTool.agent
         {
             new Thread(() =>
             {
-                lock (SYNC)
+                lock (_sync)
                 {
                     StopAgent();
                     StartAgent();
@@ -110,6 +110,12 @@ namespace LanPartyTool.agent
             {
                 Logger.Debug("Getting default tool cfg path");
                 _config.ToolCfg = GameUtility.DefaultToolCfg();
+            }
+
+            if (_config.ProfileName == "")
+            {
+                Logger.Debug("Getting default profile name");
+                _config.ProfileName = GameUtility.DefaultProfileName();
             }
 
             if (_config.ProfileCfg == "")
@@ -169,6 +175,14 @@ namespace LanPartyTool.agent
             }
 
             Logger.Debug("Tool cfg path correct");
+
+            if (_config.ProfileName == "")
+            {
+                Logger.Error("Invalid profile name");
+                return false;
+            }
+
+            Logger.Debug("Profile name path correct");
 
             if (_config.ProfileCfg == "" || !File.Exists(_config.ProfileCfg))
             {

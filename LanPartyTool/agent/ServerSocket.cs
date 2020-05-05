@@ -6,7 +6,7 @@ using log4net;
 
 namespace LanPartyTool.agent
 {
-    internal class ServerSocket
+    internal class ServerSocket : IDisposable
     {
         public delegate void NewConnectionHandler(Socket socket);
 
@@ -33,6 +33,11 @@ namespace LanPartyTool.agent
 
         public event NewConnectionHandler OnConnectionAccepted;
         public event NewStatusHandler OnNewStatus;
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
 
         public void Start()
         {
