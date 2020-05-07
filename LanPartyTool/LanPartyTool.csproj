@@ -82,7 +82,7 @@
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>lanpartytool.ico</ApplicationIcon>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Remote Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -205,6 +205,7 @@
     <Resource Include="lanpartytool.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="icon.ico" />
     <Content Include="sounds\ping.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
