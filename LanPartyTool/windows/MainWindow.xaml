@@ -38,22 +38,22 @@
                 <Button x:Name="ShowCodKeyButton" Content="Show CodKey" Margin="0,125,115,0" VerticalAlignment="Top"
                         Height="23" HorizontalAlignment="Right" Width="100" Click="ShowCodKeyButton_Click"
                         TabIndex="9" />
-                <Label x:Name="ServerUrlLabel" Content="Server URL" HorizontalAlignment="Left"
-                       Margin="228,96,0,0" VerticalAlignment="Top" Height="23"
-                       IsTabStop="False" />
-                <TextBox x:Name="ServerUrlText" Height="23" Margin="300,97,10,0" TextWrapping="NoWrap"
-                         IsReadOnly="True" VerticalAlignment="Top" IsTabStop="False" />
-                <ComboBox x:Name="SerialPortComboBox" Margin="95,97,537,0"
+                <Label x:Name="ServerUrlLabel" Content="Server URL"
+                       Margin="0,97,430,0" VerticalAlignment="Top" Height="23"
+                       IsTabStop="False" HorizontalAlignment="Right" Width="100" />
+                <TextBox x:Name="ServerUrlText" Height="23" Margin="0,97,10,0" TextWrapping="NoWrap"
+                         IsReadOnly="True" VerticalAlignment="Top" IsTabStop="False" HorizontalAlignment="Right" Width="415" />
+                <ComboBox x:Name="SerialPortComboBox" Margin="95,97,0,0"
                           VerticalAlignment="Top" Height="23"
-                          TabIndex="7" />
+                          TabIndex="7" HorizontalAlignment="Left" Width="120" />
                 <Label x:Name="ComPortLabel" Content="COM Port"
                        Margin="10,97,0,0" VerticalAlignment="Top" Height="23" HorizontalAlignment="Left" Width="62"
                        IsTabStop="False" />
                 <Label x:Name="BarcodeLabel" Content="Barcode"
                        Margin="10,124,0,0" VerticalAlignment="Top" Height="23" HorizontalAlignment="Left" Width="80"
                        IsTabStop="False" />
-                <TextBox x:Name="BarcodeText" Height="23" Margin="95,125,535,0" TextWrapping="NoWrap"
-                         VerticalAlignment="Top" TabIndex="0" />
+                <TextBox x:Name="BarcodeText" Height="23" Margin="95,125,0,0" TextWrapping="NoWrap"
+                         VerticalAlignment="Top" TabIndex="0" HorizontalAlignment="Left" Width="120" />
                 <Button x:Name="RunGameButton" Content="Run game" Margin="0,125,10,0" VerticalAlignment="Top"
                         Height="23" HorizontalAlignment="Right" Width="100" Click="RunGameButton_Click" TabIndex="10" />
                 <Button x:Name="RestartAgentButton" Content="Restart agent" Margin="0,125,220,0"
