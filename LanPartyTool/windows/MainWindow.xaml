@@ -39,10 +39,10 @@
                         Height="23" HorizontalAlignment="Right" Width="100" Click="ShowCodKeyButton_Click"
                         TabIndex="9" />
                 <Label x:Name="ServerUrlLabel" Content="Server URL"
-                       Margin="0,97,430,0" VerticalAlignment="Top" Height="23"
-                       IsTabStop="False" HorizontalAlignment="Right" Width="100" />
-                <TextBox x:Name="ServerUrlText" Height="23" Margin="0,97,10,0" TextWrapping="NoWrap"
-                         IsReadOnly="True" VerticalAlignment="Top" IsTabStop="False" HorizontalAlignment="Right" Width="415" />
+                       Margin="230,97,430,0" VerticalAlignment="Top" Height="23"
+                       IsTabStop="False" />
+                <TextBox x:Name="ServerUrlText" Height="23" Margin="335,97,10,0" TextWrapping="NoWrap"
+                         IsReadOnly="True" VerticalAlignment="Top" IsTabStop="False" />
                 <ComboBox x:Name="SerialPortComboBox" Margin="95,97,0,0"
                           VerticalAlignment="Top" Height="23"
                           TabIndex="7" HorizontalAlignment="Left" Width="120" />

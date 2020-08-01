@@ -12,13 +12,13 @@ namespace LanPartyTool.utility
         private const string ServerProtocol = "http";
         private const int ServerPort = 8080;
         private const string ServerEndPoint = "/lanparty_manager/api/public/v1/tool";
+
         private const string PingEndPoint = "/ping";
         private const string WelcomeEndPoint = "/welcome";
         private const string GetCfgEndPoint = "/getCfg";
         private const string SaveCfgEndPoint = "/saveCfg";
 
         private static readonly ILog Logger = LogManager.GetLogger(typeof(ServerUtility));
-
         public static string DefaultServerUrl()
         {
             foreach (var serverUrl in PossibleServerUrls())
