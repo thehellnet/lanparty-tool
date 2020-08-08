@@ -5,6 +5,7 @@ using System.Dynamic;
 using System.IO;
 using System.IO.Ports;
 using System.Net;
+using System.Net.Sockets;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -256,12 +257,26 @@ namespace LanPartyTool.windows
 
         private void RunGameButton_Click(object sender, RoutedEventArgs e)
         {
-            LaunchServer();
+            LaunchGameClient();
         }
 
-        private void LaunchServer()
+        private void LaunchGameClient()
         {
-            var addresses = Dns.GetHostAddresses(_config.ServerUrl);
+            var serverUri = new Uri(_config.ServerUrl);
+            var host = serverUri.Host;
+
+            IPAddress[] addresses;
+
+            try
+            {
+                addresses = Dns.GetHostAddresses(host);
+            }
+            catch (SocketException)
+            {
+                Logger.Error($"Unable to resolve {host}");
+                return;
+            }
+
             var serverAddress = addresses[0].ToString();
 
             var arguments = " +connect " + serverAddress;

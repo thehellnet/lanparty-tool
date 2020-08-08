@@ -19,8 +19,8 @@ using log4net.Config;
 
 [assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)]
 
-[assembly: AssemblyVersion("0.9.30.105")]
-[assembly: AssemblyFileVersion("0.9.30.105")]
+[assembly: AssemblyVersion("0.9.31.0")]
+[assembly: AssemblyFileVersion("0.9.31.0")]
 
 [assembly: XmlConfigurator(ConfigFile = "log4net.config")]
 [assembly: Guid("94403695-D3D3-4A0C-A7A8-A8B9FAAF5E9B")]
